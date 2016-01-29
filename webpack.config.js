@@ -9,6 +9,12 @@ var webpackConfig = {
     filename: 'bundle.js',
     publicPath: '/static/'
   },
+  externals: {
+      //require("jquery") 是引用自外部模块的
+      //对应全局变量 jQuery
+      // may be the materialize
+      //"jquery": "jQuery"
+  },
   plugins: [
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.NoErrorsPlugin()
@@ -74,7 +80,7 @@ if (process.env.NODE_ENV === 'production') {
           }
         }
       },
-      { test: /\.(png|jpg|gif|jpeg)$/, loader: 'url-loader?limit=8192'},
+      { test: /\.(png|jpg|gif|jpeg)$/, loader: 'url?limit=8192'},
       { test: /\.css$/, loader: 'style-loader!css-loader' }
     ]},
     entry : [

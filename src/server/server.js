@@ -62,9 +62,7 @@ app.get('/*', function (req, res) {
 
     const InitialView = (
       <Provider store={store}>
-        {() =>
           <RoutingContext {...renderProps} />
-        }
       </Provider>
     );
 
