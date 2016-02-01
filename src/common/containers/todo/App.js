@@ -12,6 +12,7 @@ class App extends Component {
     return (
       <div>
         <AddTodo
+          todos={visibleTodos}
           onAddSubmit={text => dispatch(addTodo(text))} />
         <TodoList
           todos={visibleTodos}
@@ -60,7 +61,7 @@ function select(state) {
     undoDisabled: state.todo.todos.past.length === 0,
     redoDisabled: state.todo.todos.future.length === 0,
     visibleTodos: selectTodos(state.todo.todos.present, state.todo.visibilityFilter),
-    visibilityFilter: state.visibilityFilter,
+    visibilityFilter: state.todo.visibilityFilter,
     layout : state.layout,
   }
 }

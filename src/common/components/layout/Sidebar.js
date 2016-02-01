@@ -5,7 +5,7 @@ import classNames from 'classnames';
 
 
 
-import {Button, Navbar} from  'react-materialize';
+//import {Button, Navbar} from  'react-materialize';
 
 class Sidebar extends Component {
 

@@ -9,6 +9,7 @@ import createBrowserHistory from 'history/lib/createBrowserHistory'
 
 import configureStore from '../common/store/configureStore';
 import routes from '../common/routes';
+import ReactDom from 'react-dom';
 
 import "../../styles/index.css";
 
@@ -17,17 +18,16 @@ const initialState = window.__INITIAL_STATE__;
 const store = configureStore(initialState);
 const rootElement = document.getElementById('root');
 
-React.render(
+if (process.env.NODE_ENV !== 'production') {
+  require('../server/devtools')(store);
+}
+
+ReactDom.render(
   <Provider store={store}>
-    {() =>
-        <ReduxRouter>
-          <Router children={routes} history={history} />
-        </ReduxRouter>
-    }
+    <ReduxRouter>
+      <Router children={routes} history={history} />
+    </ReduxRouter>
   </Provider>,
   document.getElementById('root')
 );
 
-if (process.env.NODE_ENV !== 'production') {
-  require('../server/devtools')(store);
-}

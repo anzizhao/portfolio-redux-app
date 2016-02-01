@@ -15,14 +15,9 @@ var webpackConfig = {
       // may be the materialize
       //"jquery": "jQuery"
   },
-  plugins: [
-    new webpack.optimize.OccurenceOrderPlugin(),
-    new webpack.NoErrorsPlugin()
-  ]
 };
 
 if (process.env.NODE_ENV === 'production') {
-
   webpackConfig = merge(webpackConfig,{
     devtool: "source-map",
     entry : [
@@ -44,6 +39,8 @@ if (process.env.NODE_ENV === 'production') {
           NODE_ENV: JSON.stringify('production')
         }
       }),
+      new webpack.HotModuleReplacementPlugin(),
+      new webpack.optimize.OccurenceOrderPlugin(),
       new ExtractTextPlugin("app.css"),
       new webpack.optimize.UglifyJsPlugin({minimize: true})
     ]  
@@ -52,43 +49,22 @@ if (process.env.NODE_ENV === 'production') {
 }else{
 
   webpackConfig = merge(webpackConfig,{
-    devtool: 'inline-source-map',
+    devtool: 'eval',
     module: {
-      loaders: [{
-        test: /\.js$/,
-        loader: 'babel',
-        exclude: /node_modules/,
-        include: __dirname,
-        query: {
-          optional: ['runtime'],
-          stage: 2,
-          env: {
-            development: {
-              plugins: [
-                'react-transform'
-              ],
-              extra: {
-                'react-transform': {
-                  transforms: [{
-                    transform:  'react-transform-hmr',
-                    imports: ['react'],
-                    locals:  ['module']
-                  }]
-                }
-              }
-            }
-          }
-        }
-      },
+      loaders: [
+      {test: /\.js$/, loaders: ['react-hot', 'babel'], include: path.join(__dirname, 'src')},
       { test: /\.(png|jpg|gif|jpeg)$/, loader: 'url?limit=8192'},
       { test: /\.css$/, loader: 'style-loader!css-loader' }
     ]},
     entry : [
-      'webpack-hot-middleware/client',
-      './src/client/index.js'
+        'webpack-dev-server/client?http://localhost:3000',
+        'webpack/hot/only-dev-server',
+        './src/client/index.js'
     ],
     plugins : [
-      new webpack.HotModuleReplacementPlugin()
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.optimize.OccurenceOrderPlugin(),
+        new webpack.NoErrorsPlugin()
     ]  
   });
   
