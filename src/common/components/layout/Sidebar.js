@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 import classNames from 'classnames';
+//import Button from 'react-materialize'
+
+
 
 import {Button, Navbar} from  'react-materialize';
 
@@ -22,12 +25,13 @@ class Sidebar extends Component {
 
     	<div className="sidebar">
 
-		  <div className="sidebar-item sidebar-header">
-              <img src="/luobin.jpg" alt="" className="circle responsive-img" />
+		  <div className="sidebar-item sidebar-footer">
+
 		  </div>
 
 		  <div className="sidebar-item  sidebar-nav">
 		    <Link to="/home" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">首页</Link>
+		    <Link to="/todo" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">代办事项</Link>
 		    <Link to="/portfolio" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">简历</Link>
 		    <Link to="/services" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">有趣的</Link>
 		    <Link to="/about" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">关于</Link>
@@ -35,11 +39,8 @@ class Sidebar extends Component {
 
 		  <div className="sidebar-item sidebar-footer">
 		    <p>
-				Visit <a href="https://github.com/anzizhao">My GitHub Repo</a><br/>
+				Visit <a href="https://github.com/anzizhao">my git repo </a><br/>
 				Visit <a href="mailto:#">anzizhao@126.com</a><br/>
-		    </p>
-		    <p>
-		    	Design based on <a href="http://lanyon.getpoole.com/"> Lanyon Theme</a> 
 		    </p>
 
 		  </div>
