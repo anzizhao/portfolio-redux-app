@@ -15,7 +15,7 @@ import ThemeManager from 'material-ui/lib/styles/theme-manager';
 import DarkRawTheme from 'material-ui/lib/styles/raw-themes/dark-raw-theme';
 import ThemeDecorator from 'material-ui/lib/styles/theme-decorator';
 
-@ThemeDecorator(ThemeManager.getMuiTheme(DarkRawTheme))
+//@ThemeDecorator(ThemeManager.getMuiTheme(DarkRawTheme))
 
 class App extends Component {
 

@@ -49,31 +49,23 @@ if (process.env.NODE_ENV === 'production') {
 }else{
 
   webpackConfig = merge(webpackConfig,{
-      devtool: 'eval',
-      module: {
-          loaders: [{
-                  test: /\.js$/,
-                  loader: 'react-hot!babel',
-                  query: {
-                      presets:['es2015']
-                  },
-                  include: path.join(__dirname, 'src')
-              }, { 
-                  test: /\.(png|jpg|gif|jpeg)$/, loader: 'url?limit=8192'
-              }, { 
-                  test: /\.css$/, loader: 'style-loader!css-loader' 
-              }
-          ]},
-          entry : [
-              'webpack-dev-server/client?http://localhost:3000',
-              'webpack/hot/only-dev-server',
-              './src/client/index.js'
-          ],
-          plugins : [
-              new webpack.HotModuleReplacementPlugin(),
-              new webpack.optimize.OccurenceOrderPlugin(),
-              new webpack.NoErrorsPlugin()
-          ]  
+    devtool: 'eval',
+    module: {
+      loaders: [
+      {test: /\.js$/, loaders: ['react-hot', 'babel'], include: path.join(__dirname, 'src')},
+      { test: /\.(png|jpg|gif|jpeg)$/, loader: 'url?limit=8192'},
+      { test: /\.css$/, loader: 'style-loader!css-loader' }
+    ]},
+    entry : [
+        'webpack-dev-server/client?http://localhost:3000',
+        'webpack/hot/only-dev-server',
+        './src/client/index.js'
+    ],
+    plugins : [
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.optimize.OccurenceOrderPlugin(),
+        new webpack.NoErrorsPlugin()
+    ]  
   });
   
 }
