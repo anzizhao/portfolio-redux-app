@@ -10,6 +10,13 @@ import Home from '../components/Home'
 import Header from '../components/layout/Header'
 import Sidebar from '../components/layout/Sidebar'
 
+import ThemeManager from 'material-ui/lib/styles/theme-manager';
+//import LightRawTheme from 'material-ui/lib/styles/raw-themes/light-raw-theme';
+import DarkRawTheme from 'material-ui/lib/styles/raw-themes/dark-raw-theme';
+import ThemeDecorator from 'material-ui/lib/styles/theme-decorator';
+
+@ThemeDecorator(ThemeManager.getMuiTheme(DarkRawTheme))
+
 class App extends Component {
 
   constructor(props){
@@ -17,6 +24,16 @@ class App extends Component {
     this.eventToggleSidebar = this.eventToggleSidebar.bind(this)
   }
 
+  //childContextTypes : {
+      //muiTheme: React.PropTypes.object
+  //}
+
+  //getChildContext() {
+      //return {
+          //muiTheme: ThemeManager.getMuiTheme(DarkRawTheme)
+      //};
+  //}
+  
   eventToggleSidebar(e) {
     e.preventDefault();
     this.props.toggleSidebar(!this.props.layout.sidebarOpen);

@@ -1,12 +1,18 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { ActionCreators } from 'redux-undo'
-import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters } from '../../actions/todo/actions'
+import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters, exportTodo, initTodo } from '../../actions/todo/actions'
 import AddTodo from '../../components/todo/AddTodo'
 import TodoList from '../../components/todo/TodoList'
 import Footer from '../../components/todo/Footer'
 
+
+
 class App extends Component {
+    componentWillMount() {
+        this.props.dispatch(initTodo());
+    }
+
   render() {
     const { dispatch, visibleTodos, visibilityFilter } = this.props
     return (
@@ -16,6 +22,7 @@ class App extends Component {
           onAddSubmit={text => dispatch(addTodo(text))} />
         <TodoList
           todos={visibleTodos}
+          onExportClick={() => dispatch(exportTodo()) }
           onTodoClick={id => dispatch(completeTodo(id))} />
         <Footer
           filter={visibilityFilter}

@@ -14,9 +14,6 @@ function loadState() {
     return json ? {...defaultState, ...JSON.parse(json)} : defaultState
 }
 
-function storeState(state) {
-    window.localStorage['imd'] = JSON.stringify(state)
-}
 
 function utf8ToBase64(text) {
     return window.btoa(unescape(encodeURIComponent(text)))
@@ -45,6 +42,19 @@ function exportFile(text, filename) {
     }
 }
 
+function store (namespace, data) {
+    if (data) {
+        return localStorage.setItem(namespace, JSON.stringify(data));
+    }
+
+    var store = localStorage.getItem(namespace);
+    return (store && JSON.parse(store)) || [];
+}
+
+function storeTodoState(data) {
+    return store('todo', data );
+}
+
 module.exports = {
-    loadState, storeState, exportFile
+    loadState,  exportFile, storeTodoState
 }

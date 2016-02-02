@@ -16,7 +16,7 @@ export default class AddTodo extends Component {
         return (
             <div>
                 <form onSubmit={(e) => this.handleSubmit(e)}>
-                    <input type="text" ref="input" />
+                    <input type="text" ref="input" placeholder="todo项" />
                     <button type="submit">
                     添加 
                     </button>
