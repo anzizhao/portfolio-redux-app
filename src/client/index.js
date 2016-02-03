@@ -31,7 +31,7 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 render(
-  <Provider store={store}>
+  < Provider store={store}>
     <ReduxRouter>
       <Router children={routes} history={history} />
     </ReduxRouter>

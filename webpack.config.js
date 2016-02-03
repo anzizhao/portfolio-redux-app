@@ -49,10 +49,39 @@ if (process.env.NODE_ENV === 'production') {
 }else{
 
   webpackConfig = merge(webpackConfig,{
-    devtool: 'eval',
-    module: {
-      loaders: [
-      {test: /\.js$/, loaders: ['react-hot', 'babel'], include: path.join(__dirname, 'src')},
+      devtool: 'inline-source-map',
+      module: {
+          loaders: [{
+              test: /\.js$/,
+              //loader: 'babel', //react-hot is like browser sync and babel loads jsx and es6-7
+              loader: require.resolve('babel-loader'),
+              exclud: /node_modules/,
+              include: __dirname,
+              query: {
+                  presets: ["es7.decorators", "es7.classProperties"]
+              },
+              //query: {
+                  //optional: ['runtime'],
+                  //stage: 2,
+                  //env: {:wa
+              //
+                      //development: {
+                          //plugins: [
+                              //'react-transform'
+                          //],
+                          //extra: {
+                              //'react-transform': {
+                                  //transforms: [{
+                                      //transform:  'react-transform-hmr',
+                                      //imports: ['react'],
+                                      //locals:  ['module']
+                                  //}]
+                              //}
+                          //}
+                      //}
+                  //}
+              //}
+          },
       { test: /\.(png|jpg|gif|jpeg)$/, loader: 'url?limit=8192'},
       { test: /\.css$/, loader: 'style-loader!css-loader' }
     ]},

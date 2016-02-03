@@ -17,6 +17,9 @@ import ThemeDecorator from 'material-ui/lib/styles/theme-decorator';
 
 //@ThemeDecorator(ThemeManager.getMuiTheme(DarkRawTheme))
 
+//let childContextTypes = {
+        //muiTheme: React.PropTypes.object
+    //}
 class App extends Component {
 
   constructor(props){
@@ -24,15 +27,15 @@ class App extends Component {
     this.eventToggleSidebar = this.eventToggleSidebar.bind(this)
   }
 
-  //childContextTypes : {
-      //muiTheme: React.PropTypes.object
-  //}
+  static childContextTypes =  {
+      muiTheme: React.PropTypes.object
+  }
 
-  //getChildContext() {
-      //return {
-          //muiTheme: ThemeManager.getMuiTheme(DarkRawTheme)
-      //};
-  //}
+  getChildContext() {
+      return {
+          muiTheme: ThemeManager.getMuiTheme(DarkRawTheme)
+      };
+  }
   
   eventToggleSidebar(e) {
     e.preventDefault();
