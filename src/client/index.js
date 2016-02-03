@@ -1,4 +1,4 @@
-import 'babel-core/polyfill';
+import 'babel-polyfill';
 
 import injectTapEventPlugin from 'react-tap-event-plugin';
 import React from 'react';
@@ -26,9 +26,9 @@ const initialState = window.__INITIAL_STATE__;
 const store = configureStore(initialState);
 const rootElement = document.getElementById('root');
 
-if (process.env.NODE_ENV !== 'production') {
-  require('../server/devtools')(store);
-}
+//if (process.env.NODE_ENV !== 'production') {
+  //require('../server/devtools')(store);
+//}
 
 render(
   <Provider store={store}>

@@ -2,7 +2,7 @@ import { combineReducers } from 'redux'
 import undoable, { distinctState } from 'redux-undo'
 var {storeTodoState, exportFile } = require('../../util')
 
-import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters, EXPORT_TODO, INIT_TODO } from '../../actions/todo/actions'
+import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters, EXPORT_TODO, INIT_TODO, DEL_TODO } from '../../actions/todo/actions'
 
 const { SHOW_ALL } = VisibilityFilters
 
@@ -50,9 +50,14 @@ function todos(state = [], action) {
 
         case ADD_TODO:
             db = [
-                    ...state,
-            todo(undefined, action)
+                todo(undefined, action),
+        ...state
             ]
+            storeTodoState(db);
+            return db;
+
+        case DEL_TODO:
+            db = state.filter((item)=>{ return item.id == action.id ? false: true } ) 
             storeTodoState(db);
             return db;
 

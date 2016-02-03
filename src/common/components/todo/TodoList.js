@@ -1,5 +1,10 @@
 import React, { Component, PropTypes } from 'react'
 import Todo from './Todo'
+import * as todoAction  from '../../actions/todo/actions'
+
+import Divider from 'material-ui/lib/divider';
+import List from 'material-ui/lib/lists/list';
+import FlatButton from 'material-ui/lib/flat-button';
 
 var {exportFile} = require('../../util')
 
@@ -11,24 +16,40 @@ export default class TodoList extends Component {
         //exportFile(jsonFile, filename);
     //}
     render() {
+        const { actions } = this.props
+
+        const style = {
+            flatButton: {
+                float: "right",
+                marginBottom: "10px",
+            },
+            list: {
+                marginBottom: "30px", 
+            }
+        };
+
         return (
             <div>
-                <ul>
-                {this.props.todos.map(todo =>
+                <List  style={style.list}>
+                {this.props.todos.map((todo, index)  =>
                                       <Todo {...todo}
-                                      key={todo.id}
+                                      index={index}
+                                      actions={actions}
                                       onClick={() => this.props.onTodoClick(todo.id)} />
                                      )}
-                                     </ul>
-                 <button onClick={(e) => this.props.onExportClick() }>
-                     导出待做事情 
-                 </button>
+
+
+                </List>
+                <Divider inset={true}/>
+
+                <FlatButton label="导出" onClick={(e) => this.props.onExportClick() }  style={ style.flatButton }  />
             </div>
         )
     }
 }
 
 TodoList.propTypes = {
+  actions: PropTypes.object.isRequired,
   onTodoClick: PropTypes.func.isRequired,
   onExportClick: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(PropTypes.shape({

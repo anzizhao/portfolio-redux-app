@@ -1,7 +1,11 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { ActionCreators } from 'redux-undo'
-import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters, exportTodo, initTodo } from '../../actions/todo/actions'
+import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters, exportTodo,   initTodo } from '../../actions/todo/actions'
+
+import { bindActionCreators } from 'redux'
+
+import * as todoActions  from '../../actions/todo/actions'
 import AddTodo from '../../components/todo/AddTodo'
 import TodoList from '../../components/todo/TodoList'
 import Footer from '../../components/todo/Footer'
@@ -14,7 +18,8 @@ class App extends Component {
     }
 
   render() {
-    const { dispatch, visibleTodos, visibilityFilter } = this.props
+    const { dispatch, visibleTodos, visibilityFilter, actions } = this.props
+
     return (
       <div>
         <AddTodo
@@ -22,6 +27,7 @@ class App extends Component {
           onAddSubmit={text => dispatch(addTodo(text))} />
         <TodoList
           todos={visibleTodos}
+          actions={actions}
           onExportClick={() => dispatch(exportTodo()) }
           onTodoClick={id => dispatch(completeTodo(id))} />
         <Footer
@@ -73,4 +79,11 @@ function select(state) {
   }
 }
 
-export default connect(select)(App)
+function mapDispatchToProps(dispatch) {
+  return {
+      dispatch,
+      actions: bindActionCreators(todoActions, dispatch)
+  }
+}
+
+export default connect(select, mapDispatchToProps)(App)

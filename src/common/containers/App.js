@@ -11,7 +11,7 @@ import Header from '../components/layout/Header'
 import Sidebar from '../components/layout/Sidebar'
 
 import ThemeManager from 'material-ui/lib/styles/theme-manager';
-//import LightRawTheme from 'material-ui/lib/styles/raw-themes/light-raw-theme';
+import LightRawTheme from 'material-ui/lib/styles/raw-themes/light-raw-theme';
 import DarkRawTheme from 'material-ui/lib/styles/raw-themes/dark-raw-theme';
 import ThemeDecorator from 'material-ui/lib/styles/theme-decorator';
 
@@ -24,15 +24,15 @@ class App extends Component {
     this.eventToggleSidebar = this.eventToggleSidebar.bind(this)
   }
 
-  //childContextTypes : {
-      //muiTheme: React.PropTypes.object
-  //}
+  static childContextTypes = {
+      muiTheme: React.PropTypes.object
+  };
 
-  //getChildContext() {
-      //return {
-          //muiTheme: ThemeManager.getMuiTheme(DarkRawTheme)
-      //};
-  //}
+  getChildContext() {
+      return {
+          muiTheme: ThemeManager.getMuiTheme(LightRawTheme)
+      };
+  }
   
   eventToggleSidebar(e) {
     e.preventDefault();
