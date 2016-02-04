@@ -1,20 +1,22 @@
 import React, { Component, PropTypes } from 'react'
 import FlatButton from 'material-ui/lib/flat-button';
+import TextField from 'material-ui/lib/text-field';
 
 export default class AddTodo extends Component {
     handleSubmit(e) {
         e.preventDefault()
-        const node = this.refs.input
-        const text = node.value.trim()
-        if (text) {
+        const node = this.refs.iAddTodo
+        const value = node.getValue()
+        if ( value ) {
+            const text = value.trim()
             this.props.onAddSubmit(text)
-            node.value = ''
+            node.setValue('')
         }
     }
 
     handleKeyPress(e) {
-        e.preventDefault()
         if(e.charCode == 13){
+            e.preventDefault()
             this.handleSubmit(e);
         }
     }
@@ -30,14 +32,15 @@ export default class AddTodo extends Component {
                 marginBottom: "30px", 
             }
         };
-
         return (
             <div>
                 <form onSubmit={(e) => this.handleSubmit(e)} style={style.form} >
-                    <input type="text" ref="input" placeholder="todo项 按Enter确认" 
-                    onKeyPress={(e) => this.handleKeyPress(e) }  />
-                    <FlatButton label="添加"  type="submit" style={ style.flatButton }  />
-                 
+                        <TextField
+                        floatingLabelText="添加todo项 按Enter确认"
+                        ref="iAddTodo" 
+                        onKeyPress={(e) => this.handleKeyPress(e) }  
+                        fullWidth
+                        />
                 </form>
             </div>
         )

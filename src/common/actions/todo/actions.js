@@ -6,6 +6,7 @@ export const DEL_TODO = 'DEL_TODO'
 export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
 export const EXPORT_TODO = 'EXPORT_TODO' 
 export const INIT_TODO = 'INIT_TODO' 
+export const SAVE_TODO = 'SAVE_TODO' 
 
 export const VisibilityFilters = {
   SHOW_ALL: 'SHOW_ALL',
@@ -45,9 +46,13 @@ export function initTodo () {
 }
 
 export function delTodo (id) {
-    if(! id) {
-        return; 
-    }
     return { type: DEL_TODO, id }
+}
+
+export function saveTodo (id, text) {
+    //if(! todo) {
+        //return; 
+    //}
+    return { type: SAVE_TODO, item:{id, text} }
 }
 

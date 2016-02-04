@@ -2,27 +2,95 @@ import React, { Component, PropTypes } from 'react'
 import ListItem from 'material-ui/lib/lists/list-item';
 import FlatButton from 'material-ui/lib/flat-button';
 import FontIcon from 'material-ui/lib/font-icon';
+import TextField from 'material-ui/lib/text-field';
+
+
 import Icon from 'react-fa'
 
-
 export default class Todo extends Component {
+    state = {
+        toEditItem : false,
+        itemText: ''
+    };
 
-    handleClick(){
-        this.props.onClick(key); 
+    handleEditItem (){
+        //const node = this.refs.iTodoItem
+        //node.setValue( this.props.text )
+        this.setState({
+            toEditItem : ! this.state.toEditItem,
+            itemText: this.props.text
+        });
+    }
+
+    handleEnterKeyDown (e, id) {
+        const value =  e.target.value 
+        if ( value ) {
+            //const id = this.props.id
+            const text = value.trim()
+            this.props.actions.saveTodo(id, text)
+
+            this.setState({
+                toEditItem : ! this.state.toEditItem,
+            });
+        }
+    }
+    handleDelItem (e, id) {
+          e.stopPropagation();
+          this.props.actions.delTodo(id)
+    }
+    handleChangeItem(e) {
+        this.setState({
+            itemText: e.target.value,
+        });
     }
   render() {
-
+      let style = {
+            listItem: {
+                textDecoration: this.props.completed ? 'line-through' : 'none',
+                cursor: this.props.completed ? 'default' : 'pointer',
+                display: ! this.state.toEditItem ? 'block' : 'none'
+            },
+            textField: {
+              display: this.state.toEditItem ? 'inline-block' : 'none',
+            }
+      }
       const { id } = this.props
-      const icon =(<Icon size="2x" name="times-circle-o" onClick={(e) =>  this.props.actions.delTodo(id)} /> )
+      //const icon =( 
+                       //<Icon size="lg" name="pencil-square-o" onClick={() => this.toEditItem = true} /> 
+                  //)
 
+      const iconBut =( 
+                      <Icon size="lg" name="times-circle-o" onClick={(e) => this.handleDelItem(e, id)  } /> 
+                  )
+      const listText = ( <span> <span>{ `${ String(this.props.index + 1) }.  ` }</span> {this.props.text} </span>)
+        
     return (
-      <ListItem insetChildren={true} primaryText={`${String(this.props.index+1)}.   ${this.props.text}`} 
-        style={{
-          textDecoration: this.props.completed ? 'line-through' : 'none',
-          cursor: this.props.completed ? 'default' : 'pointer'
-        }}
-        rightIcon={ icon }
-      />
+        <div>
+            <ListItem insetChildren={true} primaryText={ listText } 
+                onClick={ () =>  this.handleEditItem()  }
+                style={{
+                    textDecoration: this.props.completed ? 'line-through' : 'none',
+                    cursor: this.props.completed ? 'default' : 'pointer',
+                    display: ! this.state.toEditItem ? 'block' : 'none'
+                }}
+                rightIconButton={ iconBut }
+            />
+            <div 
+                style={{
+                          display: this.state.toEditItem ? 'block' : 'none',
+                      }}
+            >
+                 <label
+                     onClick={ () =>  this.handleEditItem()  }
+                 >{ this.props.index + 1 } </label>
+                 <TextField
+                     fullWidth
+                     onEnterKeyDown = {(e) => this.handleEnterKeyDown (e, id) }
+                     value={this.state.itemText}
+                     onChange={(e)=>this.handleChangeItem(e)}
+                 />
+            </div>
+            </div>
     )
   }
 }
@@ -33,4 +101,5 @@ Todo.propTypes = {
   completed: PropTypes.bool.isRequired,
   actions: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
+  //key: PropTypes.number.isRequired
 }

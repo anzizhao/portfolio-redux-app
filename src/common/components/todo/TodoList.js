@@ -33,9 +33,9 @@ export default class TodoList extends Component {
                 <List  style={style.list}>
                 {this.props.todos.map((todo, index)  =>
                                       <Todo {...todo}
-                                      index={index}
-                                      actions={actions}
-                                      onClick={() => this.props.onTodoClick(todo.id)} />
+                                          index={index}
+                                          actions={actions}
+                                          onClick={() => this.props.onTodoClick(todo.id)} />
                                      )}
 
 
@@ -53,6 +53,7 @@ TodoList.propTypes = {
   onTodoClick: PropTypes.func.isRequired,
   onExportClick: PropTypes.func.isRequired,
   todos: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
     text: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired
   }).isRequired).isRequired
