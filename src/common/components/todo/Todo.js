@@ -43,6 +43,10 @@ export default class Todo extends Component {
             itemText: e.target.value,
         });
     }
+    handleChangeStatus(e, id) {
+        e.stopPropagation();
+        this.props.actions.completeTodo(id)
+    }
   render() {
       let style = {
             listItem: {
@@ -62,6 +66,13 @@ export default class Todo extends Component {
       const iconBut =( 
                       <Icon size="lg" name="times-circle-o" onClick={(e) => this.handleDelItem(e, id)  } /> 
                   )
+      const iconToStop = ( 
+                      <Icon size="lg" name="stop-circle-o" onClick={(e) => this.handleChangeStatus(e, id)  } /> 
+                  )
+      const iconToPlay = ( 
+                      <Icon size="lg" name="play-circle-o" onClick={(e) => this.handleChangeStatus(e, id)  } /> 
+                  )
+
       const listText = ( <span> <span>{ `${ String(this.props.index + 1) }.  ` }</span> {this.props.text} </span>)
         
     return (
@@ -74,6 +85,7 @@ export default class Todo extends Component {
                     display: ! this.state.toEditItem ? 'block' : 'none'
                 }}
                 rightIconButton={ iconBut }
+                leftIcon={ this.props.completed ? iconToPlay: iconToStop}
             />
             <div 
                 style={{

@@ -25,12 +25,12 @@ function todo(state, action) {
         }
         case COMPLETE_TODO:
             if (state.id !== action.id) {
-            return state
-        }
-        return {
-            ...state,
-            completed: true
-        }
+                return state
+            }
+            return {
+                ...state,
+                completed: true
+            }
         default:
             return state
     }
