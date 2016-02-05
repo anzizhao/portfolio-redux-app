@@ -4,6 +4,8 @@ var {storeTodoState, exportFile } = require('../../util')
 
 import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters, EXPORT_TODO, INIT_TODO, DEL_TODO, SAVE_TODO } from '../../actions/todo/actions'
 
+import * as todoActions  from '../../actions/todo/actions'
+
 const { SHOW_ALL } = VisibilityFilters
 
 function visibilityFilter(state = SHOW_ALL, action) {
@@ -21,7 +23,8 @@ function todo(state, action) {
             return {
             id: action.id,
             text: action.text,
-            completed: false
+            completed: false,
+            collapse: true,
         }
         case COMPLETE_TODO:
             if (state.id !== action.id) {
@@ -30,6 +33,14 @@ function todo(state, action) {
             return {
                 ...state,
                 completed: true
+            }
+        case todoActions.UNCOMPLETE_TODO:
+            if (state.id !== action.id) {
+                return state
+            }
+            return {
+                ...state,
+                completed: false 
             }
         default:
             return state
@@ -84,7 +95,13 @@ function todos(state = [], action) {
                             )
             storeTodoState(db);
             return db;
-        
+
+        case todoActions.EDIT_TODO:
+            db = state.map((todo) => {
+                                todo.collapse = todo.id === action.id ? false: true
+            })
+            storeTodoState(db);
+            return db;
         default:
             return state
     }

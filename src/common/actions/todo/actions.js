@@ -2,11 +2,13 @@ var {storeTodoState} = require('../../util')
 
 export const ADD_TODO = 'ADD_TODO'
 export const COMPLETE_TODO = 'COMPLETE_TODO'
+export const UNCOMPLETE_TODO = 'UNCOMPLETE_TODO'
 export const DEL_TODO = 'DEL_TODO'
 export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
 export const EXPORT_TODO = 'EXPORT_TODO' 
 export const INIT_TODO = 'INIT_TODO' 
 export const SAVE_TODO = 'SAVE_TODO' 
+export const EDIT_TODO = 'EDIT_TODO' 
 
 export const VisibilityFilters = {
   SHOW_ALL: 'SHOW_ALL',
@@ -26,6 +28,9 @@ export function addTodo(text) {
 
 export function completeTodo(id) {
   return { type: COMPLETE_TODO, id }
+}
+export function uncompleteTodo(id) {
+  return { type: UNCOMPLETE_TODO, id }
 }
 
 export function setVisibilityFilter(filter) {
@@ -50,9 +55,9 @@ export function delTodo (id) {
 }
 
 export function saveTodo (id, text) {
-    //if(! todo) {
-        //return; 
-    //}
     return { type: SAVE_TODO, item:{id, text} }
+}
+export function editTodo (id ) {
+    return { type: EDIT_TODO, id }
 }
 
