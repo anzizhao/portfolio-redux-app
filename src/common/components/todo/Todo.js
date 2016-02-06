@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react'
+import React, { Component, PropTypes } from 'react';
+import ReactDOM from 'react-dom';
 import ListItem from 'material-ui/lib/lists/list-item';
 import FlatButton from 'material-ui/lib/flat-button';
 import FontIcon from 'material-ui/lib/font-icon';
@@ -92,8 +93,6 @@ export default class Todo extends Component {
        const iconButtonElement = (
                  <IconButton
                    touch={true}
-                   tooltip="more"
-                   tooltipPosition="bottom-left"
                  >
                    <MoreVertIcon color={Colors.grey400} />
                  </IconButton>

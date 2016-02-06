@@ -1,24 +1,28 @@
 import React, { Component, PropTypes } from 'react'
+import ReactDOM from 'react-dom';
 import FlatButton from 'material-ui/lib/flat-button';
 import TextField from 'material-ui/lib/text-field';
 
 export default class AddTodo extends Component {
+    state = {
+        toEditItem : false,
+        addTodoText: ''
+    };
     handleSubmit(e) {
         e.preventDefault()
-        const node = this.refs.iAddTodo
-        const value = node.getValue()
+        const value =  e.target.value 
         if ( value ) {
             const text = value.trim()
             this.props.onAddSubmit(text)
-            node.setValue('')
+            const dom = ReactDOM.findDOMNode(this.refs.iAddTodo)
+            dom.getElementsByTagName('input')[0].value = ''
+            //this.setState({addTodoText: ''})
         }
     }
 
-    handleKeyPress(e) {
-        if(e.charCode == 13){
-            e.preventDefault()
-            this.handleSubmit(e);
-        }
+    handleEnterKeyDown(e) {
+        e.preventDefault()
+        this.handleSubmit(e);
     }
 
 
@@ -38,7 +42,8 @@ export default class AddTodo extends Component {
                         <TextField
                         floatingLabelText="添加todo项 按Enter确认"
                         ref="iAddTodo" 
-                        onKeyPress={(e) => this.handleKeyPress(e) }  
+                        //value={ this.state.addTodoText }
+                        onEnterKeyDown = {(e) => this.handleEnterKeyDown (e) }
                         fullWidth
                         />
                 </form>

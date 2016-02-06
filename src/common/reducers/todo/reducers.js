@@ -99,6 +99,7 @@ function todos(state = [], action) {
         case todoActions.EDIT_TODO:
             db = state.map((todo) => {
                                 todo.collapse = todo.id === action.id ? false: true
+                                return todo
             })
             storeTodoState(db);
             return db;
