@@ -63,10 +63,10 @@ export default class Todo extends Component {
             listItem: {
                 textDecoration: this.props.completed ? 'line-through' : 'none',
                 cursor: this.props.completed ? 'default' : 'pointer',
-                display: ! this.props.editTodo ? 'block' : 'none'
+                display:  this.props.collapse ? 'block' : 'none'
             },
             editTodo: {
-              display: this.props.editTodo ? 'block' : 'none',
+              display: ! this.props.collapse ? 'block' : 'none',
             }
       }
       const { id } = this.props
