@@ -101,7 +101,7 @@ export default class Todo extends Component {
           starClassName = i <  this.props.urgency ? 'signStar': '' 
           starClassName +=  this.props.collapse ? ' staticStar': ' changeStar'
           starItems.unshift( <span   className={ starClassName }
-                            onClick={(e) => handleSignStar(e, i) } 
+                            onClick={(e) => handleSignStar(e, i+1) } 
                             >☆</span> ) 
       }
       const starRate = (
