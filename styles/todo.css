@@ -1,0 +1,27 @@
+/**
+* todo 
+*/
+
+.rating {
+    unicode-bidi: bidi-override;
+    direction: rtl;
+    float:right;
+}
+.rating > span {
+    display: inline-block;
+    position: relative;
+    width: 1.1em;
+    font-size: 20px;
+}
+.rating > span.changeStar:hover:before,
+.rating > span.changeStar:hover ~ span.changeStar:before {
+    color: gold;
+    content: "\2605";
+    position: absolute;
+}
+
+.signStar.staticStar:before{
+    color: gold;
+    content: "\2605";
+    position: absolute;
+}

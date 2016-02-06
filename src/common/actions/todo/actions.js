@@ -9,6 +9,7 @@ export const EXPORT_TODO = 'EXPORT_TODO'
 export const INIT_TODO = 'INIT_TODO' 
 export const SAVE_TODO = 'SAVE_TODO' 
 export const EDIT_TODO = 'EDIT_TODO' 
+export const SIGN_STAR= 'SIGN_STAR' 
 
 export const VisibilityFilters = {
   SHOW_ALL: 'SHOW_ALL',
@@ -59,5 +60,9 @@ export function saveTodo (id, text) {
 }
 export function editTodo (id ) {
     return { type: EDIT_TODO, id }
+}
+
+export function signStar (id, count ) {
+    return { type: SIGN_STAR, id, count  }
 }
 

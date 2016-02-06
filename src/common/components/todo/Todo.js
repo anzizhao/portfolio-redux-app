@@ -40,6 +40,9 @@ export default class Todo extends Component {
             });
         }
     }
+    handleSignStar (e, id ,count) {
+        this.props.actions.signStar(id, count)
+    }
     handleDelItem (e, id) {
           e.stopPropagation();
           this.props.actions.delTodo(id)
@@ -57,8 +60,8 @@ export default class Todo extends Component {
         e.stopPropagation();
         this.props.actions.uncompleteTodo(id)
     }
-
   render() {
+      console.log('render')
       let style = {
             listItem: {
                 textDecoration: this.props.completed ? 'line-through' : 'none',
@@ -87,8 +90,29 @@ export default class Todo extends Component {
                              <ActionGrade color={Colors.yellowA200}/>
                          </div>
                   )
+                           //<span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
+      const handleSignStar = (e, starCount) =>{
+            return  this.props.collapse? null: this.handleSignStar(e, id, starCount) 
+      
+      } 
+      const starItems = [] 
+      let starClassName = ''
+      for(let i=0; i<5; i++) {
+          starClassName = i <  this.props.urgency ? 'signStar': '' 
+          starClassName +=  this.props.collapse ? ' staticStar': ' changeStar'
+          starItems.unshift( <span   className={ starClassName }
+                            onClick={(e) => handleSignStar(e, i) } 
+                            >☆</span> ) 
+      }
+      const starRate = (
+          <span className="rating">
+          { 
+              starItems
+          } 
+          </span >
+      )
 
-      const listText = ( <span> <span>{ `${ String(this.props.index + 1) }.  ` }</span> {this.props.text} </span>)
+      const listText = ( <span> <span>{ `${ String(this.props.index + 1) }.  ` }</span> {this.props.text} &nbsp;&nbsp;&nbsp;&nbsp; { starRate} </span>)
 
        const iconButtonElement = (
                  <IconButton
@@ -124,7 +148,6 @@ export default class Todo extends Component {
                 style={style.listItem}
                 rightIconButton={ iconBut }
                 rightIconButton={ rightIconMenu }
-                leftIcon={ iconStart }
             />
             <div style={style.editTodo } >
                  <label
@@ -132,11 +155,11 @@ export default class Todo extends Component {
                  >{ this.props.index + 1 } </label>
                  <TextField
                      fullWidth
-                     floatingLabelText={ this.props.index + 1 }
                      onEnterKeyDown = {(e) => this.handleEnterKeyDown (e, id) }
                      value={this.state.itemText}
                      onChange={(e)=>this.handleChangeItem(e)}
                  />
+                 <span>紧急程度 {starRate} </span>
             </div>
         </div>
     )
