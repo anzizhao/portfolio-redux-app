@@ -14,6 +14,7 @@ import MenuItem from 'material-ui/lib/menus/menu-item';
 import Colors from 'material-ui/lib/styles/colors';
 
 import Icon from 'react-fa'
+import StarRate from './starRate'
 
 export default class Todo extends Component {
     state = {
@@ -74,45 +75,12 @@ export default class Todo extends Component {
       }
       const { id } = this.props
 
-      const iconBut =( 
-                      <Icon size="lg" name="times-circle-o" onClick={(e) => this.handleDelItem(e, id)  } /> 
-                  )
-      const iconToStop = ( 
-                      <Icon size="lg" name="stop-circle-o" onClick={(e) => this.handleComplete(e, id)  } /> 
-                  )
-      const iconToPlay = ( 
-                      <Icon size="lg" name="play-circle-o" onClick={(e) => this.handleUNComplete(e, id)  } /> 
-                  )
-      const iconStart = ( 
-                         <div>
-                             <ActionGrade color={Colors.yellowA200}/>
-                             <ActionGrade color={Colors.yellowA200}/>
-                             <ActionGrade color={Colors.yellowA200}/>
-                         </div>
-                  )
-                           //<span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
       const handleSignStar = (e, starCount) =>{
             return  this.props.collapse? null: this.handleSignStar(e, id, starCount) 
       
       } 
-      const starItems = [] 
-      let starClassName = ''
-      for(let i=0; i<5; i++) {
-          starClassName = i <  this.props.urgency ? 'signStar': '' 
-          starClassName +=  this.props.collapse ? ' staticStar': ' changeStar'
-          starItems.unshift( <span   className={ starClassName }
-                            onClick={(e) => handleSignStar(e, i+1) } 
-                            >☆</span> ) 
-      }
-      const starRate = (
-          <span className="rating">
-          { 
-              starItems
-          } 
-          </span >
-      )
 
-      const listText = ( <span> <span>{ `${ String(this.props.index + 1) }.  ` }</span> {this.props.text} &nbsp;&nbsp;&nbsp;&nbsp; { starRate} </span>)
+      const listText = ( <span> <span>{ `${ String(this.props.index + 1) }.  ` }</span> {this.props.text} &nbsp;&nbsp;&nbsp;&nbsp; <StarRate star={this.props.urgency} onlyShow={true} />  </span>)
 
        const iconButtonElement = (
                  <IconButton
@@ -146,12 +114,11 @@ export default class Todo extends Component {
         <div>
             <ListItem insetChildren={true} primaryText={ listText } 
                 style={style.listItem}
-                rightIconButton={ iconBut }
                 rightIconButton={ rightIconMenu }
             />
             <div style={style.editTodo } >
                  <label
-                     onClick={ () =>  this.handleEditItem()  }
+                     onClick={ () =>  this.handleEditItem(id)  }
                  >{ this.props.index + 1 } </label>
                  <TextField
                      fullWidth
@@ -159,7 +126,9 @@ export default class Todo extends Component {
                      value={this.state.itemText}
                      onChange={(e)=>this.handleChangeItem(e)}
                  />
-                 <span>紧急程度 {starRate} </span>
+                 <span>紧急程度 <StarRate star={this.props.urgency}
+                         clickStar={(e, count)=>this.handleSignStar(e, id, count)} 
+                 />  </span>
             </div>
         </div>
     )
@@ -174,3 +143,21 @@ Todo.propTypes = {
   onClick: PropTypes.func.isRequired,
   key: PropTypes.number.isRequired
 }
+
+      //const iconBut =( 
+                      //<Icon size="lg" name="times-circle-o" onClick={(e) => this.handleDelItem(e, id)  } /> 
+                  //)
+      //const iconToStop = ( 
+                      //<Icon size="lg" name="stop-circle-o" onClick={(e) => this.handleComplete(e, id)  } /> 
+                  //)
+      //const iconToPlay = ( 
+                      //<Icon size="lg" name="play-circle-o" onClick={(e) => this.handleUNComplete(e, id)  } /> 
+                  //)
+      //const iconStart = ( 
+                         //<div>
+                             //<ActionGrade color={Colors.yellowA200}/>
+                             //<ActionGrade color={Colors.yellowA200}/>
+                             //<ActionGrade color={Colors.yellowA200}/>
+                         //</div>
+                  //)
+                           //<span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
