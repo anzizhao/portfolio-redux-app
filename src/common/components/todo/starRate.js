@@ -7,48 +7,75 @@ export default class StarRate extends Component {
         super(props, context);
 
         this.state = {
-            signStar: props.star 
+            signStar: props.star,   //被打标记的星星颗数
+            hasSignStar : false   //被打标记的星星颗数
         };
     }
-
-    handleSignStar (e, count) {
+    hasSignStar(){
+        return this.props.initHasSignStar 
+    }
+    mayHandleSignStar  (e, count)  {
+        if( this.props.onlyShow ||   this.state.hasSignStar ){
+            return null 
+        }
+        this.setState({
+            hasSignStar: true,
+            signStar: count
+        })
+        // action 
         this.props.clickStar(e, count)
-    }
+    } 
 
-    _handleMouseOver (e, i) {
-        this.setState({signStar: i})
-    }
+    mayHandleMouseOver  (e, index)  {
+        if( this.props.onlyShow ||   this.state.hasSignStar ){
+            return null 
+        }
+        this.setState({signStar: index})
+    } 
 
+    maySignNone (e) {
+        if( this.state.hasSignStar || this.props.onlyShow  ){
+            return null
+        }
+        this.setState({signStar: 0})
+    } 
+
+    componentWillReceiveProps (nextProps) {
+        if ( nextProps.initHasSignStar && ! this.props.initHasSignStar ) {
+            this.setState({
+                hasSignStar: false 
+            });
+        }
+        // 组建的star 为本地的
+        this.setState({
+            signStar: nextProps.star 
+        });
+
+    }
     render() {
         let style = { }
         const {  count, star , onlyShow } = this.props
-        
+
         const starItems = [] 
         let starClassName = ''
         const len = count ? count: 5
 
-        const mayHandleSignStar = (e, count) => {
-            return onlyShow? null: this.handleSignStar(e, count) 
-        } 
-
-        const mayHandleMouseOver = (e, index) => {
-            return onlyShow? null: this._handleMouseOver(e, index) 
-        } 
-
-        for(let i=0; i<len ; i++) {
+        for(let i=1; i<=len ; i++) {
             starClassName = i <=  this.state.signStar ? 'signStar': '' 
-            starItems.unshift( <span   className={ starClassName }
-                                  onClick={(e) => mayHandleSignStar(e, i+1) } 
-                                  onMouseOver={(e)=> mayHandleMouseOver(e, i) }
+            starItems.unshift( <span className={ starClassName } key={i}
+                                  onClick={(e) => this.mayHandleSignStar(e, i) } 
+                                  onMouseOver={(e)=> this.mayHandleMouseOver(e, i) }
                               >☆</span> ) 
         }
 
         return (
-          <span className="rating">
+          <span className="rating" 
+              onMouseLeave ={(e)=> { this.maySignNone(e) }}
+          >
           { 
               starItems
           } 
-          </span >
+          </span>
         )
     }
 }
@@ -58,4 +85,6 @@ StarRate.propTypes = {
   count: PropTypes.number,
   onlyShow: PropTypes.bool,
   clickStar: PropTypes.func,
+  initHasSignStar: PropTypes.bool,
+  initHasSignStarFunc: PropTypes.func,
 }

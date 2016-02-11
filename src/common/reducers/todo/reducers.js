@@ -82,6 +82,7 @@ function todos(state = [], action) {
             })
             let changeItem = Object.assign({}, state[index]) 
             changeItem.text = action.item.text
+            changeItem.urgency = action.item.urgency 
             changeItem.collapse = true
             db = [
                 ...state.slice(0, index),
@@ -104,6 +105,16 @@ function todos(state = [], action) {
         case todoActions.EDIT_TODO:
             db = state.map((todo) => {
                                 todo.collapse = todo.id === action.id ? false: true
+                                return todo
+            })
+            storeTodoState(db);
+            return db;
+
+        case todoActions.UNEDIT_TODO:
+            db = state.map((todo) => {
+                                if(todo.id === action.id ){
+                                    todo.collapse =  true
+                                }
                                 return todo
             })
             storeTodoState(db);

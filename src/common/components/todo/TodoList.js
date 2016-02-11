@@ -33,8 +33,8 @@ export default class TodoList extends Component {
                 <List  style={style.list}>
                 {this.props.todos.map((todo, index)  =>
                                       <Todo {...todo}
+                                          key={todo.id}
                                           index={index}
-                                          key={`todoItem${todo.id}`}
                                           actions={actions}
                                           onClick={() => this.props.onTodoClick(todo.id)} />
                                      )}

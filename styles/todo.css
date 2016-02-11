@@ -25,3 +25,6 @@
     content: "\2605";
     position: absolute;
 }
+.todo-item{
+    overflow: auto
+}

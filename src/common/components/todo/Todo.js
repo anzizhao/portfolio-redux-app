@@ -19,13 +19,23 @@ import StarRate from './starRate'
 export default class Todo extends Component {
     state = {
         toEditItem : false,
+        initHasSignStar: false,
         itemText: ''
     };
 
     handleEditItem (id){
         this.props.actions.editTodo(id)
         this.setState({
-            itemText: this.props.text
+            itemText: this.props.text,
+            initHasSignStar: true
+        });
+    }
+
+    handleUNEditItem (id){
+        this.props.actions.uneditTodo(id)
+        this.setState({
+            itemText: this.props.text,
+            initHasSignStar: true 
         });
     }
 
@@ -34,16 +44,15 @@ export default class Todo extends Component {
         if ( value ) {
             //const id = this.props.id
             const text = value.trim()
-            this.props.actions.saveTodo(id, text)
+            const count = this.props.urgency 
+            this.props.actions.saveTodo(id, text, count)
 
             this.setState({
                 toEditItem : ! this.state.toEditItem,
             });
         }
     }
-    handleSignStar (e, id ,count) {
-        this.props.actions.signStar(id, count)
-    }
+
     handleDelItem (e, id) {
           e.stopPropagation();
           this.props.actions.delTodo(id)
@@ -61,24 +70,51 @@ export default class Todo extends Component {
         e.stopPropagation();
         this.props.actions.uncompleteTodo(id)
     }
-  render() {
-      console.log('render')
-      let style = {
-            listItem: {
-                textDecoration: this.props.completed ? 'line-through' : 'none',
-                cursor: this.props.completed ? 'default' : 'pointer',
-                display:  this.props.collapse ? 'block' : 'none'
-            },
-            editTodo: {
-              display: ! this.props.collapse ? 'block' : 'none',
-            }
-      }
-      const { id } = this.props
 
-      const handleSignStar = (e, starCount) =>{
-            return  this.props.collapse? null: this.handleSignStar(e, id, starCount) 
-      
-      } 
+    handleSignStar  (e, id, starCount){ 
+        return   this.props.actions.signStar(id, starCount) 
+    } 
+
+    initHasSignStar (){ 
+        this.setState({
+            initHasSignStar: false ,
+        });
+    } 
+
+    _leaveEditMode(id){
+        this.initHasSignStar()
+        this.props.actions.uneditTodo(id)
+    }
+
+    handleSaveTodo(){
+        let id, text, count 
+        id = this.props.id
+        text = this.state.itemText
+        count = this.props.urgency
+        this.props.actions.saveTodo(id, text, count)
+        this._leaveEditMode(id)
+    }
+    handleUnsaveTodo(){
+        let id = this.props.id
+        this._leaveEditMode(id)
+    }
+
+    
+  render() {
+      const { id } = this.props
+      const style = {
+          listItem: {
+              textDecoration: this.props.completed ? 'line-through' : 'none',
+              cursor: this.props.completed ? 'default' : 'pointer',
+              display:  this.props.collapse ? 'block' : 'none'
+          },
+          editTodo: {
+              display: ! this.props.collapse ? 'block' : 'none',
+          },
+          opButGroup: {
+              float: 'right',
+          },
+      };
 
       const listText = ( <span> <span>{ `${ String(this.props.index + 1) }.  ` }</span> {this.props.text} &nbsp;&nbsp;&nbsp;&nbsp; <StarRate star={this.props.urgency} onlyShow={true} />  </span>)
 
@@ -111,24 +147,28 @@ export default class Todo extends Component {
       )
 
     return (
-        <div>
+        <div className="todo-item">
             <ListItem insetChildren={true} primaryText={ listText } 
                 style={style.listItem}
                 rightIconButton={ rightIconMenu }
             />
             <div style={style.editTodo } >
                  <label
-                     onClick={ () =>  this.handleEditItem(id)  }
                  >{ this.props.index + 1 } </label>
                  <TextField
                      fullWidth
-                     onEnterKeyDown = {(e) => this.handleEnterKeyDown (e, id) }
                      value={this.state.itemText}
                      onChange={(e)=>this.handleChangeItem(e)}
                  />
-                 <span>紧急程度 <StarRate star={this.props.urgency}
+                 <div><span>紧急程度 <StarRate star={this.props.urgency}
                          clickStar={(e, count)=>this.handleSignStar(e, id, count)} 
-                 />  </span>
+                         initHasSignStar={ this.state.initHasSignStar }
+                 />  </span></div>
+
+                <div style={style.opButGroup }>
+                    <FlatButton label="完成" onClick={(e) => this.handleSaveTodo() }  style={ style.flatButton }  />
+                    <FlatButton label="取消" onClick={(e) => this.handleUnsaveTodo() }  style={ style.flatButton }  />
+                </div>
             </div>
         </div>
     )
@@ -141,23 +181,5 @@ Todo.propTypes = {
   actions: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   onClick: PropTypes.func.isRequired,
-  key: PropTypes.number.isRequired
 }
 
-      //const iconBut =( 
-                      //<Icon size="lg" name="times-circle-o" onClick={(e) => this.handleDelItem(e, id)  } /> 
-                  //)
-      //const iconToStop = ( 
-                      //<Icon size="lg" name="stop-circle-o" onClick={(e) => this.handleComplete(e, id)  } /> 
-                  //)
-      //const iconToPlay = ( 
-                      //<Icon size="lg" name="play-circle-o" onClick={(e) => this.handleUNComplete(e, id)  } /> 
-                  //)
-      //const iconStart = ( 
-                         //<div>
-                             //<ActionGrade color={Colors.yellowA200}/>
-                             //<ActionGrade color={Colors.yellowA200}/>
-                             //<ActionGrade color={Colors.yellowA200}/>
-                         //</div>
-                  //)
-                           //<span>☆</span><span>☆</span><span>☆</span><span>☆</span><span>☆</span>
