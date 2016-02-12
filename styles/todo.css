@@ -5,7 +5,8 @@
 .rating {
     unicode-bidi: bidi-override;
     direction: rtl;
-    float:right;
+    margin-left: 150px;
+    /*float:right;*/
 }
 .rating > span {
     display: inline-block;
@@ -26,5 +27,31 @@
     position: absolute;
 }
 .todo-item{
-    overflow: auto
+    overflow: auto;
+}
+
+.item-input{
+    margin-bottom: 10px;
+    /*margin-left: 10px;*/
+}
+
+.item-score{
+    margin-top:  5px;
+    margin-bottom: 5px;
+}
+.item-score-title{
+    font-size: 15px;
+    margin-left: 10px;
+    margin-bottom: 5px;
+}
+
+.item-show-right{
+    float: right;
+    margin-top: -20px;
+}
+
+.item-show-right-star{
+    font-size: 12px;
+    font-weight: 100;
+    font-style: italic;
 }

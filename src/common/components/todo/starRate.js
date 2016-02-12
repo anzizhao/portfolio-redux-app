@@ -11,9 +11,6 @@ export default class StarRate extends Component {
             hasSignStar : false   //被打标记的星星颗数
         };
     }
-    hasSignStar(){
-        return this.props.initHasSignStar 
-    }
     mayHandleSignStar  (e, count)  {
         if( this.props.onlyShow ||   this.state.hasSignStar ){
             return null 
@@ -52,10 +49,8 @@ export default class StarRate extends Component {
         });
 
     }
-    render() {
-        let style = { }
+    createItems(){
         const {  count, star , onlyShow } = this.props
-
         const starItems = [] 
         let starClassName = ''
         const len = count ? count: 5
@@ -67,13 +62,24 @@ export default class StarRate extends Component {
                                   onMouseOver={(e)=> this.mayHandleMouseOver(e, i) }
                               >☆</span> ) 
         }
+        return starItems 
+    }
+
+
+    render() {
+        const {  count, star , onlyShow, rightSide } = this.props
+        let style = {}
+        if(rightSide){
+            style.float = 'right'
+        }
 
         return (
           <span className="rating" 
+                style={style}
               onMouseLeave ={(e)=> { this.maySignNone(e) }}
           >
           { 
-              starItems
+             this.createItems() 
           } 
           </span>
         )
@@ -86,5 +92,5 @@ StarRate.propTypes = {
   onlyShow: PropTypes.bool,
   clickStar: PropTypes.func,
   initHasSignStar: PropTypes.bool,
-  initHasSignStarFunc: PropTypes.func,
+  rightSide: PropTypes.bool,
 }

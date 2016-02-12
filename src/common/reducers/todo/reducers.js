@@ -26,6 +26,8 @@ function todo(state, action) {
             completed: false,
             collapse: true,
             urgency: 2,
+            importance: 2,
+            difficulty: 2,
         }
         case COMPLETE_TODO:
             if (state.id !== action.id) {
@@ -75,14 +77,16 @@ function todos(state = [], action) {
 
         case SAVE_TODO:
             let index = state.findIndex((ele, index, arr) => {
-                                if ( ele.id === action.item.id )  {
+                                if ( ele.id === action.id )  {
                                     return true
                                 }
                                 return false
             })
             let changeItem = Object.assign({}, state[index]) 
-            changeItem.text = action.item.text
-            changeItem.urgency = action.item.urgency 
+            changeItem.text = action.text 
+            changeItem.urgency = action.urgency 
+            changeItem.importance = action.importance
+            changeItem.difficulty = action.difficulty
             changeItem.collapse = true
             db = [
                 ...state.slice(0, index),

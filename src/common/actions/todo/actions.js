@@ -56,8 +56,8 @@ export function delTodo (id) {
     return { type: DEL_TODO, id }
 }
 
-export function saveTodo (id, text, urgency) {
-    return { type: SAVE_TODO, item:{id, text, urgency} }
+export function saveTodo (id, item) {
+    return { type: SAVE_TODO, id, ...item }
 }
 export function editTodo (id ) {
     return { type: EDIT_TODO, id }
