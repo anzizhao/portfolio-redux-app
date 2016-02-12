@@ -20,37 +20,23 @@ export default class Todo extends Component {
     state = {
         toEditItem : false,
         initHasSignStar: false,
+        signStar: 0,
         itemText: ''
     };
 
+    componentWillMount(){
+        this.setState({
+            signStar: this.props.urgency 
+        });
+
+    }
     handleEditItem (id){
         this.props.actions.editTodo(id)
         this.setState({
             itemText: this.props.text,
-            initHasSignStar: true
+            initHasSignStar: true,
+            signStar: this.props.urgency
         });
-    }
-
-    handleUNEditItem (id){
-        this.props.actions.uneditTodo(id)
-        this.setState({
-            itemText: this.props.text,
-            initHasSignStar: true 
-        });
-    }
-
-    handleEnterKeyDown (e, id) {
-        const value =  e.target.value 
-        if ( value ) {
-            //const id = this.props.id
-            const text = value.trim()
-            const count = this.props.urgency 
-            this.props.actions.saveTodo(id, text, count)
-
-            this.setState({
-                toEditItem : ! this.state.toEditItem,
-            });
-        }
     }
 
     handleDelItem (e, id) {
@@ -72,17 +58,21 @@ export default class Todo extends Component {
     }
 
     handleSignStar  (e, id, starCount){ 
-        return   this.props.actions.signStar(id, starCount) 
+        //return   this.props.actions.signStar(id, starCount) 
+        this.setState({
+            signStar: starCount,
+        });
+        
     } 
 
-    initHasSignStar (){ 
+    initItemState(){ 
         this.setState({
             initHasSignStar: false ,
         });
     } 
 
     _leaveEditMode(id){
-        this.initHasSignStar()
+        this.initItemState()
         this.props.actions.uneditTodo(id)
     }
 
@@ -90,13 +80,18 @@ export default class Todo extends Component {
         let id, text, count 
         id = this.props.id
         text = this.state.itemText
-        count = this.props.urgency
+        //count = this.props.urgency
+        count = this.state.signStar  
         this.props.actions.saveTodo(id, text, count)
         this._leaveEditMode(id)
     }
     handleUnsaveTodo(){
         let id = this.props.id
         this._leaveEditMode(id)
+        //还原原来的
+        this.setState({
+            signStar: this.props.urgency,
+        });
     }
 
     
@@ -116,7 +111,7 @@ export default class Todo extends Component {
           },
       };
 
-      const listText = ( <span> <span>{ `${ String(this.props.index + 1) }.  ` }</span> {this.props.text} &nbsp;&nbsp;&nbsp;&nbsp; <StarRate star={this.props.urgency} onlyShow={true} />  </span>)
+      const listText = ( <span> <span>{ `${ String(this.props.index + 1) }.  ` }</span> {this.props.text} &nbsp;&nbsp;&nbsp;&nbsp; <StarRate star={this.state.signStar} onlyShow={true} />  </span>)
 
        const iconButtonElement = (
                  <IconButton
@@ -160,8 +155,8 @@ export default class Todo extends Component {
                      value={this.state.itemText}
                      onChange={(e)=>this.handleChangeItem(e)}
                  />
-                 <div><span>紧急程度 <StarRate star={this.props.urgency}
-                         clickStar={(e, count)=>this.handleSignStar(e, id, count)} 
+                 <div><span>紧急程度 <StarRate star={this.state.signStar }
+                         clickStar={(e, count)=>{ this.handleSignStar(e, id, count)}  } 
                          initHasSignStar={ this.state.initHasSignStar }
                  />  </span></div>
 
