@@ -24,14 +24,14 @@ if (process.env.NODE_ENV === 'production') {
       './src/client/index.js'
     ],
     module: {
-      loaders: [{
-        test: /\.js$/,
-        loader: 'react-hot!babel',
-        exclude: /node_modules/,
-        include: __dirname
+      loaders: [
+      {test: /\.js$/, loaders: ['react-hot', 'babel'], include: path.join(__dirname, 'src')},
+      { test: /\.(png|jpg|gif|jpeg)$/, loader: 'url?limit=8192'},
+      {
+          test: /\.(otf|eot|svg|ttf|woff|woff2)(\?.+)?$/,
+          loader: 'url-loader?limit=8192'
       },
-      { test: /\.(png|jpg|gif|jpeg)$/, loader: 'url-loader?limit=8192'},
-      { test: /\.css$/, loader: ExtractTextPlugin.extract('style-loader', 'css-loader?sourceMap') }
+      { test: /\.css$/, loader: 'style-loader!css-loader' }
     ]},
     plugins : [
       new webpack.DefinePlugin({
@@ -54,10 +54,6 @@ if (process.env.NODE_ENV === 'production') {
       loaders: [
       {test: /\.js$/, loaders: ['react-hot', 'babel'], include: path.join(__dirname, 'src')},
       { test: /\.(png|jpg|gif|jpeg)$/, loader: 'url?limit=8192'},
-      //{
-          //test: /\.(css)(\?.+)$/,
-          //loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
-      //},
       {
           test: /\.(otf|eot|svg|ttf|woff|woff2)(\?.+)?$/,
           loader: 'url-loader?limit=8192'
