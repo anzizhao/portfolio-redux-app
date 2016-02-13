@@ -124,8 +124,8 @@ export default class Todo extends Component {
       const { id } = this.props
       const style = {
           listItem: {
-              textDecoration: this.props.completed ? 'line-through' : 'none',
-              cursor: this.props.completed ? 'default' : 'pointer',
+              //textDecoration: this.props.completed ? 'line-through' : 'none',
+              //cursor: this.props.completed ? 'default' : 'pointer',
               display:  this.props.collapse ? 'block' : 'none'
           },
           editTodo: {
@@ -134,16 +134,21 @@ export default class Todo extends Component {
           opButGroup: {
               float: 'right',
           },
+          listTextSpan: {
+              float: 'left',
+              textDecoration: this.props.completed ? 'line-through' : 'none',
+          },
           badge: {
               fontSize: 15, 
               'marginTop': '10px',
           }
       };
 
-                            //<StarRate star={this.state.signStar} onlyShow={true} rightSide={true} />  
       const listText = ( 
-                        <span> 
+                        <span > 
+                            <span  style={style.listTextSpan}>
                             { `${ String(this.props.index + 1) }.  ${this.props.text}        ` } 
+                            </span>
                             <span className="item-show-right">
                                 <Badge
                                     badgeContent={this.state.importanceStar }
@@ -197,9 +202,11 @@ export default class Todo extends Component {
         </IconMenu>
       )
 
+            //primaryText={ listText } 
     return (
         <div className="todo-item">
-            <ListItem insetChildren={true} primaryText={ listText } 
+            <ListItem insetChildren={true} 
+                primaryText={ listText } 
                 style={style.listItem}
                 rightIconButton={ rightIconMenu }
             />

@@ -49,6 +49,14 @@ export function exportTodo () {
 }
 
 let nextTodoId = 0
+export function addTodo (text) {
+    return {
+        type: ADD_TODO, 
+        id : nextTodoId ++, 
+        text
+    }
+}
+
 export function initTodo () {
     const db = storeTodoState()
     nextTodoId += db.length;
