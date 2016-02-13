@@ -5,6 +5,7 @@ export const COMPLETE_TODO = 'COMPLETE_TODO'
 export const UNCOMPLETE_TODO = 'UNCOMPLETE_TODO'
 export const DEL_TODO = 'DEL_TODO'
 export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
+export const SET_SORT = 'SET_SORT'
 export const EXPORT_TODO = 'EXPORT_TODO' 
 export const INIT_TODO = 'INIT_TODO' 
 export const SAVE_TODO = 'SAVE_TODO' 
@@ -18,14 +19,14 @@ export const VisibilityFilters = {
   SHOW_ACTIVE: 'SHOW_ACTIVE'
 }
 
-let nextTodoId = 0
-
-export function addTodo(text) {
-    return  {
-        id: nextTodoId++,
-        type: ADD_TODO,
-        text
-    }
+export const sorts = {
+    SORT_ORIGIN: 'SORT_ORIGIN',
+    SORT_IMPORTANCE_UP: 'SORT_IMPORTANCE_UP',
+    SORT_IMPORTANCE_DOWN: 'SORT_IMPORTANCE_DOWN',
+    SORT_URGENCY_UP:'SORT_URGENCY_UP',
+    SORT_URGENCY_DOWN: 'SORT_URGENCY_DOWN',
+    SORT_DIFFICULTY_UP: 'SORT_DIFFICULTY_UP',
+    SORT_DIFFICULTY_DOWN :'SORT_DIFFICULTY_DOWN'
 }
 
 export function completeTodo(id) {
@@ -39,10 +40,15 @@ export function setVisibilityFilter(filter) {
   return { type: SET_VISIBILITY_FILTER, filter }
 }
 
+export function setSort (cmd) {
+  return { type: SET_SORT, cmd }
+}
+
 export function exportTodo () {
     return { type: EXPORT_TODO }
 }
 
+let nextTodoId = 0
 export function initTodo () {
     const db = storeTodoState()
     nextTodoId += db.length;

@@ -7,11 +7,22 @@ import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters, EXPO
 import * as todoActions  from '../../actions/todo/actions'
 
 const { SHOW_ALL } = VisibilityFilters
+const { SORT_ORIGIN } = todoActions.sorts 
 
 function visibilityFilter(state = SHOW_ALL, action) {
     switch (action.type) {
         case SET_VISIBILITY_FILTER:
             return action.filter
+        default:
+            return state
+    }
+}
+
+function sort (state = SORT_ORIGIN , action) {
+    let cmds = todoActions
+    switch (action.type) {
+        case cmds.SET_SORT:
+            return action.cmd 
         default:
             return state
     }
@@ -141,6 +152,7 @@ function todos(state = [], action) {
 
 const todoApp = combineReducers({
     visibilityFilter,
+    sort,
     todos: undoable(todos, { filter: distinctState() })
 })
 

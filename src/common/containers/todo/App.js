@@ -18,7 +18,7 @@ class App extends Component {
     }
 
   render() {
-    const { dispatch, visibleTodos, visibilityFilter, actions } = this.props
+    const { dispatch, visibleTodos, visibilityFilter, actions, sort } = this.props
 
     return (
       <div>
@@ -32,7 +32,10 @@ class App extends Component {
           onTodoClick={id => dispatch(completeTodo(id))} />
         <Footer
           filter={visibilityFilter}
+          sort={ sort } 
           onFilterChange={nextFilter => dispatch(setVisibilityFilter(nextFilter))}
+          onSortChange={nextSort => actions.setSort(nextSort) }
+
           onUndo={() => dispatch(ActionCreators.undo())}
           onRedo={() => dispatch(ActionCreators.redo())}
           undoDisabled={this.props.undoDisabled}
@@ -48,24 +51,68 @@ App.propTypes = {
     text: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired
   }).isRequired).isRequired,
+  sort : PropTypes.oneOf([
+                         'SORT_ORIGIN',
+                         'SORT_IMPORTANCE_UP',
+                         'SORT_IMPORTANCE_DOWN',
+                         'SORT_URGENCY_UP',
+                         'SORT_URGENCY_DOWN',
+                         'SORT_DIFFICULTY_UP',
+                         'SORT_DIFFICULTY_DOWN'
+  ]).isRequired,
   visibilityFilter: PropTypes.oneOf([
-    'SHOW_ALL',
-    'SHOW_COMPLETED',
-    'SHOW_ACTIVE'
+                                    'SHOW_ALL',
+                                    'SHOW_COMPLETED',
+                                    'SHOW_ACTIVE'
   ]).isRequired,
   undoDisabled: PropTypes.bool.isRequired,
   redoDisabled: PropTypes.bool.isRequired
 }
 
-function selectTodos(todos, filter) {
+function sortTodos (todos, cmd) {
+    let cmds = todoActions.sorts   
+    switch (cmd) {
+        case cmds.SORT_IMPORTANCE_UP:
+            return todos.sort((a, b)=>{
+                return a.importance - b.importance 
+        })
+        case cmds.SORT_IMPORTANCE_DOWN:
+            return todos.sort((a, b)=>{
+                return b.importance - a.importance 
+        })
+        case cmds.SORT_URGENCY_UP:
+            return todos.sort((a, b)=>{
+                return a.urgency- b.urgency
+        })
+        case cmds.SORT_URGENCY_DOWN:
+            return todos.sort((a, b)=>{
+                return b.urgency- a.urgency
+        })
+        case cmds.SORT_DIFFICULTY_UP:
+            return todos.sort((a, b)=>{
+                return a.difficulty - b.difficulty
+        })
+        case cmds.SORT_DIFFICULTY_DOWN:
+            return todos.sort((a, b)=>{
+                return b.difficulty - a.difficulty
+        })
+        //cmds.SORT_ORIGIN
+        default: 
+            return todos.sort((a, b)=>{
+                return b.id - a.id
+        })
+    }
+}
+
+function selectTodos(todos, filter, sort ) {
   switch (filter) {
     default:
     case VisibilityFilters.SHOW_ALL:
-      return todos
+      return sortTodos( todos, sort)
     case VisibilityFilters.SHOW_COMPLETED:
-      return todos.filter(todo => todo.completed)
+      return sortTodos(  todos.filter(todo => todo.completed) , sort)
     case VisibilityFilters.SHOW_ACTIVE:
-      return todos.filter(todo => !todo.completed)
+      return sortTodos(todos.filter(todo => !todo.completed), sort)
   }
 }
 
@@ -73,8 +120,9 @@ function select(state) {
   return {
     undoDisabled: state.todo.todos.past.length === 0,
     redoDisabled: state.todo.todos.future.length === 0,
-    visibleTodos: selectTodos(state.todo.todos.present, state.todo.visibilityFilter),
+    visibleTodos: selectTodos(state.todo.todos.present, state.todo.visibilityFilter, state.todo.sort ),
     visibilityFilter: state.todo.visibilityFilter,
+    sort: state.todo.sort,
     layout : state.layout,
   }
 }

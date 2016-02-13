@@ -44,6 +44,7 @@ export default class TodoList extends Component {
                 <Divider inset={true}/>
 
                 <FlatButton label="导出" onClick={(e) => this.props.onExportClick() }  style={ style.flatButton }  />
+                <br/>
             </div>
         )
     }
