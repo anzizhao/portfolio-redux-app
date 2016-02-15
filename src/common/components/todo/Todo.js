@@ -203,12 +203,24 @@ export default class Todo extends Component {
       )
 
             //primaryText={ listText } 
+            //insetChildren={true} 
     return (
         <div className="todo-item">
-            <ListItem insetChildren={true} 
+            <ListItem 
                 primaryText={ listText } 
                 style={style.listItem}
                 rightIconButton={ rightIconMenu }
+                primaryTogglesNestedList={true}
+                nestedItems={[
+                    <ListItem
+                    key={1}
+                    primaryText="Starred"
+                    />,
+                    <ListItem
+                    key={2}
+                    primaryText="Sent Mail"
+                    />,
+                ]}
             />
             <div style={style.editTodo } >
                  <label
