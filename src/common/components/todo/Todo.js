@@ -16,6 +16,7 @@ import Badge from 'material-ui/lib/badge';
 
 import Icon from 'react-fa'
 import StarRate from './starRate'
+import TodoSubBut from './todoSubBut'
 
 export default class Todo extends Component {
     state = {
@@ -196,11 +197,13 @@ export default class Todo extends Component {
               primaryText="完成"
           />
           <MenuItem
-              onClick={(e) => this.handleUNComplete(e, id) } 
+              onClick={(e) => this.handleUNComplete(e,   id) } 
               primaryText="未完成"
           />
         </IconMenu>
       )
+      let subItems = []
+      subItems.push(<TodoSubBut /> )
 
             //primaryText={ listText } 
             //insetChildren={true} 
@@ -211,16 +214,7 @@ export default class Todo extends Component {
                 style={style.listItem}
                 rightIconButton={ rightIconMenu }
                 primaryTogglesNestedList={true}
-                nestedItems={[
-                    <ListItem
-                    key={1}
-                    primaryText="Starred"
-                    />,
-                    <ListItem
-                    key={2}
-                    primaryText="Sent Mail"
-                    />,
-                ]}
+                nestedItems={subItems}
             />
             <div style={style.editTodo } >
                  <label

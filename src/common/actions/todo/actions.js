@@ -7,11 +7,15 @@ export const DEL_TODO = 'DEL_TODO'
 export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
 export const SET_SORT = 'SET_SORT'
 export const EXPORT_TODO = 'EXPORT_TODO' 
+export const IMPORT_TODO = 'IMPORT_TODO' 
 export const INIT_TODO = 'INIT_TODO' 
 export const SAVE_TODO = 'SAVE_TODO' 
 export const EDIT_TODO = 'EDIT_TODO' 
 export const UNEDIT_TODO = 'UNEDIT_TODO' 
 export const SIGN_STAR= 'SIGN_STAR' 
+
+export const ADD_TODO_SUB_PROCESS  = 'ADD_TODO_SUB_PROCESS' 
+export const ADD_TODO_SUB_CONCLUSION = 'ADD_TODO_SUB_CONCLUSION' 
 
 export const VisibilityFilters = {
   SHOW_ALL: 'SHOW_ALL',
@@ -48,6 +52,10 @@ export function exportTodo () {
     return { type: EXPORT_TODO }
 }
 
+export function importTodo (todos) {
+    return { type: IMPORT_TODO,  todos }
+}
+
 let nextTodoId = 0
 export function addTodo (text) {
     return {
@@ -82,5 +90,12 @@ export function uneditTodo (id ) {
 
 export function signStar (id, count ) {
     return { type: SIGN_STAR, id, count  }
+}
+
+export function addTodoSubProcess (todoId ) {
+    return { type: ADD_TODO_SUB_PROCESS, todoId }
+}
+export function addTodoSubConclusion (todoId ) {
+    return { type: ADD_TODO_SUB_CONCLUSION, todoId }
 }
 

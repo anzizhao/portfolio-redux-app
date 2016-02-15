@@ -6,15 +6,26 @@ import Divider from 'material-ui/lib/divider';
 import List from 'material-ui/lib/lists/list';
 import FlatButton from 'material-ui/lib/flat-button';
 
-var {exportFile} = require('../../util')
+var {exportFile, readFile } = require('../../util')
 
 export default class TodoList extends Component {
-    //handleExport(e) {
-        //e.preventDefault()
-        //const jsonFile = JSON.stringify( this.props.todos);
-        //const filename = `todo_${ new Date().toLocaleDateString() }.json`;
-        //exportFile(jsonFile, filename);
-    //}
+
+    componentDidMount(){
+        //document.getElementById('importTodo').addEventListener('change', this.handleFileSelect, false);
+        this.refs.importTodo.addEventListener('change', this.handleFileSelect.bind(this), false)
+    }
+    handleFileSelect(event){
+        let files = event.target.files; 
+        readFile(files[0], (fileStr)=>{
+            let fileJson = JSON.parse(fileStr)
+            this.props.actions.importTodo(fileJson) 
+        }) 
+    }
+
+    handleImportClick(e){
+        e.preventDefault();  
+        document.getElementById('importTodo').click()
+    }
     render() {
         const { actions } = this.props
 
@@ -33,7 +44,7 @@ export default class TodoList extends Component {
                 <List  style={style.list}>
                 {this.props.todos.map((todo, index)  =>
                                       <Todo {...todo}
-                                          key={todo.id}
+                                          key={todo.uuid}
                                           index={index}
                                           actions={actions}
                                           onClick={() => this.props.onTodoClick(todo.id)} />
@@ -43,7 +54,11 @@ export default class TodoList extends Component {
                 </List>
                 <Divider inset={true}/>
 
-                <FlatButton label="导出" onClick={(e) => this.props.onExportClick() }  style={ style.flatButton }  />
+                <div  className="todolistOpGroup">
+                    <FlatButton label="导出" onClick={(e) => this.props.onExportClick() }  style={ style.flatButton }  />
+                    <FlatButton label="导入" onClick={(e) => this.handleImportClick(e) }  style={ style.flatButton }  />
+                </div>
+                <input type="file" id="importTodo" ref='importTodo'   style={{ display: 'none'}} />
                 <br/>
             </div>
         )

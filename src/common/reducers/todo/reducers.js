@@ -31,6 +31,7 @@ function sort (state = SORT_ORIGIN , action) {
 }
 
 function todo(state, action) {
+    let tmp
     switch (action.type) {
         case ADD_TODO:
             return {
@@ -41,7 +42,9 @@ function todo(state, action) {
             urgency: 2,
             importance: 2,
             difficulty: 2,
-            lastDate: new Date(),
+            timestamp: Date.now(),
+            process: [],
+            conclusion: {},
             uuid: uuid.v1() 
         }
         case COMPLETE_TODO:
@@ -60,13 +63,37 @@ function todo(state, action) {
                 ...state,
                 completed: false 
             }
+
+        case todoActions.ADD_TODO_SUB_PROCESS:
+        case todoActions.ADD_TODO_SUB_CONCLUSION:
+            if (state.id !== action.id) {
+                return state
+            }
+            state.process = state.process || [] 
+            tmp = {
+                id:   state.process.length,
+                text: '', 
+                createTime: Date.now(),
+                lastTime: Date.now(),
+                type: 0,  // 0 progress 1 conclusion  
+                status: 1, // 0 show  1 edit 
+            }
+            if ( action.type === todoActions.ADD_TODO_SUB_PROCESS ){
+                state.push(tmp) 
+            } else {
+                tmp.type = 1
+                state.conclusion = tmp 
+            }
+            return state             
+
         default:
             return state
     }
 }
 
 function todos(state = [], action) {
-    let db = {};
+    let db = []
+    let db2 = []
     switch (action.type) {
         case INIT_TODO:
                 return action.todos
@@ -77,10 +104,40 @@ function todos(state = [], action) {
             exportFile(jsonFile, filename);
             return state;
 
+        case todoActions.IMPORT_TODO:
+            // 新加的  跟原来的比较  uuid是否相同  日期更新
+             let match = false 
+             
+             for(let i of action.todos) {
+                  match = false 
+                  i.id = state.length + 1
+                  for( let key  in state){
+                        let j = state[key]
+                        if ( j.uuid === i.uuid  )  {
+                            if( i.timestamp > j.timestamp ){
+                                 state[key]= i 
+                            } else {
+                              //旧的项扔掉   
+                            }
+                            match = true 
+                            break;
+                        }
+                  }
+                  if (! match ){
+                      db.push(i) 
+                  }
+              }
+            db2 = [
+                ...db ,
+                ...state
+            ]
+            storeTodoState(db2);
+            return db2
+
         case ADD_TODO:
             db = [
                 todo(undefined, action),
-        ...state
+                ...state
             ]
             storeTodoState(db);
             return db;
@@ -103,6 +160,8 @@ function todos(state = [], action) {
             changeItem.importance = action.importance
             changeItem.difficulty = action.difficulty
             changeItem.collapse = true
+            changeItem.timestamp = Date.now()
+
             db = [
                 ...state.slice(0, index),
                 changeItem,
@@ -113,8 +172,8 @@ function todos(state = [], action) {
 
         case COMPLETE_TODO: 
         case todoActions.UNCOMPLETE_TODO: 
-
-
+        case todoActions.ADD_TODO_SUB_PROCESS:
+        case todoActions.ADD_TODO_SUB_CONCLUSION:
             db = state.map(t =>
                              todo(t, action)
                             )
@@ -148,6 +207,7 @@ function todos(state = [], action) {
             })
             storeTodoState(db);
             return db;
+
         default:
             return state
     }
