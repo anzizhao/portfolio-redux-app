@@ -29,6 +29,9 @@
 .todo-item{
     overflow: auto;
 }
+.todo-item-title-second {
+
+}
 
 .item-input{
     margin-bottom: 10px;
@@ -57,4 +60,8 @@
 }
 .todo-sub-but {
     margin-left: 40px;
+    cursor: pointer;
+}
+.todo-item-sub{
+    margin: 20px 40px 5px 0;
 }

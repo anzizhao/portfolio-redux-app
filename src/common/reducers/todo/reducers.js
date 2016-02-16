@@ -32,33 +32,34 @@ function sort (state = SORT_ORIGIN , action) {
 
 function todo(state, action) {
     let tmp
-    switch (action.type) {
-        case ADD_TODO:
+    // 特殊的 先特别对待
+    if ( action.type ===   todoActions.ADD_TODO ) {
             return {
-            id: action.id,
-            text: action.text,
-            completed: false,
-            collapse: true,
-            urgency: 2,
-            importance: 2,
-            difficulty: 2,
-            timestamp: Date.now(),
-            process: [],
-            conclusion: {},
-            uuid: uuid.v1() 
+                id: action.id,
+                text: action.text,
+                completed: false,
+                collapse: true,
+                urgency: 2,
+                importance: 2,
+                difficulty: 2,
+                timestamp: Date.now(),
+                process: [],
+                conclusion: null,
+                uuid: uuid.v1() 
         }
+    }
+    // common code 
+    if (state.id !== action.id) {
+        return state
+    }
+    let index, process 
+    switch (action.type) {
         case COMPLETE_TODO:
-            if (state.id !== action.id) {
-                return state
-            }
             return {
                 ...state,
                 completed: true
             }
         case todoActions.UNCOMPLETE_TODO:
-            if (state.id !== action.id) {
-                return state
-            }
             return {
                 ...state,
                 completed: false 
@@ -66,25 +67,84 @@ function todo(state, action) {
 
         case todoActions.ADD_TODO_SUB_PROCESS:
         case todoActions.ADD_TODO_SUB_CONCLUSION:
-            if (state.id !== action.id) {
-                return state
-            }
             state.process = state.process || [] 
             tmp = {
                 id:   state.process.length,
                 text: '', 
                 createTime: Date.now(),
                 lastTime: Date.now(),
-                type: 0,  // 0 progress 1 conclusion  
-                status: 1, // 0 show  1 edit 
+                type: todoActions.todoSubItemType.process,  // 0 progress 1 conclusion  
+                status: todoActions.todoSubItemStatus.edit, // 0 show  1 edit 
             }
             if ( action.type === todoActions.ADD_TODO_SUB_PROCESS ){
-                state.push(tmp) 
+                state.process.push(tmp) 
             } else {
                 tmp.type = 1
                 state.conclusion = tmp 
             }
             return state             
+        case todoActions.SAVE_TODO_SUB_PROCESS:
+            process = state.process || [] 
+            index = process.findIndex((ele, index, arr) => {
+                                if ( ele.id === action.processId )  {
+                                    return true
+                                }
+                                return false
+            })
+            if ( index === -1 ){
+                return state
+            }
+            let selItem = process[index]
+            selItem.text = action.text
+            selItem.lastTime = Date.now()
+            selItem.status = todoActions.todoSubItemStatus.show  
+
+            return state
+
+        case todoActions.SAVE_TODO_SUB_CONCLUSION:
+            state.conclusion.text = action.text
+            state.conclusion.lastTime = Date.now() 
+            state.conclusion.status = todoActions.todoSubItemStatus.show 
+            return state
+
+        case todoActions.TOEDIT_TODO_SUB_PROCESS:
+            process = state.process  
+            index = process.findIndex((ele, index, arr) => {
+                                if ( ele.id === action.processId )  {
+                                    return true
+                                }
+                                return false
+            })
+            if ( index === -1 ){
+                return state
+            }
+            selItem = process[index]
+
+            selItem.status = todoActions.todoSubItemStatus.edit
+            return state
+
+        case todoActions.TOEDIT_TODO_SUB_CONCLUSION:
+            state.conclusion.status = todoActions.todoSubItemStatus.edit
+
+            return state
+
+        case todoActions.TODEL_TODO_SUB_PROCESS:
+            process = state.process  
+            index = process.findIndex((ele, index, arr) => {
+                                if ( ele.id === action.processId )  {
+                                    return true
+                                }
+                                return false
+            })
+            state.process = [
+                ...process.slice(0, index),
+                ...process.slice(index+1),
+            ] 
+            return state
+
+        case todoActions.TODEL_TODO_SUB_CONCLUSION:
+            state.conclusion = null 
+            return state
 
         default:
             return state
@@ -174,6 +234,13 @@ function todos(state = [], action) {
         case todoActions.UNCOMPLETE_TODO: 
         case todoActions.ADD_TODO_SUB_PROCESS:
         case todoActions.ADD_TODO_SUB_CONCLUSION:
+        case todoActions.SAVE_TODO_SUB_PROCESS:
+        case todoActions.SAVE_TODO_SUB_CONCLUSION:
+        case todoActions.TOEDIT_TODO_SUB_PROCESS:
+        case todoActions.TOEDIT_TODO_SUB_CONCLUSION:
+        case todoActions.TODEL_TODO_SUB_PROCESS:
+        case todoActions.TODEL_TODO_SUB_CONCLUSION:
+
             db = state.map(t =>
                              todo(t, action)
                             )

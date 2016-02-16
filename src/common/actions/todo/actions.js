@@ -16,6 +16,12 @@ export const SIGN_STAR= 'SIGN_STAR'
 
 export const ADD_TODO_SUB_PROCESS  = 'ADD_TODO_SUB_PROCESS' 
 export const ADD_TODO_SUB_CONCLUSION = 'ADD_TODO_SUB_CONCLUSION' 
+export const SAVE_TODO_SUB_PROCESS = 'SAVE_TODO_SUB_PROCESS' 
+export const SAVE_TODO_SUB_CONCLUSION = 'SAVE_TODO_SUB_CONCLUSION' 
+export const TOEDIT_TODO_SUB_PROCESS = 'TOEDIT_TODO_SUB_PROCESS' 
+export const TOEDIT_TODO_SUB_CONCLUSION = 'TOEDIT_TODO_SUB_CONCLUSION' 
+export const TODEL_TODO_SUB_PROCESS = 'TODEL_TODO_SUB_PROCESS' 
+export const TODEL_TODO_SUB_CONCLUSION = 'TODEL_TODO_SUB_CONCLUSION' 
 
 export const VisibilityFilters = {
   SHOW_ALL: 'SHOW_ALL',
@@ -31,6 +37,15 @@ export const sorts = {
     SORT_URGENCY_DOWN: 'SORT_URGENCY_DOWN',
     SORT_DIFFICULTY_UP: 'SORT_DIFFICULTY_UP',
     SORT_DIFFICULTY_DOWN :'SORT_DIFFICULTY_DOWN'
+}
+
+export const todoSubItemStatus= {
+  show: 0,
+  edit: 1,
+}
+export const todoSubItemType = {
+  process: 0,
+  conclusion: 1,
 }
 
 export function completeTodo(id) {
@@ -93,9 +108,31 @@ export function signStar (id, count ) {
 }
 
 export function addTodoSubProcess (todoId ) {
-    return { type: ADD_TODO_SUB_PROCESS, todoId }
+    return { type: ADD_TODO_SUB_PROCESS, id:todoId }
 }
 export function addTodoSubConclusion (todoId ) {
-    return { type: ADD_TODO_SUB_CONCLUSION, todoId }
+    return { type: ADD_TODO_SUB_CONCLUSION, id:todoId }
+}
+export function saveTodoSub(todoId, processId, type, text ) {
+    if ( type === todoSubItemType.process ) {
+        return { type: SAVE_TODO_SUB_PROCESS, id:todoId, processId, text } 
+    } else if ( type === todoSubItemType.conclusion ){
+        return { type: SAVE_TODO_SUB_CONCLUSION, id:todoId,  text } 
+    }
 }
 
+export function toeditTodoSub (todoId, processId, type ) {
+    if ( type === todoSubItemType.process ) {
+        return { type: TOEDIT_TODO_SUB_PROCESS, id:todoId, processId } 
+    } else if ( type === todoSubItemType.conclusion ){
+        return { type: TOEDIT_TODO_SUB_CONCLUSION, id:todoId } 
+    }
+}
+
+export function todelTodoSub (todoId, processId, type ) {
+    if ( type === todoSubItemType.process ) {
+        return { type: TODEL_TODO_SUB_PROCESS, id:todoId, processId } 
+    } else if ( type === todoSubItemType.conclusion ){
+        return { type: TODEL_TODO_SUB_CONCLUSION, id:todoId } 
+    }
+}

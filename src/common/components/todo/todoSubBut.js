@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 import ListItem from 'material-ui/lib/lists/list-item';
 import Icon from 'react-fa'
+import ReactTooltip from "react-tooltip"
 
 
 export default class TodoSubBut extends Component {
@@ -16,12 +17,18 @@ export default class TodoSubBut extends Component {
 
     handleAddProgress(e){
         event.stopPropagation()  
-        console.log('AddProgress')
+        var processFunc = this.props.actions.addTodoSubProcess
+        var todoId = this.props.todoId
+        processFunc( todoId )
+        //console.log('AddProgress')
     }
 
     handleAddConclusion(e){
         event.stopPropagation()  
-        console.log('AddConclusion')
+        var func = this.props.actions.addTodoSubConclusion
+        var todoId = this.props.todoId
+        func ( todoId )
+        //console.log('AddConclusion')
     }
 
     render() {
@@ -32,29 +39,25 @@ export default class TodoSubBut extends Component {
                 marginRight: '10px', 
             }
         }
-        const listText = (
-            <div  className='todo-sub-but'>
-                <Icon size="lg" name="reply" style={style.icon}  onClick={ this.handleAddProgress.bind(this) } />
-                <Icon size="lg" name="tags" style={style.icon} onClick={ this.handleAddConclusion.bind(this) } />
-            </div>
-        )
-        
         return (
-            <div className="todo-item-sub">
                 <div  className='todo-sub-but'>
-                    <Icon size="xs" name="reply" style={style.icon}  onClick={ this.handleAddProgress.bind(this) } />
-                    <Icon size="xs" name="tags" style={style.icon} onClick={ this.handleAddConclusion.bind(this) } />
+                        <Icon  name="reply" style={style.icon}  onClick={ this.handleAddProgress.bind(this) } 
+                        data-tip data-for='reply' data-place='left'  
+                            />
+                        <Icon  name="tags" style={style.icon} onClick={ this.handleAddConclusion.bind(this) } data-tip data-for='tags' data-place='right' />
+                        <ReactTooltip id='reply' type='warning' delayShow={200}>
+                            <span>添加进度描述条</span>
+                        </ReactTooltip>
+                        <ReactTooltip id='tags' type='warning' delayShow={200}>
+                            <span>添加结论条</span>
+                        </ReactTooltip>
                 </div>
                 
-            </div>
         )
     }
 }
 
-                //<ListItem 
-                    //primaryText={ listText } 
-                    //style={style.listItem}
-                ///>
 TodoSubBut.propTypes = {
-
+  actions: PropTypes.object.isRequired,
+  todoId: PropTypes.number.isRequired,
 }

@@ -13,10 +13,10 @@ import IconMenu from 'material-ui/lib/menus/icon-menu';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import Colors from 'material-ui/lib/styles/colors';
 import Badge from 'material-ui/lib/badge';
-
-import Icon from 'react-fa'
-import StarRate from './starRate'
-import TodoSubBut from './todoSubBut'
+import Icon from 'react-fa';
+import StarRate from './starRate';
+import TodoSubBut from './todoSubBut';
+import TodoSubItem from './todoSub';
 
 export default class Todo extends Component {
     state = {
@@ -122,7 +122,7 @@ export default class Todo extends Component {
 
     
   render() {
-      const { id } = this.props
+      const { id, conclusion } = this.props
       const style = {
           listItem: {
               //textDecoration: this.props.completed ? 'line-through' : 'none',
@@ -144,6 +144,10 @@ export default class Todo extends Component {
               marginTop: '10px',
               width: '18px',
               height: '18px'
+          },
+          secondtext: {
+                marginTop: '25px',
+                marginLeft: '30px',
           },
           badgeRoot: {
             padding: "20px 18px 12px 0", 
@@ -210,19 +214,58 @@ export default class Todo extends Component {
           />
         </IconMenu>
       )
+      let secondaryText = '', secondaryTextLines   = 0
       let subItems = []
-      subItems.push(<TodoSubBut /> )
+      let index = 1
+      //结论
+      if ( conclusion ) {
+          subItems.push(<TodoSubItem
+                        todoId = { this.props.id }
+                        key="conclusion" 
+                        index={index} 
+                        parentIndex={this.props.index+1}
+                        { ...conclusion } 
+                        actions={this.props.actions} /> )
 
-            //primaryText={ listText } 
-            //insetChildren={true} 
+          index += 1
+          secondaryText = (
+                <span  style={style.secondtext} > 
+                   结论:  { conclusion.text }
+                </span> 
+          ) 
+          // 可以根据字数  设置多少行
+          secondaryTextLines = 2
+
+      }
+
+      //过程描述
+      for( let item of this.props.process ) {
+          subItems.push(<TodoSubItem
+                        todoId = { this.props.id }
+                        key={item.id} 
+                        index={index} 
+                        parentIndex={this.props.index+1 }
+                        {...item} 
+                        actions={this.props.actions} /> )
+
+          index += 1
+      }
+      subItems.push(<TodoSubBut 
+                        todoId = { this.props.id }
+                        key="addBut"
+                        actions={this.props.actions } /> )
+
     return (
         <div className="todo-item">
             <ListItem 
                 primaryText={ listText } 
+                secondaryText = { secondaryText }
+                secondaryTextLines =  { secondaryTextLines }
                 style={style.listItem}
                 rightIconButton={ rightIconMenu }
                 primaryTogglesNestedList={true}
                 nestedItems={subItems}
+                key={ this.props.key }
             />
             <div style={style.editTodo } >
                  <label
@@ -232,6 +275,7 @@ export default class Todo extends Component {
                      fullWidth
                      value={this.state.itemText}
                      onChange={(e)=>this.handleChangeItem(e)}
+                     onEnterKeyDown ={(e) => this.handleSaveTodo()}
                  />
                  <div className="item-score">
                     <span  className='item-score-title'>重要程度 
