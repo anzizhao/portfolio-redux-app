@@ -141,7 +141,12 @@ export default class Todo extends Component {
           },
           badge: {
               fontSize: 15, 
-              'marginTop': '10px',
+              marginTop: '10px',
+              width: '18px',
+              height: '18px'
+          },
+          badgeRoot: {
+            padding: "20px 18px 12px 0", 
           }
       };
 
@@ -154,6 +159,7 @@ export default class Todo extends Component {
                                 <Badge
                                     badgeContent={this.state.importanceStar }
                                     className='item-show-right-star'
+                                    style={ style.badgeRoot }
                                     badgeStyle={{...style.badge, 'backgroundColor':'rgba(243, 255, 66, 0.56)'}} 
                                 >
                                     重要
@@ -161,6 +167,7 @@ export default class Todo extends Component {
                                 <Badge
                                     badgeContent={this.state.signStar }
                                     className='item-show-right-star'
+                                    style={ style.badgeRoot }
                                     badgeStyle={{...style.badge, 'backgroundColor':'rgba(244, 67, 54, 0.56)'}} 
                                 >
                                     紧急
@@ -168,6 +175,7 @@ export default class Todo extends Component {
                                 <Badge
                                     badgeContent={ this.state.difficultyStar }
                                     className='item-show-right-star'
+                                    style={ style.badgeRoot }
                                     badgeStyle={{...style.badge, 'backgroundColor':'rgba(3, 169, 244, 0.56)'}} 
                                 >
                                     困难

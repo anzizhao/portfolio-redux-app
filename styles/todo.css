@@ -53,7 +53,7 @@
 .item-show-right-star{
     font-size: 12px;
     font-weight: 100;
-    font-style: italic;
+    /*font-style: italic;*/
 }
 .todo-sub-but {
     margin-left: 40px;
