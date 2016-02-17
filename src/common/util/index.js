@@ -55,6 +55,10 @@ function storeTodoState(data) {
     return store('todo', data );
 }
 
+function storeTodoTags (data) {
+    return store('todotags', data );
+}
+
 function readFile(file, afterRead){
     let reader = new FileReader();
     // 读完之后触发

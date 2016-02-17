@@ -27,7 +27,7 @@ export default class TodoList extends Component {
         document.getElementById('importTodo').click()
     }
     render() {
-        const { actions } = this.props
+        const { actions, tags } = this.props
 
         const style = {
             flatButton: {
@@ -47,6 +47,7 @@ export default class TodoList extends Component {
                                           key={todo.uuid}
                                           index={index}
                                           actions={actions}
+                                          allTags={ tags }
                                           onClick={() => this.props.onTodoClick(todo.id)} />
                                      )}
 
@@ -69,6 +70,11 @@ TodoList.propTypes = {
   actions: PropTypes.object.isRequired,
   onTodoClick: PropTypes.func.isRequired,
   onExportClick: PropTypes.func.isRequired,
+  tags: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.number.isRequired,
+    text: PropTypes.string.isRequired,
+  }).isRequired),
+
   todos: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
     text: PropTypes.string.isRequired,

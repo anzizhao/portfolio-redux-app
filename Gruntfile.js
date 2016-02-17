@@ -1,6 +1,6 @@
 module.exports  = function(grunt) {
     var nowTime = new Date(); 
-    var ghPagesCommitMessage = "autoCommit" + nowTime.getTime(); 
+    var mainPageCommitMessage = "autoCommit" + nowTime.getTime(); 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
         uglify: {
@@ -20,16 +20,6 @@ module.exports  = function(grunt) {
             ghPages: ["../FarmPrivateKitchen_gh-pages/*" ] 
             
         },
-        jekyll:{
-            options: {},
-            ghPages_build:{},
-            master_serve:{
-                options: {
-                    serve: true,
-                    config:'_config.yml,_config_dev.yml',
-                }
-            }
-        },
         copy_mate: {
             ghPages: {
                 options: {
@@ -41,30 +31,20 @@ module.exports  = function(grunt) {
         },
 
         gitadd: {
-            ghPages:{
+            mainPage:{
                 options: {
                     all: true,
-                    cwd: "../FarmPrivateKitchen_gh-pages" 
+                    cwd: "../anzizhao.github.io" 
                 }
             },
-            master:{
-                options: {
-                    all: true,
-                },
-            }
         },
         gitcommit: {
-            ghPages: {
+            mainPage: {
                 options: {
-                    cwd: "../FarmPrivateKitchen_gh-pages" ,
-                    message: ghPagesCommitMessage 
+                    cwd: "../anzizhao.github.io",
+                    message: mainPageCommitMessage 
                 },
             },
-            master: {
-                options: {
-                    message:'<%= gitcommit.master.message %>' 
-                },
-            }
         },
         gitcheckout:{
             current:{
@@ -75,19 +55,13 @@ module.exports  = function(grunt) {
             } 
         },
         gitpush: {
-            ghPages: {
-                options: {
-                    remote: "origin",
-                    branch: "gh-pages",
-                    cwd: "../FarmPrivateKitchen_gh-pages" 
-                }
-            },
-            master: {
+            mainPage: {
                 options: {
                     remote: "origin",
                     branch: "master",
+                    cwd: "../anzizhao.github.io" 
                 }
-            }
+            },
         },
         gitpull: {
             ghPages: {
@@ -103,18 +77,38 @@ module.exports  = function(grunt) {
                     branch: "master",
                 }
             }
+        },
+        gitarchive: {
+            master: {
+                options: {
+                    format: 'tar.gz',
+                    prefix: 'your-project-name/',
+                    treeIsh: 'master',
+                    output: '/tmp/your-project-name.tar.gz',
+                    path: ['README', 'LICENSE']
+                }
+            }
+        },
+        run: {
+            npmBuild: {
+                 exec: 'npm run build',
+            },
+            tag: {
+                 exec: 'git archive static_i | tar -x -C ../anzizhao.github.io',
+            }
         }
     });
 
     // 加载包含 "uglify" 任务的插件。
-    grunt.loadNpmTasks('grunt-contrib-uglify');
+    //grunt.loadNpmTasks('grunt-contrib-uglify');
+
     //这版本copy 不强大
     //grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-copy-mate');
     grunt.loadNpmTasks('grunt-git');
     grunt.loadNpmTasks('grunt-contrib-clean');
-    grunt.loadNpmTasks('grunt-jekyll');
-    
+    grunt.loadNpmTasks('grunt-run');
+
     // 默认被执行的任务列表。
     grunt.registerTask('min', ['uglify']);
     grunt.registerTask('cp', ['copy_mate:ghPages']);
@@ -146,6 +140,21 @@ module.exports  = function(grunt) {
                         }
                       );
 
+
+    // 清理  编译 打包 推git
+    grunt.registerTask('myarchive', "grunt myarchive --message= ",
+                        function(){
+                             var message = grunt.option("message");
+                             if ( message ) {
+                                 grunt.config.set('gitcommit.mainPage.message', message);
+                             }
+                             grunt.task.run(['run:npmBuild',
+                                            'run:tag',
+                                            'gitadd:mainPage',
+                                            'gitcommit:mainPage',
+                                            'gitpush:mainPage']);
+                        }
+                      );
 
 };
 

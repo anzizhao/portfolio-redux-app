@@ -124,6 +124,7 @@ function select(state) {
     visibilityFilter: state.todo.visibilityFilter,
     sort: state.todo.sort,
     layout : state.layout,
+    tags: state.tags
   }
 }
 

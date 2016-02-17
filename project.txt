@@ -15,7 +15,7 @@
 
 git archive xxx分支 | tar -x -C /somewhere/else
 
-
+nohup.out 
 
 bug: 
 

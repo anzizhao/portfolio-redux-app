@@ -30,6 +30,39 @@ function sort (state = SORT_ORIGIN , action) {
     }
 }
 
+function tags (state = [], action) {
+    let cmds = todoActions
+    let newItem, index 
+    switch (action.type) {
+        case cmds.INIT_TAGS:
+            return action.tags 
+
+        case cmds.ADD_TAGS:
+            index = state.find((ele, index, arr) => {
+                                if ( ele.text === action.text )  {
+                                    return true
+                                }
+                                return false
+            })
+            if ( index != -1 ) {
+                return state 
+            }
+            newItem = {
+                id: action.text,
+                text: action.text 
+            }
+            state.push(newItem)
+
+            //store tags
+            storeTodoTags(state)           
+            return state 
+
+        default:
+            return state
+    }
+}
+
+
 function todo(state, action) {
     let tmp
     // 特殊的 先特别对待
@@ -45,6 +78,7 @@ function todo(state, action) {
                 timestamp: Date.now(),
                 process: [],
                 conclusion: null,
+                tags: [],
                 uuid: uuid.v1() 
         }
     }
@@ -221,6 +255,7 @@ function todos(state = [], action) {
             changeItem.difficulty = action.difficulty
             changeItem.collapse = true
             changeItem.timestamp = Date.now()
+            changeItem.tags = action.tags
 
             db = [
                 ...state.slice(0, index),
@@ -282,6 +317,7 @@ function todos(state = [], action) {
 
 
 const todoApp = combineReducers({
+    tags,
     visibilityFilter,
     sort,
     todos: undoable(todos, { filter: distinctState() })

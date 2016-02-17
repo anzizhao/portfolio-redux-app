@@ -18,6 +18,9 @@ import StarRate from './starRate';
 import TodoSubBut from './todoSubBut';
 import TodoSubItem from './todoSub';
 
+import 'react-select2-wrapper/css/select2.min.css';
+import Select2 from 'react-select2-wrapper';
+
 export default class Todo extends Component {
     state = {
         toEditItem : false,
@@ -25,6 +28,7 @@ export default class Todo extends Component {
         signStar: 0, //紧急程度
         importanceStar: 0,  //重要程度
         difficultyStar: 0,   //困难程度
+        tags: [],
         itemText: ''
     };
 
@@ -33,9 +37,10 @@ export default class Todo extends Component {
             signStar: this.props.urgency ,
             importanceStar: this.props.importance,
             difficultyStar: this.props.difficulty,
+            tags: this.props.tags,
         });
-
     }
+     
     handleEditItem (id){
         this.props.actions.editTodo(id)
         this.setState({
@@ -102,11 +107,13 @@ export default class Todo extends Component {
     handleSaveTodo(){
         let id 
         id = this.props.id
+
         let item = {
             text: this.state.itemText, 
             urgency: this.state.signStar, 
             importance: this.state.importanceStar,
             difficulty: this.state.difficultyStar,
+            tags: this.state.tags 
         }
         this.props.actions.saveTodo(id, item)
         this._leaveEditMode(id)
@@ -120,9 +127,29 @@ export default class Todo extends Component {
         });
     }
 
+    handleTagChange(e) {
+        // target options array,  the last ele id is empty '', that means add new value
+        console.log('handleTageChange')
+
+        var opts = e.target
+        var ele = opts[opts.length-1]
+        if ( ele.id === '' ) {
+            //new value, set  
+            this.props.actions.addTags(ele.id, ele.text)
+        }
+        // 这个不需要render的
+        var tags = []
+        for(let i=0; i<opts.length; i++) {
+            let item = opts[i]
+            tags.push(
+                {id: item.id, text:item.text }
+            ) 
+        }
+        this.state.tags = tags 
+    }
     
   render() {
-      const { id, conclusion } = this.props
+      const { id, conclusion, allTags } = this.props
       const style = {
           listItem: {
               //textDecoration: this.props.completed ? 'line-through' : 'none',
@@ -148,16 +175,32 @@ export default class Todo extends Component {
           secondtext: {
                 marginTop: '25px',
                 marginLeft: '30px',
+                marginRight: '30px',
           },
           badgeRoot: {
             padding: "20px 18px 12px 0", 
-          }
-      };
+          },
+          selectTag:{
+            width: "100%" 
+          } 
 
+      }
+      let tags = [] 
+      if ( this.state.tags ){
+          for( let item of this.state.tags ) {
+               tags.push( <span className='tagBadge'> 
+                             <span className="badge3"></span>
+                              { item.text }
+                          </span>)
+          }
+      }
       const listText = ( 
                         <span > 
                             <span  style={style.listTextSpan}>
                             { `${ String(this.props.index + 1) }.  ${this.props.text}        ` } 
+                            </span>
+                            <span  className='tags'>
+                                { tags }
                             </span>
                             <span className="item-show-right">
                                 <Badge
@@ -185,14 +228,15 @@ export default class Todo extends Component {
                                     困难
                                 </Badge>
                             </span>
-                        </span>)
+                        </span>
+                       )
 
        const iconButtonElement = (
-                 <IconButton
-                   touch={true}
-                 >
-                   <MoreVertIcon color={Colors.grey400} />
-                 </IconButton>
+           <IconButton
+               touch={true}
+           >
+               <MoreVertIcon color={Colors.grey400} />
+           </IconButton>
        ) 
       const rightIconMenu = (
         <IconMenu iconButtonElement={iconButtonElement}>
@@ -214,7 +258,8 @@ export default class Todo extends Component {
           />
         </IconMenu>
       )
-      let secondaryText = '', secondaryTextLines   = 0
+      let secondaryText = '' 
+      let secondaryTextLines   = 1
       let subItems = []
       let index = 1
       //结论
@@ -239,22 +284,25 @@ export default class Todo extends Component {
       }
 
       //过程描述
-      for( let item of this.props.process ) {
-          subItems.push(<TodoSubItem
-                        todoId = { this.props.id }
-                        key={item.id} 
-                        index={index} 
-                        parentIndex={this.props.index+1 }
-                        {...item} 
-                        actions={this.props.actions} /> )
+      if ( this.props.process.length != 0 ) {
+          for( let item of this.props.process ) {
+              subItems.push(<TodoSubItem
+                            todoId = { this.props.id }
+                            key={item.id} 
+                            index={index} 
+                            parentIndex={this.props.index+1 }
+                            {...item} 
+                            actions={this.props.actions} /> )
 
-          index += 1
+                            index += 1
+          }
       }
       subItems.push(<TodoSubBut 
                         todoId = { this.props.id }
                         key="addBut"
                         actions={this.props.actions } /> )
 
+    console.log("before return")
     return (
         <div className="todo-item">
             <ListItem 
@@ -268,8 +316,7 @@ export default class Todo extends Component {
                 key={ this.props.key }
             />
             <div style={style.editTodo } >
-                 <label
-                 >{ this.props.index + 1 } </label>
+                 <label>{ this.props.index + 1 } </label>
                  <TextField
                     className='item-input'
                      fullWidth
@@ -300,6 +347,19 @@ export default class Todo extends Component {
                      </span>
                  </div>
 
+                 <div className="select-tag">
+                     <Select2
+                         style={style.selectTag}
+                         multiple
+                         data={allTags}
+                         onChange={ this.handleTagChange.bind(this) }
+                         options={{
+                                 placeholder: '添加或选择标签',
+                                 tags: true,
+                             }
+                         }
+                     />
+                 </div>
                 <div style={style.opButGroup }>
                     <FlatButton label="完成" onClick={(e) => this.handleSaveTodo() }  style={ style.flatButton }  />
                     <FlatButton label="取消" onClick={(e) => this.handleUnsaveTodo() }  style={ style.flatButton }  />
@@ -308,7 +368,11 @@ export default class Todo extends Component {
         </div>
     )
   }
+
 }
+
+
+
 
 Todo.propTypes = {
   text: PropTypes.string.isRequired,

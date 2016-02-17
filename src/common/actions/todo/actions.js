@@ -13,7 +13,10 @@ export const SAVE_TODO = 'SAVE_TODO'
 export const EDIT_TODO = 'EDIT_TODO' 
 export const UNEDIT_TODO = 'UNEDIT_TODO' 
 export const SIGN_STAR= 'SIGN_STAR' 
+export const ADD_TODO_TAG = 'ADD_TODO_TAG'
 
+
+//sub todo 
 export const ADD_TODO_SUB_PROCESS  = 'ADD_TODO_SUB_PROCESS' 
 export const ADD_TODO_SUB_CONCLUSION = 'ADD_TODO_SUB_CONCLUSION' 
 export const SAVE_TODO_SUB_PROCESS = 'SAVE_TODO_SUB_PROCESS' 
@@ -22,6 +25,11 @@ export const TOEDIT_TODO_SUB_PROCESS = 'TOEDIT_TODO_SUB_PROCESS'
 export const TOEDIT_TODO_SUB_CONCLUSION = 'TOEDIT_TODO_SUB_CONCLUSION' 
 export const TODEL_TODO_SUB_PROCESS = 'TODEL_TODO_SUB_PROCESS' 
 export const TODEL_TODO_SUB_CONCLUSION = 'TODEL_TODO_SUB_CONCLUSION' 
+
+//tags
+export const INIT_TAGS= 'INIT_TAGS' 
+export const ADD_TAGS = 'ADD_TAGS' 
+
 
 export const VisibilityFilters = {
   SHOW_ALL: 'SHOW_ALL',
@@ -135,4 +143,22 @@ export function todelTodoSub (todoId, processId, type ) {
     } else if ( type === todoSubItemType.conclusion ){
         return { type: TODEL_TODO_SUB_CONCLUSION, id:todoId } 
     }
+}
+
+
+
+export function addTags (id, text) {
+    return { type: ADD_TAGS, id, text} 
+}
+
+export function initTags (id, text) {
+    const db = storeTodoTags()
+    return {
+      type: INIT_TAGS,
+      tags:  db,
+    }
+}
+
+export function addTodoTags (id, tags) {
+    return { type: ADD_TAGS, id, tags} 
 }
