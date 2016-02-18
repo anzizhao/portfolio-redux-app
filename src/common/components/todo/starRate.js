@@ -11,6 +11,7 @@ export default class StarRate extends Component {
             hasSignStar : false   //被打标记的星星颗数
         };
     }
+
     mayHandleSignStar  (e, count)  {
         if( this.props.onlyShow ||   this.state.hasSignStar ){
             return null 
@@ -38,13 +39,10 @@ export default class StarRate extends Component {
     } 
 
     componentWillReceiveProps (nextProps) {
-        if ( nextProps.initHasSignStar && ! this.props.initHasSignStar ) {
-            this.setState({
-                hasSignStar: false 
-            });
-        }
+
         // 组建的star 为本地的
         this.setState({
+            hasSignStar: false ,
             signStar: nextProps.star 
         });
 
@@ -91,6 +89,5 @@ StarRate.propTypes = {
   count: PropTypes.number,
   onlyShow: PropTypes.bool,
   clickStar: PropTypes.func,
-  initHasSignStar: PropTypes.bool,
   rightSide: PropTypes.bool,
 }
