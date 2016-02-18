@@ -18,6 +18,8 @@ import StarRate from './starRate';
 import TodoSubBut from './todoSubBut';
 import TodoSubItem from './todoSub';
 
+import Tags from './tags';
+
 import 'react-select2-wrapper/css/select2.min.css';
 import Select2 from 'react-select2-wrapper';
 
@@ -185,23 +187,13 @@ export default class Todo extends Component {
           } 
 
       }
-      let tags = [] 
-      if ( this.state.tags ){
-          for( let item of this.state.tags ) {
-               tags.push( <span className='tagBadge'> 
-                             <span className="badge3"></span>
-                              { item.text }
-                          </span>)
-          }
-      }
+
       const listText = ( 
                         <span > 
                             <span  style={style.listTextSpan}>
                             { `${ String(this.props.index + 1) }.  ${this.props.text}        ` } 
                             </span>
-                            <span  className='tags'>
-                                { tags }
-                            </span>
+                            <Tags tags={this.state.tags } /> 
                             <span className="item-show-right">
                                 <Badge
                                     badgeContent={this.state.importanceStar }
