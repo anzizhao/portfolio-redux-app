@@ -69,5 +69,5 @@ function readFile(file, afterRead){
 }
 
 module.exports = {
-    loadState,  exportFile, storeTodoState, readFile
+    loadState,  exportFile, storeTodoState, storeTodoTags, readFile 
 }

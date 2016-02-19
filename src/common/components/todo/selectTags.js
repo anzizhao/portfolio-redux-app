@@ -12,7 +12,7 @@ export default class SelectTags extends Component {
     } 
     render() {
         const style = this.getStyle() 
-        const { onChange, allTags } = this.props
+        const { onChange, allTags ,select } = this.props
         const options = {
             placeholder: '添加或选择标签',
             tags: true,
@@ -22,6 +22,7 @@ export default class SelectTags extends Component {
                     <Select2
                         style={style.selectTag}
                         multiple
+                        defaultValue={select}
                         data={allTags}
                         onChange={ onChange }
                         options={options}
@@ -34,6 +35,10 @@ export default class SelectTags extends Component {
 SelectTags.propTypes = {
     onChange: PropTypes.func.isRequired,
     allTags: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        text: PropTypes.string.isRequired,
+    }).isRequired).isRequired,
+    select: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.number.isRequired,
         text: PropTypes.string.isRequired,
     }).isRequired).isRequired
@@ -41,7 +46,7 @@ SelectTags.propTypes = {
 
 SelectTags.style = {
     selectTag:{
-        width: "100%" 
+        width: "100%" ,
     } 
 }
 

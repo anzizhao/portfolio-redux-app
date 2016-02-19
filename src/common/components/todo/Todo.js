@@ -110,7 +110,10 @@ export default class Todo extends Component {
 
     handleTagChange(e) {
         // target options array,  the last ele id is empty '', that means add new value
-        var opts = e.target
+        var opts = e.target.selectedOptions
+        if( ! opts ){
+            return 
+        } 
         var ele = opts[opts.length-1]
         if ( ele.id === '' ) {
             //new value, set  
@@ -294,6 +297,7 @@ export default class Todo extends Component {
                     <SelectTags  
                         onChange={ this.handleTagChange.bind(this)} 
                         allTags = { allTags } 
+                        select={ this.state.tags }
                     />
 
                     <div style={style.opButGroup }>
@@ -319,7 +323,7 @@ Todo.propTypes = {
     index: PropTypes.number.isRequired,
     onClick: PropTypes.func.isRequired,
     allTags: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number.isRequired,
+        id: PropTypes.string.isRequired,
         text: PropTypes.string.isRequired,
     }).isRequired).isRequired
 }
