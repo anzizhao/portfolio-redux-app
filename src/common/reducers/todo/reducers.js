@@ -114,10 +114,11 @@ function todo(state, action) {
             if ( action.type === todoActions.ADD_TODO_SUB_PROCESS ){
                 state.process.push(tmp) 
             } else {
-                tmp.type = 1
+                tmp.type = todoActions.todoSubItemType.conclusion
                 state.conclusion = tmp 
             }
             return state             
+
         case todoActions.SAVE_TODO_SUB_PROCESS:
             process = state.process || [] 
             index = process.findIndex((ele, index, arr) => {

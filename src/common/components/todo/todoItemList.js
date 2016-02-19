@@ -74,7 +74,7 @@ export default class TodoItemList extends Component {
             secondaryTextLines = 2
             secondaryText = (
                 <span  style={style.secondtext} > 
-                结论:  { conclusion.text }
+                结论:  { this.props.conclusion.text }
                 </span> 
             ) 
         }
@@ -122,7 +122,10 @@ export default class TodoItemList extends Component {
 
 
     render() {
-        const { id , actions} = this.props
+        const { id , actions, collapse } = this.props
+        if ( ! collapse ) {
+            return <div></div> 
+        }
         const style = this.getStyle() 
 
         const listText =  this.renderText(style) 

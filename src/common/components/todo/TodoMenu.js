@@ -9,24 +9,24 @@ import Colors from 'material-ui/lib/styles/colors';
 export default class TodoMenu extends Component {
 
     handleDel (e ) {
-        e.stopPropagation()
+        //e.stopPropagation()
         const del = this.props.actions.delTodo 
         const id = this.props.todoId 
         del(id) 
     }
     handleComplete (e ) {
-        e.stopPropagation();
+        //e.stopPropagation();
         const id = this.props.todoId 
         this.props.actions.completeTodo(id)
     }
     handleUnComplete(e ) {
-        e.stopPropagation();
+        //e.stopPropagation();
         const id = this.props.todoId 
         this.props.actions.uncompleteTodo(id)
     }
 
     handleEdit (e){
-        e.stopPropagation();
+        //e.stopPropagation();
         const id = this.props.todoId 
         this.props.actions.editTodo(id)
     }

@@ -7,7 +7,6 @@ import TextField from 'material-ui/lib/text-field';
 import ActionGrade from 'material-ui/lib/svg-icons/action/grade';
 
 import Colors from 'material-ui/lib/styles/colors';
-import Icon from 'react-fa';
 
 
 
@@ -33,9 +32,7 @@ export default class Todo extends Component {
         difficulty: 0,   //困难程度
         itemText: ''
     };
-    componentWillMount(){
 
-    }
     componentWillReceiveProps (nextProps) {
         const props = nextProps
         this.setState({
@@ -45,6 +42,22 @@ export default class Todo extends Component {
             itemText: props.text,
             tags: props.tags,
         });
+    }
+
+    componentDidMount () {
+        const props = this.props 
+        if( ! this.props.collapse )  {
+            const ele = ReactDOM.findDOMNode(this._input)
+            ele.getElementsByTagName('textarea')[1].focus()
+        }
+    }
+
+    componentDidUpdate() {
+        const props = this.props 
+        if( ! this.props.collapse )  {
+            const ele = ReactDOM.findDOMNode(this._input)
+            ele.getElementsByTagName('textarea')[1].focus()
+        }
     }
 
 
@@ -188,6 +201,7 @@ export default class Todo extends Component {
                         value={this.state.itemText}
                         onChange={(e)=>this.handleChangeItem(e)}
                         onEnterKeyDown ={(e) => this.handleSaveTodo()}
+                        ref={(c) => this._input = c}
                     />
                     <TakeRate 
                         {...takeRateParam} />

@@ -8,11 +8,15 @@ export default class StarRate extends Component {
 
         this.state = {
             signStar: props.star,   //被打标记的星星颗数
+            startStar: false,     // 开始打标记
             hasSignStar : false   //被打标记的星星颗数
         };
+        this.mouseFocus  =   300  //ms
+        this.timeoutFunc = null
     }
 
     mayHandleSignStar  (e, count)  {
+        e.preventDefault() 
         if( this.props.onlyShow ||   this.state.hasSignStar ){
             return null 
         }
@@ -20,22 +24,45 @@ export default class StarRate extends Component {
             hasSignStar: true,
             signStar: count
         })
-        // action 
         this.props.clickStar(e, count)
     } 
 
+    handleMouseLeave (e)  {
+        e.preventDefault() 
+        clearTimeout(this.timeoutFunc )
+    }
+
     mayHandleMouseOver  (e, index)  {
+        e.preventDefault() 
         if( this.props.onlyShow ||   this.state.hasSignStar ){
             return null 
         }
-        this.setState({signStar: index})
+
+        if ( ! this.state.startStar ) {
+            clearTimeout(this.timeoutFunc )
+            this.timeoutFunc = setTimeout(() => {
+                this.setState({
+                    startStar: true, 
+                    signStar : index  
+                })
+            }, this.mouseFocus )
+            return 
+        }
+
+        this.setState({
+            signStar : index  
+        })
+
     } 
 
     maySignNone (e) {
         if( this.state.hasSignStar || this.props.onlyShow  ){
             return null
         }
-        this.setState({signStar: 0})
+        this.setState({
+            signStar: 0,
+            startStar: false, 
+        })
     } 
 
     componentWillReceiveProps (nextProps) {
@@ -45,8 +72,16 @@ export default class StarRate extends Component {
             hasSignStar: false ,
             signStar: nextProps.star 
         });
-
     }
+
+    componentWillUpdate () {
+        clearTimeout(this.timeoutFunc )
+    }
+
+    componentWillUnMount () {
+        clearTimeout(this.timeoutFunc )
+    }
+
     createItems(){
         const {  count, star , onlyShow } = this.props
         const starItems = [] 
@@ -58,10 +93,13 @@ export default class StarRate extends Component {
             starItems.unshift( <span className={ starClassName } key={i}
                                   onClick={(e) => this.mayHandleSignStar(e, i) } 
                                   onMouseOver={(e)=> this.mayHandleMouseOver(e, i) }
+                                  onMouseLeave={(e)=> this.handleMouseLeave(e) }
                               >☆</span> ) 
         }
         return starItems 
     }
+
+
 
 
     render() {
