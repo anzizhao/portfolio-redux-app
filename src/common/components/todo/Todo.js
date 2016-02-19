@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
-import ListItem from 'material-ui/lib/lists/list-item';
 import FlatButton from 'material-ui/lib/flat-button';
 import FontIcon from 'material-ui/lib/font-icon';
 import TextField from 'material-ui/lib/text-field';
@@ -12,14 +11,10 @@ import Icon from 'react-fa';
 
 
 
-import TodoSubBut from './todoSubBut';
-import TodoSubItem from './todoSub';
 
-import Tags from './tags';
-import TodoMenu from './TodoMenu';
-import Mertic from './metric';
 import TakeRate from './takeRate';
 import SelectTags from './selectTags';
+import TodoItemList from './todoItemList';
 
 
 export default class Todo extends Component {
@@ -89,9 +84,7 @@ export default class Todo extends Component {
     }
 
     handleSaveTodo(){
-        let id 
-        id = this.props.id
-
+        let id = this.props.id
         let item = {
             text: this.state.itemText, 
             importance: this.state.importance,
@@ -129,6 +122,7 @@ export default class Todo extends Component {
         }
         this.state.tags = tags 
     }
+
     getStyle (){
         const style =  this.constructor.style
         const dStyle = {
@@ -151,88 +145,6 @@ export default class Todo extends Component {
         return Object.assign({}, style, dStyle) 
     } 
 
-    renderConclusion(subItems){
-        const { id, conclusion } = this.props
-        let index = 1
-        //结论
-        if ( conclusion ) {
-            subItems.push(<TodoSubItem
-                          todoId = { id }
-                          key="conclusion" 
-                          index={index} 
-                          parentIndex={this.props.index+1}
-                          { ...conclusion } 
-                          actions={this.props.actions} /> )
-            return    true 
-        }
-        return false 
-    }
-
-    renderProcess(subItems, i){
-        let index = i
-        //过程描述
-        if ( this.props.process.length != 0 ) {
-            for( let item of this.props.process ) {
-                subItems.push(<TodoSubItem
-                                  todoId = { this.props.id }
-                                  key={item.id} 
-                                  index={index} 
-                                  parentIndex={this.props.index+1 }
-                                  {...item} 
-                                  actions={this.props.actions} /> )
-
-                index += 1
-            }
-        }
-    }
-
-    renderSub(style){
-        let secondaryText = '' 
-        let secondaryTextLines   = 1
-        let subItems = []
-        let index = 1
-
-        //结论
-        if ( this.renderConclusion( subItems )) {
-            index = 2 
-            // 可以根据字数  设置多少行
-            secondaryTextLines = 2
-            secondaryText = (
-                <span  style={style.secondtext} > 
-                结论:  { conclusion.text }
-                </span> 
-            ) 
-        }
-
-        this.renderProcess(subItems, index)
-
-        // 操作按钮
-        subItems.push(<TodoSubBut 
-                          todoId = { this.props.id }
-                          key="addBut"
-                      actions={this.props.actions } /> )
-
-        return {
-                    subItems,    
-                    secondaryText,
-                    secondaryTextLines
-                }              
-    }
-    renderText(style){
-        return  ( 
-                     <span > 
-                          <span  style={style.listTextSpan}>
-                              { `${ String( this.props.index  + 1) }.  ${this.props.text}        ` } 
-                          </span>
-                          <Tags tags={this.state.tags } /> 
-                          <Mertic 
-                              importance={this.state.importance}
-                              urgency = { this.state.urgency}
-                              difficulty={ this.state.difficulty}
-                          />
-                     </span>
-                         )
-    }
     getTakeRateParam(){
         return  {
             values: {
@@ -249,37 +161,22 @@ export default class Todo extends Component {
         }
     }
 
+
+
     render() {
         const { id, conclusion, allTags, actions } = this.props
         const style = this.getStyle() 
-
-        const listText =  this.renderText(style) 
-
-        // listItem 组建必需的左右icon button 必需为button  所有使用a 包裹住
-        const rightIconMenu = (
-            <a className="btn" type="button"> 
-                <TodoMenu
-                    todoId={id}
-                    actions={ actions }
-                />
-            </a> 
-        )
-
-        const { secondaryText, secondaryTextLines, subItems } = this.renderSub(style)
         const takeRateParam = this.getTakeRateParam() 
 
         return (
             <div className="todo-item">
                 <div style={style.listItemDiv }>
-                    <ListItem 
-                        primaryText={ listText } 
-                        secondaryText = { secondaryText }
-                        secondaryTextLines =  { secondaryTextLines }
-                        style={style.listItem}
-                        rightIconButton ={ rightIconMenu }
-                        primaryTogglesNestedList={true}
-                        nestedItems={subItems}
-                        key={ this.props.key }
+                    <TodoItemList 
+                        importance={this.state.importance} 
+                        urgency={this.state.urgency} 
+                        difficulty={this.state.difficulty}
+
+                        {...this.props}
                     />
                 </div>
                 <div style={style.editTodo } >
@@ -287,6 +184,7 @@ export default class Todo extends Component {
                     <TextField
                         className='item-input'
                         fullWidth
+                        multiLine={true}
                         value={this.state.itemText}
                         onChange={(e)=>this.handleChangeItem(e)}
                         onEnterKeyDown ={(e) => this.handleSaveTodo()}
@@ -297,7 +195,7 @@ export default class Todo extends Component {
                     <SelectTags  
                         onChange={ this.handleTagChange.bind(this)} 
                         allTags = { allTags } 
-                        select={ this.state.tags }
+                        select={ this.props.tags }
                     />
 
                     <div style={style.opButGroup }>
