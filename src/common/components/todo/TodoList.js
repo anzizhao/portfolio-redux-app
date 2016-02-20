@@ -6,6 +6,8 @@ import Divider from 'material-ui/lib/divider';
 import List from 'material-ui/lib/lists/list';
 import FlatButton from 'material-ui/lib/flat-button';
 
+import Badge from 'material-ui/lib/badge';
+
 var {exportFile, readFile } = require('../../util')
 
 export default class TodoList extends Component {
@@ -38,8 +40,32 @@ export default class TodoList extends Component {
 
         const style = this.getStyle() 
 
-        return (
-            <div>
+        return (           
+                <div  className="todoList">
+                <div  className="mertic-tips">
+                    <span>
+                        重要=
+                        <Badge
+                            badgeContent={''}
+                            style={ style.badgeContent}
+                            badgeStyle={{...style.badge, 'backgroundColor':'rgba(243, 255, 66, 0.56)'}} 
+                        />
+                        紧急=
+                        <Badge
+                            badgeContent={''}
+                            style={ style.badgeContent}
+                            badgeStyle={{...style.badge, 'backgroundColor':'rgba(244, 67, 54, 0.56)'}} 
+                        />
+
+                        困难=
+                        <Badge
+                            badgeContent={''}
+                            style={ style.badgeContent}
+                            badgeStyle={{...style.badge, 'backgroundColor':'rgba(3, 169, 244, 0.56)'}} 
+                        />
+                    </span>
+                    <br/>
+                </div>
                 <List  style={style.list}>
                 {this.props.todos.map((todo, index)  =>
                                       <Todo {...todo}
@@ -88,5 +114,15 @@ TodoList.style = {
     },
     list: {
         marginBottom: "30px", 
+        clear: "both",
+    },
+    badge: {
+        marginTop: '22px',
+        width: '20px',
+        height: '20px',
+    },
+    badgeContent:{
+        padding: '24px 24px 12px 0' ,
+        marginRight: '5px',
     }
 }

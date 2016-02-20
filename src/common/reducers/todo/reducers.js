@@ -30,6 +30,25 @@ function sort (state = SORT_ORIGIN , action) {
     }
 }
 
+function addTagsItem(state, item ){
+    //array find not found return undefine 
+    let index = state.find((ele, index, arr) => {
+        if ( ele.text === item.text )  {
+            return true
+        }
+        return false
+    })
+    if ( ! index ) {
+        let newItem = {
+            id: item.text,
+            text: item.text 
+        }
+        state.push(newItem)
+    } 
+
+    return state 
+}
+
 function tags (state = [], action) {
     let cmds = todoActions
     let newItem, index 
@@ -38,22 +57,16 @@ function tags (state = [], action) {
             return action.tags 
 
         case cmds.ADD_TAGS:
-            //array find not found return undefine 
-            index = state.find((ele, index, arr) => {
-                                if ( ele.text === action.text )  {
-                                    return true
-                                }
-                                return false
-            })
-            if ( index ) {
-                return state 
+            if ( action.tags ) {
+                // add array 
+                for(let item of action.tags )  {
+                    addTagsItem(state,{ text: item.text })
+                }
+            } else {
+                // add item 
+                addTagsItem(state,{text: action.text} )
+            
             }
-            newItem = {
-                id: action.text,
-                text: action.text 
-            }
-            state.push(newItem)
-
             //store tags
             storeTodoTags(state)           
             return state 
@@ -68,7 +81,7 @@ function todo(state, action) {
     let tmp
     // 特殊的 先特别对待
     if ( action.type ===   todoActions.ADD_TODO ) {
-            return {
+            return  {
                 id: action.id,
                 text: action.text,
                 completed: false,
@@ -79,9 +92,9 @@ function todo(state, action) {
                 timestamp: Date.now(),
                 process: [],
                 conclusion: null,
-                tags: [],
-                uuid: uuid.v1() 
-        }
+                uuid: uuid.v1(),
+                tags: ( action.tags && action.tags instanceof Array )? action.tags : []
+            }
     }
     // common code 
     if (state.id !== action.id) {

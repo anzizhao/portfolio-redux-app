@@ -2,6 +2,8 @@ import React, { Component, PropTypes } from 'react'
 import ReactDOM from 'react-dom';
 import FlatButton from 'material-ui/lib/flat-button';
 import TextField from 'material-ui/lib/text-field';
+//import parseInput from '../../util' 
+var {parseInput} = require('../../util');
 
 export default class AddTodo extends Component {
     state = {
@@ -12,8 +14,13 @@ export default class AddTodo extends Component {
         e.preventDefault()
         const value =  e.target.value 
         if ( value ) {
-            const text = value.trim()
-            this.props.onAddSubmit(text)
+            //const text = value.trim()
+            const {tags, text} = parseInput( value.trim() )
+
+            tags &&  this.props.actions.addTagsBatch(tags )
+
+            this.props.actions.addTodo(text, tags)
+
             const dom = ReactDOM.findDOMNode(this.refs.iAddTodo)
             dom.getElementsByTagName('input')[0].value = ''
             //this.setState({addTodoText: ''})
@@ -28,10 +35,6 @@ export default class AddTodo extends Component {
 
     render() {
         const style = {
-            flatButton: {
-                float: "right",
-                marginBottom: "10px",
-            },
             form: {
                 marginBottom: "30px", 
             }
@@ -40,11 +43,11 @@ export default class AddTodo extends Component {
             <div>
                 <form onSubmit={(e) => this.handleSubmit(e)} style={style.form} >
                         <TextField
-                        floatingLabelText="添加todo项 按Enter确认"
-                        ref="iAddTodo" 
-                        //value={ this.state.addTodoText }
-                        onEnterKeyDown = {(e) => this.handleEnterKeyDown (e) }
-                        fullWidth
+                            floatingLabelText="添加todo项 按Enter确认"
+                            ref="iAddTodo" 
+                            //value={ this.state.addTodoText }
+                            onEnterKeyDown = {(e) => this.handleEnterKeyDown (e) }
+                            fullWidth
                         />
                 </form>
             </div>
@@ -53,5 +56,5 @@ export default class AddTodo extends Component {
 }
 
 AddTodo.propTypes = {
-    onAddSubmit: PropTypes.func.isRequired,
+    actions: PropTypes.object.isRequired,
 }

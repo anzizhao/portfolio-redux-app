@@ -80,10 +80,11 @@ export function importTodo (todos) {
 }
 
 let nextTodoId = 0
-export function addTodo (text) {
+export function addTodo (text, tags) {
     return {
         type: ADD_TODO, 
         id : nextTodoId ++, 
+        tags,
         text
     }
 }
@@ -149,6 +150,10 @@ export function todelTodoSub (todoId, processId, type ) {
 
 export function addTags (id, text) {
     return { type: ADD_TAGS, id, text} 
+}
+
+export function addTagsBatch (tags) {
+    return { type: ADD_TAGS, tags } 
 }
 
 export function initTags () {

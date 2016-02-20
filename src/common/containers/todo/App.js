@@ -26,7 +26,8 @@ class App extends Component {
       <div>
         <AddTodo
           todos={visibleTodos}
-          onAddSubmit={text => dispatch(addTodo(text))} />
+          actions={actions}
+          />
         <TodoList
           todos={visibleTodos}
           actions={actions}

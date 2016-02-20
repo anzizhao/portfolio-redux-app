@@ -101,6 +101,9 @@ export default class TodoItemList extends Component {
                               { `${ String( this.props.index  + 1) }.  ${this.props.text}        ` } 
                           </span>
                           <Tags tags={this.props.tags } /> 
+                          <span  style={style.processNum}>
+                            { this.props.process.length || '' }
+                          </span>
                           <Mertic 
                               importance={this.props.importance}
                               urgency = { this.props.urgency}
@@ -166,4 +169,10 @@ TodoItemList.style = {
         marginLeft: '30px',
         marginRight: '30px',
     },
+    processNum:{
+        fontSize: '11px',
+        fontWeight: 500,
+        marginLeft: '10px',
+        color: '#888',
+    }
 }

@@ -67,6 +67,11 @@ export default class Footer extends Component {
     )
   }
 
+        //{this.renderSort('SORT_IMPORTANCE_UP', '重要up')}
+        //{', '}
+        //{this.renderSort('SORT_URGENCY_UP', '紧急up')}
+        //{', '}
+
   renderSorts() {
     return (
       <p>
@@ -74,17 +79,13 @@ export default class Footer extends Component {
         {' '}
         {this.renderSort('SORT_ORIGIN', '默认')}
         {', '}
-        {this.renderSort('SORT_IMPORTANCE_UP', '重要up')}
+        {this.renderSort('SORT_IMPORTANCE_DOWN', '重要')}
         {', '}
-        {this.renderSort('SORT_IMPORTANCE_DOWN', '重要down')}
+        {this.renderSort('SORT_URGENCY_DOWN', '紧急')}
         {', '}
-        {this.renderSort('SORT_URGENCY_UP', '紧急up')}
+        {this.renderSort('SORT_DIFFICULTY_DOWN', '困难')}
         {', '}
-        {this.renderSort('SORT_URGENCY_DOWN', '紧急down')}
-        {', '}
-        {this.renderSort('SORT_DIFFICULTY_UP', '困难up')}
-        {', '}
-        {this.renderSort('SORT_DIFFICULTY_DOWN', '困难down')}
+        {this.renderSort('SORT_DIFFICULTY_UP', '容易')}
       </p>
     )
   }
