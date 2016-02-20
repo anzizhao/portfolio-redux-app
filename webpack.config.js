@@ -7,7 +7,7 @@ var webpackConfig = {
   output: {
     path: path.join(__dirname, 'dist'),
     filename: 'bundle.js',
-    publicPath: '/static/'
+    publicPath: '/dist/'
   },
   externals: {
       //require("jquery") 是引用自外部模块的
