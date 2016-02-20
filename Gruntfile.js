@@ -64,19 +64,13 @@ module.exports  = function(grunt) {
             },
         },
         gitpull: {
-            ghPages: {
-                options: {
-                    remote: "origin",
-                    branch: "gh-pages",
-                    cwd: "../FarmPrivateKitchen_gh-pages" 
-                }
-            },
-            master: {
+            mainPage: {
                 options: {
                     remote: "origin",
                     branch: "master",
+                    cwd: "../anzizhao.github.io" 
                 }
-            }
+            },
         },
         gitarchive: {
             master: {
@@ -148,7 +142,9 @@ module.exports  = function(grunt) {
                              if ( message ) {
                                  grunt.config.set('gitcommit.mainPage.message', message);
                              }
-                             grunt.task.run(['run:npmBuild',
+                             grunt.task.run([
+                                            'gitpull:mainPage',
+                                            'run:npmBuild',
                                             'run:tag',
                                             'gitadd:mainPage',
                                             'gitcommit:mainPage',
