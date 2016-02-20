@@ -26,18 +26,17 @@ export default class TodoList extends Component {
         e.preventDefault();  
         document.getElementById('importTodo').click()
     }
+
+    getStyle (){
+        const style =  this.constructor.style
+        const dStyle = {}
+        return Object.assign({}, style, dStyle) 
+    } 
+
     render() {
         const { actions, tags } = this.props
 
-        const style = {
-            flatButton: {
-                float: "right",
-                marginBottom: "10px",
-            },
-            list: {
-                marginBottom: "30px", 
-            }
-        };
+        const style = this.getStyle() 
 
         return (
             <div>
@@ -71,13 +70,23 @@ TodoList.propTypes = {
   onTodoClick: PropTypes.func.isRequired,
   onExportClick: PropTypes.func.isRequired,
   tags: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
+      id: PropTypes.string.isRequired,
     text: PropTypes.string.isRequired,
-  }).isRequired),
+  }).isRequired).isRequired,
 
   todos: PropTypes.arrayOf(PropTypes.shape({
       id: PropTypes.number.isRequired,
     text: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired
   }).isRequired).isRequired
+}
+
+TodoList.style = {
+    flatButton: {
+        float: "right",
+        marginBottom: "10px",
+    },
+    list: {
+        marginBottom: "30px", 
+    }
 }

@@ -1,4 +1,4 @@
-var {storeTodoState} = require('../../util')
+var {storeTodoState, storeTodoTags} = require('../../util')
 
 export const ADD_TODO = 'ADD_TODO'
 export const COMPLETE_TODO = 'COMPLETE_TODO'
@@ -151,7 +151,7 @@ export function addTags (id, text) {
     return { type: ADD_TAGS, id, text} 
 }
 
-export function initTags (id, text) {
+export function initTags () {
     const db = storeTodoTags()
     return {
       type: INIT_TAGS,

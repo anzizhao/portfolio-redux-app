@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import undoable, { distinctState } from 'redux-undo'
-var {storeTodoState, exportFile } = require('../../util')
+var {storeTodoState, storeTodoTags, exportFile } = require('../../util')
 
 import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters, EXPORT_TODO, INIT_TODO, DEL_TODO, SAVE_TODO } from '../../actions/todo/actions'
 
@@ -38,13 +38,14 @@ function tags (state = [], action) {
             return action.tags 
 
         case cmds.ADD_TAGS:
+            //array find not found return undefine 
             index = state.find((ele, index, arr) => {
                                 if ( ele.text === action.text )  {
                                     return true
                                 }
                                 return false
             })
-            if ( index != -1 ) {
+            if ( index ) {
                 return state 
             }
             newItem = {
@@ -113,10 +114,11 @@ function todo(state, action) {
             if ( action.type === todoActions.ADD_TODO_SUB_PROCESS ){
                 state.process.push(tmp) 
             } else {
-                tmp.type = 1
+                tmp.type = todoActions.todoSubItemType.conclusion
                 state.conclusion = tmp 
             }
             return state             
+
         case todoActions.SAVE_TODO_SUB_PROCESS:
             process = state.process || [] 
             index = process.findIndex((ele, index, arr) => {
@@ -248,6 +250,10 @@ function todos(state = [], action) {
                                 }
                                 return false
             })
+            if( index === -1) {
+                return state 
+            }
+
             let changeItem = Object.assign({}, state[index]) 
             changeItem.text = action.text 
             changeItem.urgency = action.urgency 

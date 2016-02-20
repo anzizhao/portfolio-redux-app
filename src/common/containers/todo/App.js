@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { ActionCreators } from 'redux-undo'
-import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters, exportTodo,   initTodo } from '../../actions/todo/actions'
+import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters, exportTodo,   initTodo, initTags } from '../../actions/todo/actions'
 
 import { bindActionCreators } from 'redux'
 
@@ -14,11 +14,13 @@ import Footer from '../../components/todo/Footer'
 
 class App extends Component {
     componentWillMount() {
+        //初始化todo 和 tags
         this.props.dispatch(initTodo());
+        this.props.dispatch(initTags());
     }
 
   render() {
-    const { dispatch, visibleTodos, visibilityFilter, actions, sort } = this.props
+    const { dispatch, visibleTodos, visibilityFilter, actions, sort ,tags} = this.props
 
     return (
       <div>
@@ -28,6 +30,7 @@ class App extends Component {
         <TodoList
           todos={visibleTodos}
           actions={actions}
+          tags={tags}
           onExportClick={() => dispatch(exportTodo()) }
           onTodoClick={id => dispatch(completeTodo(id))} />
         <Footer
@@ -65,6 +68,10 @@ App.propTypes = {
                                     'SHOW_COMPLETED',
                                     'SHOW_ACTIVE'
   ]).isRequired,
+  tags: PropTypes.arrayOf(PropTypes.shape({
+      id: PropTypes.string.isRequired,
+      text: PropTypes.string.isRequired,
+  }).isRequired).isRequired,
   undoDisabled: PropTypes.bool.isRequired,
   redoDisabled: PropTypes.bool.isRequired
 }
@@ -123,8 +130,8 @@ function select(state) {
     visibleTodos: selectTodos(state.todo.todos.present, state.todo.visibilityFilter, state.todo.sort ),
     visibilityFilter: state.todo.visibilityFilter,
     sort: state.todo.sort,
-    layout : state.layout,
-    tags: state.tags
+    tags: state.todo.tags,
+    layout : state.layout
   }
 }
 
