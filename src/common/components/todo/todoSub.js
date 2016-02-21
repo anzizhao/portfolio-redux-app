@@ -4,8 +4,16 @@ import ListItem from 'material-ui/lib/lists/list-item';
 import TextField from 'material-ui/lib/text-field';
 import Icon from 'react-fa'
 
+
+
+
 import ReactTooltip from "react-tooltip"
 import {todoSubItemStatus, todoSubItemType } from '../../actions/todo/actions'
+import Tags from './tags';
+
+
+
+var {parseInput} = require('../../util');
 
 
 
@@ -20,11 +28,13 @@ export default class TodoSubItem extends Component {
             itemText: text,
         })
     }
-    _saveTodoSub(text){
+    _saveTodoSub(originText){
         let todoId = this.props.todoId
         let processId = this.props.id
         let type = this.props.type
-        this.props.actions.saveTodoSub (todoId, processId, type, text )
+        const processItem  = parseInput( originText )
+
+        this.props.actions.saveTodoSub (todoId, processId, type, processItem )
     }
     handleEnterKeyDown (e) {
         let text = e.target.value
@@ -40,7 +50,21 @@ export default class TodoSubItem extends Component {
         var id = this.props.todoId 
         var processId = this.props.id 
         var type = this.props.type
-        var text = this.props.text
+        var text  = ''
+        if ( this.props.tags instanceof Array  ) {
+            this.props.tags.forEach((item, index, arr)=>{
+                if ( index === 0 ) {
+                    text = "( " 
+                }
+                text += item.text 
+                if ( index === arr.length-1 ) {
+                    text += " ) " 
+                } else {
+                    text += " ," 
+                }
+            })
+        }
+        text += this.props.text
         this.props.actions.toeditTodoSub (id, processId, type )
         this.setState({
             itemText: text,
@@ -118,7 +142,10 @@ export default class TodoSubItem extends Component {
        //const lastDate = this.props.lastTime 
        const listText = (
            <span >
-               { textPart } 
+               <span  style={style.listTextSpan}>
+                   { textPart } 
+               </span>
+               <Tags tags={this.props.tags } subTag={true} /> 
                <div style={style.lastDate } >最后编辑
                    <span style={style.date }>{lastDate}</span>  
                </div>
@@ -139,7 +166,7 @@ export default class TodoSubItem extends Component {
                            data-tip data-for={'subItemLable' + subIndex } data-place='left'  
                            style={style.editLabel}
 
-                       >{ this.props.index  } </label>
+                       >{ subIndex } </label>
                        <TextField
                            className='item-input'
                            fullWidth
@@ -168,6 +195,9 @@ TodoSubItem.propTypes = {
 
 
 TodoSubItem.style = {
+    listTextSpan: {
+        float: 'left',
+    },
     delIcon: {
         marginTop: '15px', 
     },

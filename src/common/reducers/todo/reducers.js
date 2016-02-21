@@ -155,9 +155,10 @@ function todo(state, action) {
                 return state
             }
             let selItem = process[index]
-            selItem.text = action.text
             selItem.lastTime = Date.now()
             selItem.status = todoActions.todoSubItemStatus.show  
+            selItem.text = action.item.text
+            selItem.tags = action.item.tags 
 
             return state
 

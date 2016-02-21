@@ -125,11 +125,11 @@ export function addTodoSubProcess (todoId ) {
 export function addTodoSubConclusion (todoId ) {
     return { type: ADD_TODO_SUB_CONCLUSION, id:todoId }
 }
-export function saveTodoSub(todoId, processId, type, text ) {
+export function saveTodoSub(todoId, processId, type, item ) {
     if ( type === todoSubItemType.process ) {
-        return { type: SAVE_TODO_SUB_PROCESS, id:todoId, processId, text } 
+        return { type: SAVE_TODO_SUB_PROCESS, id:todoId, processId, item } 
     } else if ( type === todoSubItemType.conclusion ){
-        return { type: SAVE_TODO_SUB_CONCLUSION, id:todoId,  text } 
+        return { type: SAVE_TODO_SUB_CONCLUSION, id:todoId,  text: item.text }  
     }
 }
 
