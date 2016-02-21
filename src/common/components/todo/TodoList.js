@@ -7,6 +7,7 @@ import List from 'material-ui/lib/lists/list';
 import FlatButton from 'material-ui/lib/flat-button';
 
 import Badge from 'material-ui/lib/badge';
+import ClearAllBut from './clearAllBut';
 
 var {exportFile, readFile } = require('../../util')
 
@@ -15,7 +16,9 @@ export default class TodoList extends Component {
     componentDidMount(){
         //document.getElementById('importTodo').addEventListener('change', this.handleFileSelect, false);
         this.refs.importTodo.addEventListener('change', this.handleFileSelect.bind(this), false)
+
     }
+
     handleFileSelect(event){
         let files = event.target.files; 
         readFile(files[0], (fileStr)=>{
@@ -26,6 +29,7 @@ export default class TodoList extends Component {
 
     handleImportClick(e){
         e.preventDefault();  
+        document.getElementById('importTodo').value='';
         document.getElementById('importTodo').click()
     }
 
@@ -73,7 +77,7 @@ export default class TodoList extends Component {
                                           index={index}
                                           actions={actions}
                                           allTags={ tags }
-                                          onClick={() => this.props.onTodoClick(todo.id)} />
+                                          onClick={() => this.props.onTodoClick} />
                                      )}
 
 
@@ -81,9 +85,15 @@ export default class TodoList extends Component {
                 <Divider inset={true}/>
 
                 <div  className="todolistOpGroup">
+
                     <FlatButton label="导出" onClick={(e) => this.props.onExportClick() }  style={ style.flatButton }  />
                     <FlatButton label="导入" onClick={(e) => this.handleImportClick(e) }  style={ style.flatButton }  />
+                    <ClearAllBut
+                        actions={ actions }
+                       />
+
                 </div>
+
                 <input type="file" id="importTodo" ref='importTodo'   style={{ display: 'none'}} />
                 <br/>
             </div>

@@ -50,6 +50,7 @@ export default class Todo extends Component {
             const ele = ReactDOM.findDOMNode(this._input)
             ele.getElementsByTagName('textarea')[1].focus()
         }
+
     }
 
     componentDidUpdate() {
@@ -237,7 +238,7 @@ Todo.propTypes = {
     allTags: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,
         text: PropTypes.string.isRequired,
-    }).isRequired).isRequired
+    })).isRequired
 }
 
 //static style 

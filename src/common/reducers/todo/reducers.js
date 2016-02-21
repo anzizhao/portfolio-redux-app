@@ -204,10 +204,14 @@ function todos(state = [], action) {
     let db = []
     let db2 = []
     switch (action.type) {
-        case INIT_TODO:
+        case todoActions.INIT_TODO:
                 return action.todos
 
-        case EXPORT_TODO:
+        case todoActions.CLEAR_ALL_TODO:
+            storeTodoState([]);
+            return [];
+
+        case todoActions.EXPORT_TODO:
             const jsonFile = JSON.stringify(state);
             const filename = `todo_${ new Date().toLocaleDateString() }.json`;
             exportFile(jsonFile, filename);
@@ -243,7 +247,7 @@ function todos(state = [], action) {
             storeTodoState(db2);
             return db2
 
-        case ADD_TODO:
+        case todoActions.ADD_TODO:
             db = [
                 todo(undefined, action),
                 ...state
@@ -251,12 +255,12 @@ function todos(state = [], action) {
             storeTodoState(db);
             return db;
 
-        case DEL_TODO:
+        case todoActions.DEL_TODO:
             db = state.filter((item)=>{ return item.id == action.id ? false: true } ) 
             storeTodoState(db);
             return db;
 
-        case SAVE_TODO:
+        case todoActions.SAVE_TODO:
             let index = state.findIndex((ele, index, arr) => {
                                 if ( ele.id === action.id )  {
                                     return true
@@ -284,7 +288,7 @@ function todos(state = [], action) {
             storeTodoState(db);
             return db;
 
-        case COMPLETE_TODO: 
+        case todoActions.COMPLETE_TODO: 
         case todoActions.UNCOMPLETE_TODO: 
         case todoActions.ADD_TODO_SUB_PROCESS:
         case todoActions.ADD_TODO_SUB_CONCLUSION:

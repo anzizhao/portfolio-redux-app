@@ -95,6 +95,7 @@ export default class TodoItemList extends Component {
     }
 
     renderText(style){
+
         return  ( 
                      <span > 
                           <span  style={style.listTextSpan}>
@@ -152,11 +153,12 @@ export default class TodoItemList extends Component {
     }
 }
 
+//有可能是空的数组  shape的isRequired 不太需要
 TodoItemList.propTypes = {
     tags: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,
         text: PropTypes.string.isRequired,
-    }).isRequired), 
+    })), 
 } 
 
 

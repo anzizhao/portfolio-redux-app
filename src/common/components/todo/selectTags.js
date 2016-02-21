@@ -17,13 +17,27 @@ export default class SelectTags extends Component {
             placeholder: '添加或选择标签',
             tags: true,
         }
+        // select2 id should be the number 
+        const _tags = allTags.map((item, index) => {
+            return {
+                id: index,
+                text: item.text
+            } 
+        })
+        let _select  = []
+        select.forEach(item => {
+            let result = _tags.find(tag =>  item.text === tag.text ) 
+            if ( result ) {
+                _select.push  ( result.id )
+            }
+        })
         return (
                 <div className="select-tag">
                     <Select2
                         style={style.selectTag}
                         multiple
-                        defaultValue={select}
-                        data={allTags}
+                        defaultValue={ _select }
+                        data={_tags}
                         onChange={ onChange }
                         options={options}
                    />
@@ -37,11 +51,11 @@ SelectTags.propTypes = {
     allTags: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,
         text: PropTypes.string.isRequired,
-    }).isRequired).isRequired,
+    })).isRequired,
     select: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.number.isRequired,
+        id: PropTypes.isRequired,
         text: PropTypes.string.isRequired,
-    }).isRequired).isRequired
+    })).isRequired
 }
 
 SelectTags.style = {

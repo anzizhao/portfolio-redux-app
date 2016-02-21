@@ -61,10 +61,12 @@ function storeTodoTags (data) {
 
 function readFile(file, afterRead){
     let reader = new FileReader();
+
     // 读完之后触发
     reader.onload  = (e) => {
         afterRead(e.target.result) 
     }
+
     reader.readAsText(file);
 }
 

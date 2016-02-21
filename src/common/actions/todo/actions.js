@@ -1,4 +1,4 @@
-var {storeTodoState, storeTodoTags} = require('../../util')
+var {storeTodoState, storeTodoTags }  = require('../../util')
 
 export const ADD_TODO = 'ADD_TODO'
 export const COMPLETE_TODO = 'COMPLETE_TODO'
@@ -8,6 +8,7 @@ export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
 export const SET_SORT = 'SET_SORT'
 export const EXPORT_TODO = 'EXPORT_TODO' 
 export const IMPORT_TODO = 'IMPORT_TODO' 
+export const CLEAR_ALL_TODO = 'CLEAR_ALL_TODO' 
 export const INIT_TODO = 'INIT_TODO' 
 export const SAVE_TODO = 'SAVE_TODO' 
 export const EDIT_TODO = 'EDIT_TODO' 
@@ -29,7 +30,6 @@ export const TODEL_TODO_SUB_CONCLUSION = 'TODEL_TODO_SUB_CONCLUSION'
 //tags
 export const INIT_TAGS= 'INIT_TAGS' 
 export const ADD_TAGS = 'ADD_TAGS' 
-
 
 export const VisibilityFilters = {
   SHOW_ALL: 'SHOW_ALL',
@@ -77,6 +77,10 @@ export function exportTodo () {
 
 export function importTodo (todos) {
     return { type: IMPORT_TODO,  todos }
+}
+
+export function clearAllTodo () {
+    return { type: CLEAR_ALL_TODO }
 }
 
 let nextTodoId = 0
