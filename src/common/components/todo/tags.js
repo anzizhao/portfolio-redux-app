@@ -4,6 +4,10 @@ import ReactDOM from 'react-dom';
 export default class Tags extends Component {
     render() {
         const { tags } = this.props
+        if ( !tags ) {
+            return <span></span> 
+        }
+
         return (
             <span  className='tags'>
             {
