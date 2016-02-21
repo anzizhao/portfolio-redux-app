@@ -75,8 +75,8 @@ export function exportTodo () {
     return { type: EXPORT_TODO }
 }
 
-export function importTodo (todos) {
-    return { type: IMPORT_TODO,  todos }
+export function importTodo (fileJson) {
+    return { type: IMPORT_TODO, fileJson }
 }
 
 export function clearAllTodo () {
@@ -95,7 +95,6 @@ export function addTodo (text, tags) {
 
 export function initTodo () {
     const db = storeTodoState()
-    nextTodoId += db.length;
     return {
       type: INIT_TODO,
       todos:  db,
