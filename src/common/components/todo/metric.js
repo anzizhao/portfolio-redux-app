@@ -14,7 +14,6 @@ export default class Mertic extends Component {
                         style={ style.badgeRoot }
                         badgeStyle={{...style.badge, 'backgroundColor':'rgba(243, 255, 66, 0.56)'}} 
                     >
-                        重要
                     </Badge>
                     <Badge
                         badgeContent={ urgency }
@@ -22,7 +21,6 @@ export default class Mertic extends Component {
                         style={ style.badgeRoot }
                         badgeStyle={{...style.badge, 'backgroundColor':'rgba(244, 67, 54, 0.56)'}} 
                     >
-                        紧急
                     </Badge>
                     <Badge
                         badgeContent={ difficulty }
@@ -30,7 +28,6 @@ export default class Mertic extends Component {
                         style={ style.badgeRoot }
                         badgeStyle={{...style.badge, 'backgroundColor':'rgba(3, 169, 244, 0.56)'}} 
                     >
-                        困难
                     </Badge>
                 </span>
 )

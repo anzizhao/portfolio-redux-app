@@ -21,7 +21,7 @@ export default class StarRate extends Component {
             return null 
         }
         this.setState({
-            hasSignStar: true,
+            //hasSignStar: true,
             signStar: count
         })
         this.props.clickStar(e, count)
@@ -66,21 +66,20 @@ export default class StarRate extends Component {
     } 
 
     componentWillReceiveProps (nextProps) {
-
         // 组建的star 为本地的
         this.setState({
-            hasSignStar: false ,
+            //hasSignStar: false ,
             signStar: nextProps.star 
         });
     }
 
-    componentWillUpdate () {
-        clearTimeout(this.timeoutFunc )
-    }
+    //componentWillUpdate () {
+        //clearTimeout(this.timeoutFunc )
+    //}
 
-    componentWillUnMount () {
-        clearTimeout(this.timeoutFunc )
-    }
+    //componentWillUnMount () {
+        //clearTimeout(this.timeoutFunc )
+    //}
 
     createItems(){
         const {  count, star , onlyShow } = this.props
@@ -88,12 +87,13 @@ export default class StarRate extends Component {
         let starClassName = ''
         const len = count ? count: 5
 
+        //onMouseOver={(e)=> this.mayHandleMouseOver(e, i) }
+        //onMouseLeave={(e)=> this.handleMouseLeave(e) }
+
         for(let i=1; i<=len ; i++) {
             starClassName = i <=  this.state.signStar ? 'signStar': '' 
             starItems.unshift( <span className={ starClassName } key={i}
                                   onClick={(e) => this.mayHandleSignStar(e, i) } 
-                                  onMouseOver={(e)=> this.mayHandleMouseOver(e, i) }
-                                  onMouseLeave={(e)=> this.handleMouseLeave(e) }
                               >☆</span> ) 
         }
         return starItems 
@@ -109,10 +109,10 @@ export default class StarRate extends Component {
             style.float = 'right'
         }
 
+        //onMouseLeave ={(e)=> { this.maySignNone(e) }}
         return (
           <span className="rating" 
                 style={style}
-              onMouseLeave ={(e)=> { this.maySignNone(e) }}
           >
           { 
              this.createItems() 
