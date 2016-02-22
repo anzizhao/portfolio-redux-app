@@ -27,6 +27,7 @@ export default class Tags extends Component {
         }
 
         const style = this.getStyle() 
+
         return (
             <span  className='tags'>
             {
