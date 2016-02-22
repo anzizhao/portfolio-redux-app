@@ -64,8 +64,8 @@ export default class TodoList extends Component {
                         困难=
                         <Badge
                             badgeContent={''}
-                            style={ style.badgeContent}
                             badgeStyle={{...style.badge, 'backgroundColor':'rgba(3, 169, 244, 0.56)'}} 
+                            style={ style.badgeContent}
                         />
                     </span>
                     <br/>

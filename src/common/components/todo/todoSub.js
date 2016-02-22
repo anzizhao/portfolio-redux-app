@@ -187,10 +187,20 @@ export default class TodoSubItem extends Component {
 }
 
 TodoSubItem.propTypes = {
-  actions: PropTypes.object.isRequired,
-  todoId: PropTypes.number.isRequired,
-  index: PropTypes.number.isRequired,
-  parentIndex: PropTypes.number.isRequired,
+    actions: PropTypes.object.isRequired,
+    id: PropTypes.number.isRequired,
+    todoId: PropTypes.number.isRequired,
+    index: PropTypes.number.isRequired,
+    parentIndex: PropTypes.number.isRequired,
+    type: PropTypes.number.isRequired,
+    text: PropTypes.string.isRequired,
+    tags: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        text: PropTypes.string.isRequired,
+    })), 
+
+    lastTime: PropTypes.number.isRequired,
+    status: PropTypes.number.isRequired,
 }
 
 

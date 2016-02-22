@@ -36,7 +36,7 @@ export default class AddTodo extends Component {
     render() {
         const style = {
             form: {
-                marginBottom: "30px", 
+                marginBottom: '30px', 
             }
         };
         return (
@@ -44,10 +44,10 @@ export default class AddTodo extends Component {
                 <form onSubmit={(e) => this.handleSubmit(e)} style={style.form} >
                         <TextField
                             floatingLabelText="添加todo项 按Enter确认"
-                            ref="iAddTodo" 
+                            fullWidth
                             //value={ this.state.addTodoText }
                             onEnterKeyDown = {(e) => this.handleEnterKeyDown (e) }
-                            fullWidth
+                            ref="iAddTodo" 
                         />
                 </form>
             </div>

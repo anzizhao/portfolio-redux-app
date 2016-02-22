@@ -53,11 +53,11 @@ export default class Tags extends Component {
 }
 
 Tags.propTypes = {
+    subTag: PropTypes.bool,
     tags: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,
         text: PropTypes.string.isRequired,
     })),
-    subTag: PropTypes.bool,
 }
 
 

@@ -31,13 +31,13 @@ export default class TodoItemList extends Component {
         //结论
         if ( conclusion ) {
             subItems.push(<TodoSubItem
-                              todoId = { id }
-                              key="conclusion" 
-                              index={1} 
-                              parentIndex={index+1}
-                              { ...conclusion } 
+                          todoId = { id }
+                          key="conclusion" 
+                          index={1} 
+                          parentIndex={index+1}
+                          { ...conclusion } 
                           actions={actions} /> )
-            return    true 
+                          return    true 
         }
         return false 
     }
@@ -49,14 +49,14 @@ export default class TodoItemList extends Component {
         if ( this.props.process.length != 0 ) {
             for( let item of this.props.process ) {
                 subItems.push(<TodoSubItem
-                                  todoId = { this.props.id }
-                                  key={item.id} 
-                                  index={index} 
-                                  parentIndex={this.props.index+1 }
-                                  {...item} 
-                                  actions={this.props.actions} /> )
+                              todoId = { this.props.id }
+                              key={item.id} 
+                              index={index} 
+                              parentIndex={this.props.index+1 }
+                              {...item} 
+                              actions={this.props.actions} /> )
 
-                index += 1
+                              index += 1
             }
         }
     }
@@ -83,43 +83,43 @@ export default class TodoItemList extends Component {
 
         // 操作按钮
         subItems.push(<TodoSubBut 
-                          todoId = { this.props.id }
-                          key="addBut"
+                      todoId = { this.props.id }
+                      key="addBut"
                       actions={this.props.actions } /> )
 
-        return {
-                    subItems,    
-                    secondaryText,
-                    secondaryTextLines
-                }              
+                      return {
+                          subItems,    
+                          secondaryText,
+                          secondaryTextLines
+                      }              
     }
 
     renderText(style){
 
         return  ( 
-                     <span > 
-                          <span  style={style.listTextSpan}>
-                              { `${ String( this.props.index  + 1) }.  ${this.props.text}        ` } 
-                          </span>
-                          <Tags tags={this.props.tags } /> 
-                          <span  style={style.processNum}>
-                            { this.props.process.length || '' }
-                          </span>
-                          <Mertic 
-                              importance={this.props.importance}
-                              urgency = { this.props.urgency}
-                              difficulty={ this.props.difficulty}
-                          />
-                     </span>
-                         )
+                 <span > 
+                 <span  style={style.listTextSpan}>
+                 { `${ String( this.props.index  + 1) }.  ${this.props.text}        ` } 
+                 </span>
+                 <Tags tags={this.props.tags } /> 
+                 <span  style={style.processNum}>
+                 { this.props.process.length || '' }
+                 </span>
+                 <Mertic 
+                 importance={this.props.importance}
+                 urgency = { this.props.urgency}
+                 difficulty={ this.props.difficulty}
+                 />
+                 </span>
+                )
     }
     renderRightIconMenu(){
         return (
             <a className="btn" type="button"> 
-                <TodoMenu
-                    todoId={this.props.id}
-                    actions={ this.props.actions }
-                />
+            <TodoMenu
+            todoId={this.props.id}
+            actions={ this.props.actions }
+            />
             </a> 
         ) 
     }
@@ -140,14 +140,13 @@ export default class TodoItemList extends Component {
 
         return (
             <ListItem 
-                primaryText={ listText } 
-                secondaryText = { secondaryText }
-                secondaryTextLines =  { secondaryTextLines }
-                style={style.listItem}
-                rightIconButton ={ rightIconMenu }
-                primaryTogglesNestedList={true}
-                nestedItems={subItems}
-                key={ this.props.key }
+            primaryText={ listText } 
+            secondaryText = { secondaryText }
+            secondaryTextLines =  { secondaryTextLines }
+            style={style.listItem}
+            rightIconButton ={ rightIconMenu }
+            primaryTogglesNestedList={true}
+            nestedItems={subItems}
             />
         )
     }
@@ -159,6 +158,21 @@ TodoItemList.propTypes = {
         id: PropTypes.string.isRequired,
         text: PropTypes.string.isRequired,
     })), 
+    process: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.number.isRequired,
+        text: PropTypes.string.isRequired,
+    })), 
+    actions: PropTypes.object.isRequired,
+    completed: PropTypes.bool.isRequired,
+    id: PropTypes.number.isRequired,
+    index: PropTypes.number.isRequired,
+    conclusion: PropTypes.object,
+    collapse: PropTypes.bool.isRequired,
+    text: PropTypes.string.isRequired,
+    importance: PropTypes.number.isRequired,
+    urgency: PropTypes.number.isRequired,
+    difficulty: PropTypes.number.isRequired,
+
 } 
 
 

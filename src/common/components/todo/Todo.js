@@ -73,17 +73,17 @@ export default class Todo extends Component {
             initRate: false, 
         }
         switch(type) {
-          case r.importance:
-            state.importance = count;
-            break;
+            case r.importance:
+                state.importance = count;
+                break;
             case r.urgency:
                 state.urgency = count
-            break;
+                break;
             case r.difficulty:
                 state.difficulty = count
-            break;
-            defalut: 
-                return 
+                break;
+                defalut: 
+                    return 
         }
         //更新相关的对象
         this.setState(state);
@@ -134,7 +134,8 @@ export default class Todo extends Component {
                 {id: item.id, text:item.text }
             ) 
         }
-        this.state.tags = tags 
+        this.setState({ tags: tags })
+        //this.state.tags = tags 
     }
 
     getStyle (){
@@ -168,8 +169,8 @@ export default class Todo extends Component {
             } ,
             handles: {
                 importance: (e, count)=>{ this.handleRate(e, Todo.rateType.importance, count)}  ,
-                urgency:   (e, count)=>{ this.handleRate(e, Todo.rateType.urgency, count)}, 
-                difficulty:  (e, count)=>{ this.handleRate(e, Todo.rateType.difficulty, count)}  
+                    urgency:   (e, count)=>{ this.handleRate(e, Todo.rateType.urgency, count)}, 
+                        difficulty:  (e, count)=>{ this.handleRate(e, Todo.rateType.difficulty, count)}  
             } ,
             initRate: this.state.initRate
         }
@@ -183,53 +184,56 @@ export default class Todo extends Component {
         const takeRateParam = this.getTakeRateParam() 
 
         return (
-            <div className="todo-item">
-            <div style={style.listItemDiv }>
-            <TodoItemList 
-            difficulty={this.state.difficulty}
-            importance={this.state.importance} 
-            urgency={this.state.urgency} 
+                <div className="todo-item">
+                    <div style={style.listItemDiv }>
+                        <TodoItemList 
+                        difficulty={this.state.difficulty}
+                        importance={this.state.importance} 
+                        urgency={this.state.urgency} 
 
-            {...this.props}
-            />
-            </div>
-            <div style={style.editTodo } >
-            <label>{ this.props.index + 1 } </label>
-            <TextField
-            className='item-input'
-            fullWidth
-            multiLine={true}
-            value={this.state.itemText}
-            onChange={(e)=>this.handleChangeItem(e)}
-            onEnterKeyDown ={(e) => this.handleSaveTodo()}
-            ref={(c) => this._input = c}
-            />
-            <TakeRate 
-            {...takeRateParam} />
+                        {...this.props}
+                        />
+                    </div>
+                    <div style={style.editTodo } >
+                        <label>{ this.props.index + 1 } </label>
+                        <TextField
+                        className='item-input'
+                        fullWidth
+                        multiLine={true}
+                        value={this.state.itemText}
+                        onChange={(e)=>this.handleChangeItem(e)}
+                        onEnterKeyDown ={(e) => this.handleSaveTodo()}
+                        ref={(c) => this._input = c}
+                        />
+                        <TakeRate 
+                        {...takeRateParam} />
 
-            <SelectTags  
-            onChange={ this.handleTagChange.bind(this)} 
-            allTags = { allTags } 
-            select={ this.props.tags }
-            />
+                        <SelectTags  
+                        onChange={ this.handleTagChange.bind(this)} 
+                        allTags = { allTags } 
+                        select={ this.props.tags }
+                        />
 
-            <div style={style.opButGroup }>
-            <FlatButton label="完成" onClick={(e) => this.handleSaveTodo() }  style={ style.flatButton }  />
-            <FlatButton label="取消" onClick={(e) => this.handleUnsaveTodo() }  style={ style.flatButton }  />
-            </div>
-            </div>
-
-
-            </div>
+                        <div style={style.opButGroup }>
+                            <FlatButton label="完成" onClick={(e) => this.handleSaveTodo() }  style={ style.flatButton }  />
+                            <FlatButton label="取消" onClick={(e) => this.handleUnsaveTodo() }  style={ style.flatButton }  />
+                        </div>
+                    </div>
+                </div>
         )
     }
 
 }
 
-
-
-
 Todo.propTypes = {
+    id: PropTypes.number.isRequired,
+    tags: PropTypes.arrayOf(PropTypes.shape({
+        id: PropTypes.string.isRequired,
+        text: PropTypes.string.isRequired,
+    })),
+    conclusion: PropTypes.object,
+    collapse: PropTypes.bool.isRequired,
+
     text: PropTypes.string.isRequired,
     completed: PropTypes.bool.isRequired,
     actions: PropTypes.object.isRequired,

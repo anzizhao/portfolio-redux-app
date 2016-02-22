@@ -13,22 +13,19 @@ export default class Mertic extends Component {
                         className='item-show-right-star'
                         style={ style.badgeRoot }
                         badgeStyle={{...style.badge, 'backgroundColor':'rgba(243, 255, 66, 0.56)'}} 
-                    >
-                    </Badge>
+                    />
                     <Badge
                         badgeContent={ urgency }
                         className='item-show-right-star'
                         style={ style.badgeRoot }
                         badgeStyle={{...style.badge, 'backgroundColor':'rgba(244, 67, 54, 0.56)'}} 
-                    >
-                    </Badge>
+                    />
                     <Badge
                         badgeContent={ difficulty }
                         className='item-show-right-star'
                         style={ style.badgeRoot }
                         badgeStyle={{...style.badge, 'backgroundColor':'rgba(3, 169, 244, 0.56)'}} 
-                    >
-                    </Badge>
+                    />
                 </span>
 )
     }
