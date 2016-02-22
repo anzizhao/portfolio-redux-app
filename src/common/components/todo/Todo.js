@@ -18,11 +18,11 @@ import TodoItemList from './todoItemList';
 
 export default class Todo extends Component {
     // 本地的变量  因为要需要取消掉的 其实可以考虑undo
-   static rateType = {
+    static rateType = {
         importance: 1,
         urgency: 2,
         difficulty: 3,
-   };    
+    };    
     state = {
         toEditItem : false,
         initRate: false,
@@ -73,15 +73,15 @@ export default class Todo extends Component {
             initRate: false, 
         }
         switch(type) {
-            case r.importance:
-                state.importance = count
-                break;
+          case r.importance:
+            state.importance = count;
+            break;
             case r.urgency:
                 state.urgency = count
-                break;
+            break;
             case r.difficulty:
                 state.difficulty = count
-                break;
+            break;
             defalut: 
                 return 
         }
@@ -184,40 +184,40 @@ export default class Todo extends Component {
 
         return (
             <div className="todo-item">
-                <div style={style.listItemDiv }>
-                    <TodoItemList 
-                        importance={this.state.importance} 
-                        urgency={this.state.urgency} 
-                        difficulty={this.state.difficulty}
+            <div style={style.listItemDiv }>
+            <TodoItemList 
+            difficulty={this.state.difficulty}
+            importance={this.state.importance} 
+            urgency={this.state.urgency} 
 
-                        {...this.props}
-                    />
-                </div>
-                <div style={style.editTodo } >
-                    <label>{ this.props.index + 1 } </label>
-                    <TextField
-                        className='item-input'
-                        fullWidth
-                        multiLine={true}
-                        value={this.state.itemText}
-                        onChange={(e)=>this.handleChangeItem(e)}
-                        onEnterKeyDown ={(e) => this.handleSaveTodo()}
-                        ref={(c) => this._input = c}
-                    />
-                    <TakeRate 
-                        {...takeRateParam} />
+            {...this.props}
+            />
+            </div>
+            <div style={style.editTodo } >
+            <label>{ this.props.index + 1 } </label>
+            <TextField
+            className='item-input'
+            fullWidth
+            multiLine={true}
+            value={this.state.itemText}
+            onChange={(e)=>this.handleChangeItem(e)}
+            onEnterKeyDown ={(e) => this.handleSaveTodo()}
+            ref={(c) => this._input = c}
+            />
+            <TakeRate 
+            {...takeRateParam} />
 
-                    <SelectTags  
-                        onChange={ this.handleTagChange.bind(this)} 
-                        allTags = { allTags } 
-                        select={ this.props.tags }
-                    />
+            <SelectTags  
+            onChange={ this.handleTagChange.bind(this)} 
+            allTags = { allTags } 
+            select={ this.props.tags }
+            />
 
-                    <div style={style.opButGroup }>
-                        <FlatButton label="完成" onClick={(e) => this.handleSaveTodo() }  style={ style.flatButton }  />
-                        <FlatButton label="取消" onClick={(e) => this.handleUnsaveTodo() }  style={ style.flatButton }  />
-                    </div>
-                </div>
+            <div style={style.opButGroup }>
+            <FlatButton label="完成" onClick={(e) => this.handleSaveTodo() }  style={ style.flatButton }  />
+            <FlatButton label="取消" onClick={(e) => this.handleUnsaveTodo() }  style={ style.flatButton }  />
+            </div>
+            </div>
 
 
             </div>

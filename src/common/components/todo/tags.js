@@ -34,12 +34,14 @@ export default class Tags extends Component {
                 tags.map((item, index) => {
                     return (
                         <span 
-                            style={style.tagBadge}
                             className='tagBadge' 
-                            key={index} > 
+                            key={index} 
+                            style={style.tagBadge}
+                            > 
                             <span 
+                                className="badge3"
                                 style={style.badge3 }
-                                className="badge3"></span>
+                                ></span>
                             { item.text }
                         </span>
                     )}

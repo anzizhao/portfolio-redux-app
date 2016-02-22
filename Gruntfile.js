@@ -136,7 +136,7 @@ module.exports  = function(grunt) {
 
 
     // 清理  编译 打包 推git
-    grunt.registerTask('tag', "grunt myarchive --message= ",
+    grunt.registerTask('tag', "grunt tag --message= ",
                         function(){
                              var message = grunt.option("message");
                              if ( message ) {
