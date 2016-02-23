@@ -142,7 +142,7 @@ function todo(state, action) {
                     let maxItem = state.process.reduce((f, s)=>{
                         return f.id > s.id ? f: s 
                     }) 
-                    tmp.id = maxItem.id 
+                    tmp.id = maxItem.id  + 1
                 }
                 state.process.push(tmp) 
             } else {
