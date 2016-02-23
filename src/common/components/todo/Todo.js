@@ -118,7 +118,7 @@ export default class Todo extends Component {
     handleTagChange(e) {
         // target options array,  the last ele id is empty '', that means add new value
         var opts = e.target.selectedOptions
-        if( ! opts ){
+        if( ! opts || ! opts.length ){
             return 
         } 
         var ele = opts[opts.length-1]
