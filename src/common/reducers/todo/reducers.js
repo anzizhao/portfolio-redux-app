@@ -239,24 +239,38 @@ function todos(state = [], action) {
 
         case todoActions.IMPORT_TODO:
             // 新加的  跟原来的比较  uuid是否相同  日期更新
+            // uuid 相同的在原来位置  新的在后面加上
+            // 1. 对actions的todo项根据id进行排序
+            // 2. 找出state的最大的id
+            // 3. 匹配uuid, 相同选择更改时间戳大的,不相同的后面添加 id 为nextId  
              let match = false 
-             
-             for(let i of action.todos) {
+             let nextId  
+             let sortTodos = action.todos.sort((f, s)=>{
+                    return f.id - s.id 
+             })
+             if ( state.length ) {
+                 let maxItem = state.reduce((f, s)=>{
+                        return f.id > s.id ? f: s 
+                 })
+                 nextId = maxItem.id + 1 
+             } else {
+                nextId = 0 
+             }
+             for(let i of sortTodos ) {
                   match = false 
-                  i.id = state.length + 1
                   for( let key  in state){
                         let j = state[key]
                         if ( j.uuid === i.uuid  )  {
                             if( i.timestamp > j.timestamp ){
                                  state[key]= i 
-                            } else {
-                              //旧的项扔掉   
-                            }
+                            } 
                             match = true 
                             break;
                         }
                   }
                   if (! match ){
+                      i.id = nextId + 1
+                      nextId += 1
                       db.push(i) 
                   }
               }
