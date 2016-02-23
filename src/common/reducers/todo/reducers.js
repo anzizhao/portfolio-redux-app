@@ -136,6 +136,14 @@ function todo(state, action) {
                 status: todoActions.todoSubItemStatus.edit, // 0 show  1 edit 
             }
             if ( action.type === todoActions.ADD_TODO_SUB_PROCESS ){
+                // find the max id  
+                let id 
+                if( state.process.length ) {
+                    let maxItem = state.process.reduce((f, s)=>{
+                        return f.id > s.id ? f: s 
+                    }) 
+                    tmp.id = maxItem.id 
+                }
                 state.process.push(tmp) 
             } else {
                 tmp.type = todoActions.todoSubItemType.conclusion
@@ -260,7 +268,17 @@ function todos(state = [], action) {
             return db2
 
         case todoActions.ADD_TODO:
-            action.id = state.length 
+            // find the max id, then plus 1
+            if ( state.length === 0 ) {
+                action.id = state.length 
+            } else {
+            
+                let maxItem = state.reduce((f, s) => {
+                    return f.id > s.id ? f: s 
+                })
+                action.id = maxItem.id + 1
+            }
+
             db = [
                 todo(undefined, action),
                 ...state
