@@ -90,7 +90,6 @@ module.exports  = function(grunt) {
             tag: {
                  exec: 'git archive static_i | tar -x -C ../anzizhao.github.io',
             }
-        u
     });
 
     // 加载包含 "uglify" 任务的插件。
