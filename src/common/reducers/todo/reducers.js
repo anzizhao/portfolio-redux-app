@@ -30,6 +30,16 @@ function sort (state = SORT_ORIGIN , action) {
     }
 }
 
+function mode (state = todoActions.todoMode.select , action) {
+    let cmds  = todoActions
+    switch (action.type) {
+        case cmds.SET_MODE:
+            return action.mode  
+        default:
+            return state
+    }
+}
+
 function addTagsItem(state, item ){
     //array find not found return undefine 
     let index = state.find((ele, index, arr) => {
@@ -410,7 +420,7 @@ function afterReducers ( state={} ,  action ) {
                 tags: state.tags 
             }
             const jsonFile = JSON.stringify( jsonObj )
-            const filename = `todo_${ new Date().toLocaleDateString() }.json`;
+            const filename = `/tmp/todo_${ new Date().toLocaleDateString() }.json`;
             exportFile(jsonFile, filename);
     }
     return state 
@@ -422,12 +432,13 @@ function todoApp(state = {}, action) {
     const actionb = beforeReducers(action) 
     const undoTodo = undoable(todos, { filter: distinctState() })
 
-    // 小级reducers 处理
+    // 下级reducers 处理
     const combineState =  {
           tags: tags(state.tags, actionb ),
           visibilityFilter: visibilityFilter(state.visibilityFilter, actionb),
           sort: sort(state.sort, actionb ),
           todos: undoTodo(state.todos, actionb ),
+          mode: mode(state.mode, actionb ) , 
     }
     // 本级reducers处理 
     const retState = afterReducers(combineState, actionb )

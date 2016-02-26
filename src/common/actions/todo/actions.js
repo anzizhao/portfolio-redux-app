@@ -16,6 +16,7 @@ export const UNEDIT_TODO = 'UNEDIT_TODO'
 export const SIGN_STAR= 'SIGN_STAR' 
 export const ADD_TODO_TAG = 'ADD_TODO_TAG'
 
+export const SET_MODE = 'SET_MODE'   //set todo mode 
 
 //sub todo 
 export const ADD_TODO_SUB_PROCESS  = 'ADD_TODO_SUB_PROCESS' 
@@ -56,6 +57,11 @@ export const todoSubItemType = {
   conclusion: 1,
 }
 
+export const todoMode = {
+  default: 0, //默认模式
+  select: 1,  // 选择模式
+}
+
 export function completeTodo(id) {
   return { type: COMPLETE_TODO, id }
 }
@@ -70,6 +76,14 @@ export function setVisibilityFilter(filter) {
 export function setSort (cmd) {
   return { type: SET_SORT, cmd }
 }
+
+export function setSelectMode () {
+  return { type: SET_SORT,  mode: todoMode.select }
+}
+export function setDefaultMode () {
+  return { type: SET_SORT,  mode: todoMode.default }
+}
+
 
 export function exportTodo () {
     return { type: EXPORT_TODO }

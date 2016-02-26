@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 
 import ListItem from 'material-ui/lib/lists/list-item';
+import Checkbox from 'material-ui/lib/checkbox';
 
 import TodoSubBut from './todoSubBut';
 import TodoSubItem from './todoSub';
@@ -140,13 +141,14 @@ export default class TodoItemList extends Component {
 
         return (
             <ListItem 
-            primaryText={ listText } 
-            secondaryText = { secondaryText }
-            secondaryTextLines =  { secondaryTextLines }
-            style={style.listItem}
-            rightIconButton ={ rightIconMenu }
-            primaryTogglesNestedList={true}
-            nestedItems={subItems}
+                leftCheckbox={<Checkbox onCheck={e=> e} />}
+                primaryText={ listText } 
+                secondaryText = { secondaryText }
+                secondaryTextLines =  { secondaryTextLines }
+                style={style.listItem}
+                rightIconButton ={ rightIconMenu }
+                primaryTogglesNestedList={true}
+                nestedItems={subItems}
             />
         )
     }

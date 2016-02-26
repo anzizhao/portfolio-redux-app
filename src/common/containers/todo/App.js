@@ -18,35 +18,55 @@ class App extends Component {
         this.props.dispatch(initTodo());
         this.props.dispatch(initTags());
     }
+    _selectMode(){
+        return this.props.mode ===   todoActions.todoMode.select
+    }
+    renderAddTodo(){
+        if ( this._selectMode() ) {
+            return  
+        }
+        const {  actions } = this.props
+        return (
+            <AddTodo
+                actions={actions}
+            />
+        )
+    }
+    renderFooter(){
+        if ( this._selectMode() ) {
+            return  
+        }
+        const { dispatch, visibleTodos, visibilityFilter, actions, sort } = this.props
+        return (
+            <Footer
+                filter={visibilityFilter}
+                sort={ sort } 
+                onFilterChange={nextFilter => dispatch(setVisibilityFilter(nextFilter))}
+                onSortChange={nextSort => actions.setSort(nextSort) }
 
-  render() {
-    const { dispatch, visibleTodos, visibilityFilter, actions, sort ,tags} = this.props
+                onUndo={() => dispatch(ActionCreators.undo())}
+                onRedo={() => dispatch(ActionCreators.redo())}
+                undoDisabled={this.props.undoDisabled}
+                redoDisabled={this.props.redoDisabled} />
+        )
+    }
+      render() {
+        const { dispatch, visibleTodos,  actions, tags, mode} = this.props
+        return (
+          <div>
+            { this.renderAddTodo() }
+            <TodoList
+              todos={visibleTodos}
+              actions={actions}
+              mode={mode}
+              tags={tags}
+              onExportClick={() => dispatch(exportTodo()) }
+              onTodoClick={id => dispatch(completeTodo(id))} />
+            { this.renderFooter() }
 
-    return (
-      <div>
-        <AddTodo
-          todos={visibleTodos}
-          actions={actions}
-          />
-        <TodoList
-          todos={visibleTodos}
-          actions={actions}
-          tags={tags}
-          onExportClick={() => dispatch(exportTodo()) }
-          onTodoClick={id => dispatch(completeTodo(id))} />
-        <Footer
-          filter={visibilityFilter}
-          sort={ sort } 
-          onFilterChange={nextFilter => dispatch(setVisibilityFilter(nextFilter))}
-          onSortChange={nextSort => actions.setSort(nextSort) }
-
-          onUndo={() => dispatch(ActionCreators.undo())}
-          onRedo={() => dispatch(ActionCreators.redo())}
-          undoDisabled={this.props.undoDisabled}
-          redoDisabled={this.props.redoDisabled} />
-      </div>
-    )
-  }
+          </div>
+        )
+      }
 }
 
 App.propTypes = {
@@ -73,7 +93,10 @@ App.propTypes = {
       id: PropTypes.string.isRequired,
       text: PropTypes.string.isRequired,
   }).isRequired).isRequired,
+  actions: PropTypes.object.isRequired,
   undoDisabled: PropTypes.bool.isRequired,
+  mode: PropTypes.number.isRequired,
+
   redoDisabled: PropTypes.bool.isRequired
 }
 
@@ -132,6 +155,7 @@ function select(state) {
     visibilityFilter: state.todo.visibilityFilter,
     sort: state.todo.sort,
     tags: state.todo.tags,
+    mode: state.todo.mode,
     layout : state.layout
   }
 }

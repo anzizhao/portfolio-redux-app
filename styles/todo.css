@@ -132,12 +132,17 @@
     border: 1px solid ;
     border-color: #00ab6b;
 }
-
+.mertic-tips {
+    display: inline-block;
+    float: right;
+}
 .mertic-tips > span  {
    font-size: 12px; 
    font-style: bold;
-   float: right;
 }
 .todolist{
     background: white;
+}
+.todo-list-banner{
+    max-width: 300;
 }
