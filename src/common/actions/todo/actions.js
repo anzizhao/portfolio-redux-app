@@ -1,5 +1,6 @@
 var {storeTodoState, storeTodoTags }  = require('../../util')
 
+//todo 
 export const ADD_TODO = 'ADD_TODO'
 export const COMPLETE_TODO = 'COMPLETE_TODO'
 export const UNCOMPLETE_TODO = 'UNCOMPLETE_TODO'
@@ -17,6 +18,9 @@ export const SIGN_STAR= 'SIGN_STAR'
 export const ADD_TODO_TAG = 'ADD_TODO_TAG'
 
 export const SET_MODE = 'SET_MODE'   //set todo mode 
+export const TOGGLE_MODE = 'TOGGLE_MODE'   //set todo mode 
+export const SET_TODO_SELECT = 'SET_TODO_SELECT'   //select todo 
+
 
 //sub todo 
 export const ADD_TODO_SUB_PROCESS  = 'ADD_TODO_SUB_PROCESS' 
@@ -78,11 +82,16 @@ export function setSort (cmd) {
 }
 
 export function setSelectMode () {
-  return { type: SET_SORT,  mode: todoMode.select }
+  return { type: SET_MODE,  mode: todoMode.select }
 }
 export function setDefaultMode () {
-  return { type: SET_SORT,  mode: todoMode.default }
+  return { type: SET_MODE,  mode: todoMode.default }
 }
+
+export function toggleSelectMode () {
+  return { type: TOGGLE_MODE,  mode: todoMode.select }
+}
+
 
 
 export function exportTodo () {
@@ -184,3 +193,11 @@ export function initTags () {
 export function addTodoTags (id, tags) {
     return { type: ADD_TAGS, id, tags} 
 }
+
+export function selectTodo (id, select  ) {
+    return { type:  SET_TODO_SELECT, id, select } 
+}
+
+
+
+

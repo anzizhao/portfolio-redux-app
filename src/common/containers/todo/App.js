@@ -10,6 +10,10 @@ import AddTodo from '../../components/todo/AddTodo'
 import TodoList from '../../components/todo/TodoList'
 import Footer from '../../components/todo/Footer'
 
+class mode {
+    
+
+}
 
 
 class App extends Component {
@@ -52,6 +56,7 @@ class App extends Component {
     }
       render() {
         const { dispatch, visibleTodos,  actions, tags, mode} = this.props
+        
         return (
           <div>
             { this.renderAddTodo() }
@@ -60,6 +65,7 @@ class App extends Component {
               actions={actions}
               mode={mode}
               tags={tags}
+              
               onExportClick={() => dispatch(exportTodo()) }
               onTodoClick={id => dispatch(completeTodo(id))} />
             { this.renderFooter() }

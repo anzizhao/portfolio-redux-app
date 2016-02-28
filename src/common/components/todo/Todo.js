@@ -190,7 +190,6 @@ export default class Todo extends Component {
                         difficulty={this.state.difficulty}
                         importance={this.state.importance} 
                         urgency={this.state.urgency} 
-
                         {...this.props}
                         />
                     </div>
@@ -238,6 +237,7 @@ Todo.propTypes = {
     completed: PropTypes.bool.isRequired,
     actions: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired,
+    mode: PropTypes.number.isRequired,
     onClick: PropTypes.func.isRequired,
     allTags: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,

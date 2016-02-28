@@ -11,6 +11,8 @@ import TodoMenu from './TodoMenu';
 import Mertic from './metric';
 
 
+import * as todoActions  from '../../actions/todo/actions'
+
 export default class TodoItemList extends Component {
 
     getStyle (){
@@ -26,6 +28,7 @@ export default class TodoItemList extends Component {
         }
         return Object.assign({}, style, dStyle) 
     } 
+
 
     renderConclusion(subItems){
         const { id, conclusion , index, actions} = this.props
@@ -125,6 +128,29 @@ export default class TodoItemList extends Component {
         ) 
     }
 
+    _selectMode(){
+        return this.props.mode ===   todoActions.todoMode.select
+    }
+    clickCheckbox(e){
+        e.preventDefault()
+        const { actions, id } = this.props
+        const value =  e.target.value 
+        console.log('clikCheckbox ' + value)
+        console.dir(e)
+        actions.selectTodo(id, value)
+    }
+
+    renderCheckbox(){
+        const { actions, id } = this.props
+        if ( this._selectMode() ) {
+            return (
+                <Checkbox onClick={ this.clickCheckbox.bind(this) } />
+            )  
+        
+        } 
+
+        return  
+    }
 
     render() {
         const { id , actions, collapse } = this.props
@@ -137,11 +163,12 @@ export default class TodoItemList extends Component {
 
         // listItem 组建必需的左右icon button 必需为button  所有使用a 包裹住
         const rightIconMenu = this.renderRightIconMenu() 
+        const leftCheckbox = this.renderCheckbox()
         const { secondaryText, secondaryTextLines, subItems } = this.renderSub(style)
 
         return (
             <ListItem 
-                leftCheckbox={<Checkbox onCheck={e=> e} />}
+                leftCheckbox={ leftCheckbox }
                 primaryText={ listText } 
                 secondaryText = { secondaryText }
                 secondaryTextLines =  { secondaryTextLines }
@@ -173,6 +200,8 @@ TodoItemList.propTypes = {
     text: PropTypes.string.isRequired,
     importance: PropTypes.number.isRequired,
     urgency: PropTypes.number.isRequired,
+
+    mode: PropTypes.number.isRequired,
     difficulty: PropTypes.number.isRequired,
 
 } 

@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import Todo from './Todo'
-import * as todoActions  from '../../actions/todo/actions'
 
 import Divider from 'material-ui/lib/divider';
 import List from 'material-ui/lib/lists/list';
@@ -9,6 +8,8 @@ import Checkbox from 'material-ui/lib/checkbox';
 
 import Badge from 'material-ui/lib/badge';
 import ClearAllBut from './clearAllBut';
+
+import * as todoActions  from '../../actions/todo/actions'
 
 var {exportFile, readFile } = require('../../util')
 
@@ -45,6 +46,7 @@ export default class TodoList extends Component {
     }
 
     renderBanner (){
+        const { actions } = this.props
         const style = this.getStyle() 
         const butLable = this._selectMode() ? "退出选择" : "选择"
         return (
@@ -52,6 +54,7 @@ export default class TodoList extends Component {
                 <div>
                     <FlatButton label=  { butLable }
                         style ={style.selectBut } 
+                        onClick={e => actions.toggleSelectMode() }
                         primary={true}  />
                 </div>
                 {
@@ -114,7 +117,7 @@ export default class TodoList extends Component {
     }
 
     render() {
-        const { actions, tags } = this.props
+        const { actions, tags, mode } = this.props
 
         const style = this.getStyle() 
 
@@ -128,6 +131,7 @@ export default class TodoList extends Component {
                                           index={index}
                                           actions={actions}
                                           allTags={ tags }
+                                          mode={mode}
                                           onClick={() => this.props.onTodoClick} />
                                      )}
 

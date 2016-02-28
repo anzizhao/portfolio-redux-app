@@ -30,11 +30,17 @@ function sort (state = SORT_ORIGIN , action) {
     }
 }
 
-function mode (state = todoActions.todoMode.select , action) {
+function mode (state = todoActions.todoMode.default, action) {
     let cmds  = todoActions
     switch (action.type) {
         case cmds.SET_MODE:
             return action.mode  
+        case cmds.TOGGLE_MODE:
+            if( action.mode === cmds.todoMode.select && state !==  cmds.todoMode.select ) {
+                //如果关注的selectmode 且原来的不是select mode， 改为select mode
+                return  todoActions.todoMode.select 
+            }
+            return todoActions.todoMode.default
         default:
             return state
     }
@@ -112,6 +118,7 @@ function todo(state, action) {
                 difficulty: 2,
                 timestamp: Date.now(),
                 process: [],
+                select: false,   //是否被选择
                 conclusion: null,
                 uuid: uuid.v1(),
                 tags: ( action.tags && action.tags instanceof Array )? action.tags : []
@@ -121,7 +128,7 @@ function todo(state, action) {
     if (state.id !== action.id) {
         return state
     }
-    let index, process 
+    let index, process, item 
     switch (action.type) {
         case COMPLETE_TODO:
             return {
@@ -133,6 +140,25 @@ function todo(state, action) {
                 ...state,
                 completed: false 
             }
+
+
+        case todoActions.SAVE_TODO:
+
+            //let item = Object.assign({}, state[index]) 
+            let item =  state  
+            item.text = action.text 
+            item.urgency = action.urgency 
+            item.importance = action.importance
+            item.difficulty = action.difficulty
+            item.collapse = true
+            item.timestamp = Date.now()
+            item.tags = action.tags
+            return item;
+
+        case todoActions.SET_TODO_SELECT:
+            item =  state  
+            item.select = action.select 
+            return item;
 
         case todoActions.ADD_TODO_SUB_PROCESS:
         case todoActions.ADD_TODO_SUB_CONCLUSION:
@@ -246,7 +272,15 @@ function todos(state = [], action) {
             //const filename = `todo_${ new Date().toLocaleDateString() }.json`;
             //exportFile(jsonFile, filename);
             //return state;
-
+        case todoActions.SET_MODE:
+        case todoActions.TOGGLE_MODE:
+            if ( action.currentMode === todoActions.todoMode.select ) {
+                return state.map(item =>{
+                    item.select = false 
+                    return item 
+                })
+            }
+            return state 
         case todoActions.IMPORT_TODO:
             // 新加的  跟原来的比较  uuid是否相同  日期更新
             // uuid 相同的在原来位置  新的在后面加上
@@ -315,36 +349,22 @@ function todos(state = [], action) {
             storeTodoState(db);
             return db;
 
-        case todoActions.SAVE_TODO:
-            let index = state.findIndex((ele, index, arr) => {
-                                if ( ele.id === action.id )  {
-                                    return true
-                                }
-                                return false
-            })
-            if( index === -1) {
+        case todoActions.SET_TODO_SELECT:
+            // may be 后面增加错误信息的提示
+            if ( action.currentMode !== todoActions.todoMode.select ) {
                 return state 
-            }
+        }
+            db = state.map(t => {
+                return  t.id === action.id ? todo(t, action) : t 
 
-            let changeItem = Object.assign({}, state[index]) 
-            changeItem.text = action.text 
-            changeItem.urgency = action.urgency 
-            changeItem.importance = action.importance
-            changeItem.difficulty = action.difficulty
-            changeItem.collapse = true
-            changeItem.timestamp = Date.now()
-            changeItem.tags = action.tags
-
-            db = [
-                ...state.slice(0, index),
-                changeItem,
-                ...state.slice(index+1),
-            ]
+            })
             storeTodoState(db);
             return db;
 
+
         case todoActions.COMPLETE_TODO: 
         case todoActions.UNCOMPLETE_TODO: 
+        case todoActions.SAVE_TODO:
         case todoActions.ADD_TODO_SUB_PROCESS:
         case todoActions.ADD_TODO_SUB_CONCLUSION:
         case todoActions.SAVE_TODO_SUB_PROCESS:
@@ -403,7 +423,10 @@ function todos(state = [], action) {
     //todos: undoable(todos, { filter: distinctState() })
 //})
 
-function beforeReducers(action){
+// state 不做修改
+function beforeReducers(state, action){
+    action.currentMode = mode(state.mode, action) 
+
     switch (action.type) {
         case todoActions.IMPORT_TODO:
             action.todos = action.fileJson.todos || []
@@ -429,7 +452,7 @@ function afterReducers ( state={} ,  action ) {
 //需要在todoApp 这里完成完成导入导出  因为处理完的tags 和 todos 
 function todoApp(state = {}, action) {
     
-    const actionb = beforeReducers(action) 
+    const actionb = beforeReducers(state,  action) 
     const undoTodo = undoable(todos, { filter: distinctState() })
 
     // 下级reducers 处理
@@ -438,7 +461,7 @@ function todoApp(state = {}, action) {
           visibilityFilter: visibilityFilter(state.visibilityFilter, actionb),
           sort: sort(state.sort, actionb ),
           todos: undoTodo(state.todos, actionb ),
-          mode: mode(state.mode, actionb ) , 
+          mode: actionb.currentMode ,   // mode 需要优先处理， 其他需要根据mode来作处理的
     }
     // 本级reducers处理 
     const retState = afterReducers(combineState, actionb )
