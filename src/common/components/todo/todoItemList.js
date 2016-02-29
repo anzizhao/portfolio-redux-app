@@ -131,20 +131,23 @@ export default class TodoItemList extends Component {
     _selectMode(){
         return this.props.mode ===   todoActions.todoMode.select
     }
-    clickCheckbox(e){
-        e.preventDefault()
+    clickCheckbox(e, checked ){
+        //e.preventDefault()
         const { actions, id } = this.props
-        const value =  e.target.value 
-        console.log('clikCheckbox ' + value)
-        console.dir(e)
+        const value =  checked
+        //console.log('clikCheckbox ' + value)
+        //console.dir(e)
         actions.selectTodo(id, value)
     }
 
     renderCheckbox(){
-        const { actions, id } = this.props
+        const { actions, id, select } = this.props
         if ( this._selectMode() ) {
             return (
-                <Checkbox onClick={ this.clickCheckbox.bind(this) } />
+                <Checkbox 
+                    checked={ select }
+                    onCheck={ (e, checked)=> { this.clickCheckbox(e, checked) }} 
+                    />
             )  
         
         } 

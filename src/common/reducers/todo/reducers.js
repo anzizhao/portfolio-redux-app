@@ -5,6 +5,8 @@ var {storeTodoState, storeTodoTags, exportFile } = require('../../util')
 import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters, EXPORT_TODO, INIT_TODO, DEL_TODO, SAVE_TODO } from '../../actions/todo/actions'
 
 import * as todoActions  from '../../actions/todo/actions'
+import visibleTodos from '../../components/todo/visibleTodos'
+
 
 var uuid = require('uuid');
 
@@ -349,6 +351,15 @@ function todos(state = [], action) {
             storeTodoState(db);
             return db;
 
+        case todoActions.DEL_SELECT:
+            let t  = action 
+            db = visibleTodos (state, t.visibilityFilter, t.sort )
+                            .filter(item =>{
+                                return item.select 
+                            })
+            storeTodoState(db)
+            return db 
+
         case todoActions.SET_TODO_SELECT:
             // may be 后面增加错误信息的提示
             if ( action.currentMode !== todoActions.todoMode.select ) {
@@ -357,6 +368,17 @@ function todos(state = [], action) {
             db = state.map(t => {
                 return  t.id === action.id ? todo(t, action) : t 
 
+            })
+            storeTodoState(db);
+            return db;
+
+        case todoActions.SET_TODO_SELECT_ALL:
+            if ( action.currentMode !== todoActions.todoMode.select ) {
+                return state 
+        }
+            db = state.map(t => {
+                t.select = action.select
+                return t
             })
             storeTodoState(db);
             return db;
@@ -431,20 +453,49 @@ function beforeReducers(state, action){
         case todoActions.IMPORT_TODO:
             action.todos = action.fileJson.todos || []
             action.tags = action.fileJson.tags || []
+            break
+
+        case todoActions.DEL_SELECT:
+            let t  = state
+            action.visibilityFilter = t.visibilityFilter
+            action.sort = t.sort 
+            break
+
     }
     return action 
 }
 
+function objExportFile(obj, filename) {
+    const jsonFile = JSON.stringify( obj )
+    exportFile(jsonFile, filename);
+}
+
 function afterReducers ( state={} ,  action ) {
+    let jsonObj , filename  
     switch (action.type) {
         case todoActions.EXPORT_TODO:
-            const jsonObj = {
+            jsonObj = {
                 todos: state.todos.present,
                 tags: state.tags 
             }
-            const jsonFile = JSON.stringify( jsonObj )
-            const filename = `/tmp/todo_${ new Date().toLocaleDateString() }.json`;
-            exportFile(jsonFile, filename);
+            filename = `todo_${ new Date().toLocaleDateString() }.json`
+            objExportFile(jsonObj, filename )
+
+            return state
+        case todoActions.EXPORT_SELECT:
+            let t  = state
+            jsonObj = {
+                tags: state.tags ,
+                todos: visibleTodos (t.todos.present, t.visibilityFilter, t.sort ),
+            }
+            jsonObj.todos = visibleTodos (t.todos.present, t.visibilityFilter, t.sort )
+                            .filter(item =>{
+                                return item.select 
+                            })
+            filename = `todo_${ new Date().toLocaleDateString() }.json`
+            objExportFile(jsonObj, filename )
+            return state
+
     }
     return state 
 }
@@ -462,6 +513,7 @@ function todoApp(state = {}, action) {
           sort: sort(state.sort, actionb ),
           todos: undoTodo(state.todos, actionb ),
           mode: actionb.currentMode ,   // mode 需要优先处理， 其他需要根据mode来作处理的
+        
     }
     // 本级reducers处理 
     const retState = afterReducers(combineState, actionb )

@@ -14,13 +14,18 @@ export const INIT_TODO = 'INIT_TODO'
 export const SAVE_TODO = 'SAVE_TODO' 
 export const EDIT_TODO = 'EDIT_TODO' 
 export const UNEDIT_TODO = 'UNEDIT_TODO' 
+
+
+export const EXPORT_SELECT  = 'EXPORT_SELECT'
+export const DEL_SELECT  = 'DEL_SELECT'
+
 export const SIGN_STAR= 'SIGN_STAR' 
 export const ADD_TODO_TAG = 'ADD_TODO_TAG'
 
 export const SET_MODE = 'SET_MODE'   //set todo mode 
 export const TOGGLE_MODE = 'TOGGLE_MODE'   //set todo mode 
 export const SET_TODO_SELECT = 'SET_TODO_SELECT'   //select todo 
-
+export const SET_TODO_SELECT_ALL= 'SET_TODO_SELECT_ALL'   //set all todo  select 
 
 //sub todo 
 export const ADD_TODO_SUB_PROCESS  = 'ADD_TODO_SUB_PROCESS' 
@@ -198,6 +203,16 @@ export function selectTodo (id, select  ) {
     return { type:  SET_TODO_SELECT, id, select } 
 }
 
+export function selectAllTodo ( select  ) {
+    return { type:  SET_TODO_SELECT_ALL,  select } 
+}
+
+export function exportSelect () {
+    return { type:  EXPORT_SELECT } 
+}
+export function delSelect () {
+    return { type:  DEL_SELECT } 
+}
 
 
 

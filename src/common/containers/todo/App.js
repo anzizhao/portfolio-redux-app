@@ -10,10 +10,7 @@ import AddTodo from '../../components/todo/AddTodo'
 import TodoList from '../../components/todo/TodoList'
 import Footer from '../../components/todo/Footer'
 
-class mode {
-    
-
-}
+import visibleTodos from '../../components/todo/visibleTodos'
 
 
 class App extends Component {
@@ -106,64 +103,19 @@ App.propTypes = {
   redoDisabled: PropTypes.bool.isRequired
 }
 
-function sortTodos (todos, cmd) {
-    let cmds = todoActions.sorts   
-    switch (cmd) {
-        case cmds.SORT_IMPORTANCE_UP:
-            return todos.sort((a, b)=>{
-                return a.importance - b.importance 
-        })
-        case cmds.SORT_IMPORTANCE_DOWN:
-            return todos.sort((a, b)=>{
-                return b.importance - a.importance 
-        })
-        case cmds.SORT_URGENCY_UP:
-            return todos.sort((a, b)=>{
-                return a.urgency- b.urgency
-        })
-        case cmds.SORT_URGENCY_DOWN:
-            return todos.sort((a, b)=>{
-                return b.urgency- a.urgency
-        })
-        case cmds.SORT_DIFFICULTY_UP:
-            return todos.sort((a, b)=>{
-                return a.difficulty - b.difficulty
-        })
-        case cmds.SORT_DIFFICULTY_DOWN:
-            return todos.sort((a, b)=>{
-                return b.difficulty - a.difficulty
-        })
-        //cmds.SORT_ORIGIN
-        default: 
-            return todos.sort((a, b)=>{
-                return b.id - a.id
-        })
-    }
-}
-
-function selectTodos(todos, filter, sort ) {
-  switch (filter) {
-    default:
-    case VisibilityFilters.SHOW_ALL:
-      return sortTodos( todos, sort)
-    case VisibilityFilters.SHOW_COMPLETED:
-      return sortTodos(  todos.filter(todo => todo.completed) , sort)
-    case VisibilityFilters.SHOW_ACTIVE:
-      return sortTodos(todos.filter(todo => !todo.completed), sort)
-  }
-}
 
 function select(state) {
-  return {
-    undoDisabled: state.todo.todos.past.length === 0,
-    redoDisabled: state.todo.todos.future.length === 0,
-    visibleTodos: selectTodos(state.todo.todos.present, state.todo.visibilityFilter, state.todo.sort ),
-    visibilityFilter: state.todo.visibilityFilter,
-    sort: state.todo.sort,
-    tags: state.todo.tags,
-    mode: state.todo.mode,
-    layout : state.layout
-  }
+    let t  = state.todo
+    return {
+        undoDisabled: t.todos.past.length === 0,
+        redoDisabled: t.todos.future.length === 0,
+        visibleTodos: visibleTodos (t.todos.present, t.visibilityFilter, t.sort ),
+        visibilityFilter: t.visibilityFilter,
+        sort: t.sort,
+        tags: t.tags,
+        mode: t.mode,
+        layout : state.layout
+    }
 }
 
 function mapDispatchToProps(dispatch) {
