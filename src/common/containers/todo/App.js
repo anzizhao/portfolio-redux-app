@@ -38,13 +38,16 @@ class App extends Component {
         // target options array,  the last ele id is empty '', that means add new value
         var opts = e.target.selectedOptions
         var filename = ''
-        if( ! opts || ! opts.length ){
-            this.props.actions.selectFile('')
-            return 
-        } 
-        var ele = opts[opts.length-1]
-        this.props.actions.selectFile(ele.text)
-
+        // 让问题暴露出来
+        //if( ! opts || ! opts.length ){
+            //return 
+        //} 
+        var ele = opts[0]
+        var text = ''
+        if ( ele.index !== 0) {
+            text = ele.text 
+        }
+        this.props.actions.selectFile(text)
     }
 
     renderFooter(){

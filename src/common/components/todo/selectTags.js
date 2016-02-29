@@ -22,21 +22,36 @@ export default class SelectTags extends Component {
             }
         }
         // select2 id should be the number 
-        const _tags = [{id: 0, text:''},  //default show all item 
+        //const _tags = [{id: 0, text:''},  //default show all item 
+            //... allTags.map((item, index) => {
+                    //return {
+                        //id: index+1,
+                        //text: item.text
+                    //} 
+                //})
+            //]
 
-            ... allTags.map((item, index) => {
+        let _select, _tags   
+        if ( this.props.singleSelect ) {
+            _select  = 0 
+            multiple = false  
+            // 选择文件的需求
+            _tags = [{id: 0, text:'全部文件'},  //default show all item 
+                ... allTags.map((item, index) => {
                     return {
                         id: index+1,
                         text: item.text
                     } 
                 })
             ]
-
-        let _select   
-        if ( this.props.singleSelect ) {
-            _select  = 0 
-            multiple = false  
         } else {
+            _tags = allTags.map((item, index) => {
+                    return {
+                        id: index+1,
+                        text: item.text
+                    } 
+                })
+
             _select  = []
             multiple = true 
             if ( select ) {
