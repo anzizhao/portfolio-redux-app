@@ -22,12 +22,15 @@ export default class SelectTags extends Component {
             }
         }
         // select2 id should be the number 
-        const _tags = allTags.map((item, index) => {
-            return {
-                id: index,
-                text: item.text
-            } 
-        })
+        const _tags = [{id: 0, text:''},  //default show all item 
+
+            ... allTags.map((item, index) => {
+                    return {
+                        id: index+1,
+                        text: item.text
+                    } 
+                })
+            ]
 
         let _select   
         if ( this.props.singleSelect ) {

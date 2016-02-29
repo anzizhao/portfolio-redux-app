@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { ActionCreators } from 'redux-undo'
-import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters, exportTodo,   initTodo, initTags } from '../../actions/todo/actions'
+import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters, exportTodo, initAll  } from '../../actions/todo/actions'
 
 import { bindActionCreators } from 'redux'
 
@@ -16,8 +16,9 @@ import visibleTodos from '../../components/todo/visibleTodos'
 class App extends Component {
     componentWillMount() {
         //初始化todo 和 tags
-        this.props.dispatch(initTodo());
-        this.props.dispatch(initTags());
+        //this.props.dispatch(initTodo());
+        //this.props.dispatch(initTags());
+        this.props.dispatch(initAll());
     }
     _selectMode(){
         return this.props.mode ===   todoActions.todoMode.select

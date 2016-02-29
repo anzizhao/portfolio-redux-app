@@ -1,6 +1,5 @@
 import React, { Component, PropTypes } from 'react'
 import Todo from './Todo'
-import * as todoActions  from '../../actions/todo/actions'
 
 import Divider from 'material-ui/lib/divider';
 import List from 'material-ui/lib/lists/list';
@@ -8,12 +7,24 @@ import FlatButton from 'material-ui/lib/flat-button';
 import Checkbox from 'material-ui/lib/checkbox';
 
 import Badge from 'material-ui/lib/badge';
-import ClearAllBut from './clearAllBut';
+
+//import ClearAllBut from './clearAllBut'
+import ConfirmDlg from './confirmDlg'
+
+import * as todoActions  from '../../actions/todo/actions'
 
 var {exportFile, readFile } = require('../../util')
 
 export default class TodoList extends Component {
 
+    
+    constructor(props) {
+        super(props);
+        this.state = {
+            allSelect: true ,
+        };
+    }
+    
     componentDidMount(){
         //document.getElementById('importTodo').addEventListener('change', this.handleFileSelect, false);
         this.refs.importTodo.addEventListener('change', this.handleFileSelect.bind(this), false)
@@ -24,7 +35,7 @@ export default class TodoList extends Component {
         let files = event.target.files; 
         readFile(files[0], (fileStr)=>{
             let fileJson = JSON.parse(fileStr)
-            this.props.actions.importTodo(fileJson) 
+            this.props.actions.importTodo(fileJson, files[0].name) 
         }) 
     }
 
@@ -44,14 +55,31 @@ export default class TodoList extends Component {
         return this.props.mode ===   todoActions.todoMode.select
     }
 
+    clickCheckbox(e, checked){
+        // 这个的确是不需要的
+        //e.preventDefault()
+        const { actions, id } = this.props
+        const value =  checked
+        this.setState({
+            allSelect: value 
+        })
+        actions.selectAllTodo(value)
+    }
+
+
     renderBanner (){
+        const { actions } = this.props
         const style = this.getStyle() 
-        const butLable = this._selectMode() ? "退出选择" : "选择模式"
+        const butLable = this._selectMode() ? "退出选择" : "选择"
+                            //checked={ this.allSelect }
+                            //checked={ this.state.allSelect }
+                            //onCheck={ (e, checked)=> { this.clickCheckbox(e, checked) }} 
         return (
             <div  className="todo-list-banner" >
                 <div>
                     <FlatButton label=  { butLable }
                         style ={style.selectBut } 
+                        onClick={e => actions.toggleSelectMode() }
                         primary={true}  />
                 </div>
                 {
@@ -60,6 +88,9 @@ export default class TodoList extends Component {
                      <div style={ style.selectLabel }>
                         <Checkbox
                             label="全选"
+                            //checked={ this.allSelect }
+                            checked={ this.state.allSelect }
+                            onCheck={ (e, checked)=> { this.clickCheckbox(e, checked) }} 
                         />
                     </div>
                 }
@@ -92,9 +123,53 @@ export default class TodoList extends Component {
         )
     }
 
-    renderOpGrounp(){
+    exportSelect (e){
+        const { actions } = this.props
+        actions.exportSelect()
+    }
+    delSelect(e){
+        const { actions } = this.props
+        actions.delSelect()
+    }
+    renderOpGrounp() {
         const { actions } = this.props
         const style = this.getStyle() 
+        if( this._selectMode() ) {
+            return (
+                    <div  className="todolistOpGroup">
+                        <FlatButton label="导出所选" 
+                            onClick={ this.exportSelect.bind(this) }  
+                            style={ style.flatButton }  />
+                        <ConfirmDlg
+                            msg="确认删除所选内容" 
+                            title='!!!! 注意'
+                            buttonLabel="删除所选"
+                            op={this.delSelect.bind(this)}
+                           />
+
+                    </div>
+            )
+        
+        } else {
+            return (
+                    <div  className="todolistOpGroup">
+                        <FlatButton label="导出" 
+                            onClick={(e) => this.props.onExportClick() }  
+                            style={ style.flatButton }  />
+                        <FlatButton label="导入" 
+                            onClick={(e) => this.handleImportClick(e) }  
+                            style={ style.flatButton }  />
+                        <ConfirmDlg
+                            msg="确认清除所有todo项，建议删除前先导出备份" 
+                            title='!!!! 注意'
+                            buttonLabel="清除"
+                            op={(e) => this.props.actions.clearAllTodo() }
+                           />
+
+                    </div>
+            )
+        
+        }
         return (
             this._selectMode() 
             && 
@@ -128,7 +203,7 @@ export default class TodoList extends Component {
                                           index={index}
                                           actions={actions}
                                           allTags={ tags }
-                                          mode = { mode }
+                                          mode={mode}
                                           onClick={() => this.props.onTodoClick} />
                                      )}
 

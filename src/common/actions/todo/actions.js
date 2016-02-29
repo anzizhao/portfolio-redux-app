@@ -1,5 +1,9 @@
-var {storeTodoState, storeTodoTags }  = require('../../util')
-
+var {storeTodoState, storeTodoTags , storeTodoFromfiles}  = require('../../util')
+//init 
+export const INIT_ALL = 'INIT_ALL' 
+export const INIT_TODO = 'INIT_TODO' 
+export const INIT_TAGS= 'INIT_TAGS' 
+export const INIT_FROMFILES = 'INIT_FROMFILES' 
 //todo 
 export const ADD_TODO = 'ADD_TODO'
 export const COMPLETE_TODO = 'COMPLETE_TODO'
@@ -9,7 +13,6 @@ export const DEL_TODO = 'DEL_TODO'
 export const EXPORT_TODO = 'EXPORT_TODO' 
 export const IMPORT_TODO = 'IMPORT_TODO' 
 export const CLEAR_ALL_TODO = 'CLEAR_ALL_TODO' 
-export const INIT_TODO = 'INIT_TODO' 
 export const SAVE_TODO = 'SAVE_TODO' 
 export const EDIT_TODO = 'EDIT_TODO' 
 export const UNEDIT_TODO = 'UNEDIT_TODO' 
@@ -41,7 +44,6 @@ export const TODEL_TODO_SUB_PROCESS = 'TODEL_TODO_SUB_PROCESS'
 export const TODEL_TODO_SUB_CONCLUSION = 'TODEL_TODO_SUB_CONCLUSION' 
 
 //tags
-export const INIT_TAGS= 'INIT_TAGS' 
 export const ADD_TAGS = 'ADD_TAGS' 
 
 export const VisibilityFilters = {
@@ -132,6 +134,28 @@ export function initTodo () {
     }
 }
 
+export function initTags () {
+    const db = storeTodoTags()
+    return {
+      type: INIT_TAGS,
+      tags:  db,
+    }
+}
+
+export function initFromfiles() {
+    const db = storeTodoFromfiles()
+    return {
+      type: INIT_FROMFILES,
+      fromfiles:  db,
+    }
+}
+
+export function initAll () {
+    return {
+      type: INIT_ALL,
+    }
+}
+
 export function delTodo (id) {
     return { type: DEL_TODO, id }
 }
@@ -190,13 +214,6 @@ export function addTagsBatch (tags) {
     return { type: ADD_TAGS, tags } 
 }
 
-export function initTags () {
-    const db = storeTodoTags()
-    return {
-      type: INIT_TAGS,
-      tags:  db,
-    }
-}
 
 export function addTodoTags (id, tags) {
     return { type: ADD_TAGS, id, tags} 
