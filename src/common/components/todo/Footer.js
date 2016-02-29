@@ -92,17 +92,30 @@ export default class Footer extends Component {
   }
 
   renderFromfile() {
-    return (
-      <div>
-        <span style={this.style.showTip }>源文件: </span>
-        <SelectTags  
-            onChange={ this.props.selectFromfile } 
-            allTags = { this.props.fromfiles } 
-            disableTag = { true }
-            singleSelect = { true }
-        />
-      </div>
-    )
+      const { fromfiles } = this.props
+      // 选择文件的需求
+      const files = [
+          {id: 0, text:'[全部文件]'},  //default show all item 
+          {id: 1, text:'[浏览器的]'},  //default show all item 
+          ... fromfiles.map((item, index) => {
+              return {
+                  id: index+2,
+                  text: item.text
+              } 
+          })
+      ]
+      return (
+          <div>
+              <span style={this.style.showTip }>源文件: </span>
+              <SelectTags  
+                  onChange={ this.props.selectFromfile } 
+                  allTags = { files } 
+                  select={ this.props.tags }
+                  disableTag = { true }
+              />
+          </div>
+      )
+      //singleSelect = { true }
   }
 
 

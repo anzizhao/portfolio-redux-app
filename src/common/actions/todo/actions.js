@@ -235,6 +235,6 @@ export function delSelect () {
 }
 
 
-export function selectFile(filename){
-    return { type:  SET_SELECT_FILE, filename } 
+export function selectFile(files){
+    return { type:  SET_SELECT_FILE, files} 
 }

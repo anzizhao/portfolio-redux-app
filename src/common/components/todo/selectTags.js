@@ -35,28 +35,13 @@ export default class SelectTags extends Component {
         if ( this.props.singleSelect ) {
             _select  = 0 
             multiple = false  
-            // 选择文件的需求
-            _tags = [{id: 0, text:'全部文件'},  //default show all item 
-                ... allTags.map((item, index) => {
-                    return {
-                        id: index+1,
-                        text: item.text
-                    } 
-                })
-            ]
-        } else {
-            _tags = allTags.map((item, index) => {
-                    return {
-                        id: index+1,
-                        text: item.text
-                    } 
-                })
 
+        } else {
             _select  = []
             multiple = true 
             if ( select ) {
                 select.forEach(item => {
-                    let result = _tags.find(tag =>  item.text === tag.text ) 
+                    let result = allTags.find(tag =>  item.text === tag.text ) 
                     if ( result ) {
                         _select.push  ( result.id )
                     }
@@ -70,7 +55,7 @@ export default class SelectTags extends Component {
                         style={style.selectTag}
                         multiple =  { multiple } 
                         defaultValue={ _select }
-                        data={_tags}
+                        data={ allTags }
                         onChange={ onChange }
                         options={options}
                    />
@@ -83,7 +68,6 @@ SelectTags.propTypes = {
     onChange: PropTypes.func.isRequired,
     disableTag: PropTypes.bool,
     allTags: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string,
         text: PropTypes.string.isRequired,
     })).isRequired,
     singleSelect: PropTypes.bool,

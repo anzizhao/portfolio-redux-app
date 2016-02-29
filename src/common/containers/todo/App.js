@@ -37,17 +37,27 @@ class App extends Component {
     selectFilterFile(e) {
         // target options array,  the last ele id is empty '', that means add new value
         var opts = e.target.selectedOptions
-        var filename = ''
-        // 让问题暴露出来
         //if( ! opts || ! opts.length ){
             //return 
         //} 
-        var ele = opts[0]
-        var text = ''
-        if ( ele.index !== 0) {
-            text = ele.text 
+        var files = []
+        for(let i=0; i<opts.length; i++) {
+            let item = opts[i]
+            files.push(
+                { id: item.id, text:item.text }
+            ) 
         }
-        this.props.actions.selectFile(text)
+        this.props.actions.selectFile(files)
+
+        // target options array,  the last ele id is empty '', that means add new value
+        //var opts = e.target.selectedOptions
+        //var filename = ''
+        //var ele = opts[0]
+        //var text = ''
+        //if ( ele.index !== 0) {
+            //text = ele.text 
+        //}
+        //this.props.actions.selectFile(text)
     }
 
     renderFooter(){

@@ -32,11 +32,11 @@ function sort (state = SORT_ORIGIN , action) {
     }
 }
 
-function selectFile (state = '', action) {
+function selectFile (state = [], action) {
     let cmds = todoActions
-    switch (action.type) {
+    switch ( action.type) {
         case cmds.SET_SELECT_FILE:
-            return action.filename
+            return action.files
         default:
             return state
     }
@@ -532,14 +532,13 @@ function afterReducers ( state={} ,  action ) {
             let t  = state
             jsonObj = {
                 tags: state.tags ,
-                todos: visibleTodos (t.todos.present, t.visibilityFilter, t.sort, t.selectFile ),
             }
-            jsonObj.todos = visibleTodos (t.todos.present, t.visibilityFilter, t.sort )
+            jsonObj.todos = visibleTodos (t.todos.present, t.visibilityFilter, t.sort, t.selectFile )
                             .filter(item =>{
                                 return item.select 
                             })
-            if( state.selectFile !== '' ) {
-                filename = state.selectFile  
+            if( state.selectFile.length !==  0 ) {
+                filename = state.selectFile[0].text  
             } else {
                 filename = `todo_${ new Date().toLocaleDateString() }.json`
             }

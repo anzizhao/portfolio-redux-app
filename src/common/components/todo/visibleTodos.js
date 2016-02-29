@@ -3,13 +3,31 @@ import * as todoActions  from '../../actions/todo/actions'
 
 
 
-function selectFile (todos, fromfile) {
-    if ( fromfile  === '') {
+function selectFile (todos, files) {
+    //select file 数组为空, 返回全部
+    if ( files.length === 0) {
         return todos 
     } else {
-        return todos.filter(item => {
-            return item.fromfile === fromfile 
+        // 一些特殊的值 全部 没有源文件的
+        let tmp 
+        tmp = files.find(file => {
+            return file.text === '[全部文件]' 
         }) 
+        if ( tmp ) {
+            return todos 
+        }
+
+        files.forEach(file => {
+            if ( file.text === '[浏览器的]' ) {
+                file.text = '' 
+            }
+        }) 
+
+        return todos.filter(item =>{
+            return files.some(file => {
+                return file.text === item.fromfile
+            }) 
+        })
     }
 }
 
@@ -49,8 +67,8 @@ function sortTodos (todos, cmd) {
 }
 
 
-export default function selectTodos(_todos, filter, sort, selectedFile ) { 
-   const todos = selectFile(_todos, selectedFile) 
+export default function selectTodos(_todos, filter, sort, selectedFiles ) { 
+   const todos = selectFile(_todos, selectedFiles) 
    switch (filter) {
        default:
            case VisibilityFilters.SHOW_ALL:
