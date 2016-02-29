@@ -45,7 +45,6 @@ export default class AddTodo extends Component {
                         <TextField
                             floatingLabelText="添加todo项 按Enter确认"
                             fullWidth
-                            //value={ this.state.addTodoText }
                             onEnterKeyDown = {(e) => this.handleEnterKeyDown (e) }
                             ref="iAddTodo" 
                         />
