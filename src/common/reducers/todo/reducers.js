@@ -149,7 +149,7 @@ function todo(state, action) {
                 timestamp: Date.now(),
                 process: [],
                 select: false,   //是否被选择
-                fromfile: '',  //从那个文件导入
+                fromfile: action.fromfile ,  //从那个文件导入
                 conclusion: null,
                 uuid: uuid.v1(),
                 tags: ( action.tags && action.tags instanceof Array )? action.tags : []
@@ -492,6 +492,13 @@ function beforeReducers(state, action){
             let t  = state
             action.visibilityFilter = t.visibilityFilter
             action.sort = t.sort 
+            break
+        case todoActions.ADD_TODO:
+            let t  = state
+            action.fromfile = '' 
+            if( t.selectFile.length ) {
+                action.fromfile = t.selectFile[0].text
+            }
             break
 
     }
