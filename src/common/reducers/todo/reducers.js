@@ -482,6 +482,7 @@ function todos(state = [], action) {
 function beforeReducers(state, action){
     action.currentMode = mode(state.mode, action) 
 
+    let tmp 
     switch (action.type) {
         case todoActions.IMPORT_TODO:
             action.todos = action.fileJson.todos || []
@@ -496,7 +497,14 @@ function beforeReducers(state, action){
         case todoActions.ADD_TODO:
             let t  = state
             action.fromfile = '' 
-            if( t.selectFile.length ) {
+
+            tmp = t.selectFile.find(file => {
+                return file.text === '[全部文件]'  ||  file.text === '[浏览器的]' 
+            }) 
+            let files = t.selectFile
+            if( files.length && files[0].text  !== '[全部文件]' 
+                    && files[0].text  !== '[全部文件]' 
+              ) {
                 action.fromfile = t.selectFile[0].text
             }
             break
