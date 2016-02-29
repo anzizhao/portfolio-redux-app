@@ -35,7 +35,7 @@ export default class TodoList extends Component {
         let files = event.target.files; 
         readFile(files[0], (fileStr)=>{
             let fileJson = JSON.parse(fileStr)
-            this.props.actions.importTodo(fileJson) 
+            this.props.actions.importTodo(fileJson, files[0].name) 
         }) 
     }
 

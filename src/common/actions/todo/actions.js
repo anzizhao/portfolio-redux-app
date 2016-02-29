@@ -5,8 +5,7 @@ export const ADD_TODO = 'ADD_TODO'
 export const COMPLETE_TODO = 'COMPLETE_TODO'
 export const UNCOMPLETE_TODO = 'UNCOMPLETE_TODO'
 export const DEL_TODO = 'DEL_TODO'
-export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
-export const SET_SORT = 'SET_SORT'
+
 export const EXPORT_TODO = 'EXPORT_TODO' 
 export const IMPORT_TODO = 'IMPORT_TODO' 
 export const CLEAR_ALL_TODO = 'CLEAR_ALL_TODO' 
@@ -14,6 +13,10 @@ export const INIT_TODO = 'INIT_TODO'
 export const SAVE_TODO = 'SAVE_TODO' 
 export const EDIT_TODO = 'EDIT_TODO' 
 export const UNEDIT_TODO = 'UNEDIT_TODO' 
+
+export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
+export const SET_SORT = 'SET_SORT'
+export const SET_SELECT_FILE= 'SET_SELECT_FILE'
 
 
 export const EXPORT_SELECT  = 'EXPORT_SELECT'
@@ -103,8 +106,8 @@ export function exportTodo () {
     return { type: EXPORT_TODO }
 }
 
-export function importTodo (fileJson) {
-    return { type: IMPORT_TODO, fileJson }
+export function importTodo (fileJson, fromfile) {
+    return { type: IMPORT_TODO, fileJson, fromfile }
 }
 
 export function clearAllTodo () {
@@ -215,4 +218,6 @@ export function delSelect () {
 }
 
 
-
+export function selectFile(filename){
+    return { type:  SET_SELECT_FILE, filename } 
+}

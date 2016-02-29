@@ -33,6 +33,19 @@ class App extends Component {
             />
         )
     }
+    selectFilterFile(e) {
+        // target options array,  the last ele id is empty '', that means add new value
+        var opts = e.target.selectedOptions
+        var filename = ''
+        if( ! opts || ! opts.length ){
+            this.props.actions.selectFile('')
+            return 
+        } 
+        var ele = opts[opts.length-1]
+        this.props.actions.selectFile(ele.text)
+
+    }
+
     renderFooter(){
         if ( this._selectMode() ) {
             return  
@@ -47,6 +60,8 @@ class App extends Component {
 
                 onUndo={() => dispatch(ActionCreators.undo())}
                 onRedo={() => dispatch(ActionCreators.redo())}
+                fromfiles={this.props.fromfiles}
+                selectFromfile = {e=> this.selectFilterFile(e)  }
                 undoDisabled={this.props.undoDisabled}
                 redoDisabled={this.props.redoDisabled} />
         )
@@ -96,6 +111,9 @@ App.propTypes = {
       id: PropTypes.string.isRequired,
       text: PropTypes.string.isRequired,
   }).isRequired).isRequired,
+  fromfiles: PropTypes.arrayOf(PropTypes.shape({
+      text: PropTypes.string.isRequired,
+  }).isRequired).isRequired,
   actions: PropTypes.object.isRequired,
   undoDisabled: PropTypes.bool.isRequired,
   mode: PropTypes.number.isRequired,
@@ -109,11 +127,13 @@ function select(state) {
     return {
         undoDisabled: t.todos.past.length === 0,
         redoDisabled: t.todos.future.length === 0,
-        visibleTodos: visibleTodos (t.todos.present, t.visibilityFilter, t.sort ),
+        visibleTodos: visibleTodos (t.todos.present, t.visibilityFilter, t.sort, t.selectFile ),
         visibilityFilter: t.visibilityFilter,
         sort: t.sort,
         tags: t.tags,
         mode: t.mode,
+        selectFile: t.selectFile,
+        fromfiles: t.fromfiles,
         layout : state.layout
     }
 }

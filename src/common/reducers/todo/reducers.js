@@ -32,6 +32,17 @@ function sort (state = SORT_ORIGIN , action) {
     }
 }
 
+function selectFile (state = '', action) {
+    let cmds = todoActions
+    switch (action.type) {
+        case cmds.SET_SELECT_FILE:
+            return action.filename
+        default:
+            return state
+    }
+}
+
+
 function mode (state = todoActions.todoMode.default, action) {
     let cmds  = todoActions
     switch (action.type) {
@@ -106,6 +117,7 @@ function tags (state = [], action) {
 }
 
 
+
 function todo(state, action) {
     let tmp
     // 特殊的 先特别对待
@@ -121,6 +133,7 @@ function todo(state, action) {
                 timestamp: Date.now(),
                 process: [],
                 select: false,   //是否被选择
+                fromfile: '',  //从那个文件导入
                 conclusion: null,
                 uuid: uuid.v1(),
                 tags: ( action.tags && action.tags instanceof Array )? action.tags : []
@@ -304,6 +317,7 @@ function todos(state = [], action) {
              }
              for(let i of sortTodos ) {
                   match = false 
+                  i.fromfile = action.fromfile
                   for( let key  in state){
                         let j = state[key]
                         if ( j.uuid === i.uuid  )  {
@@ -482,11 +496,23 @@ function afterReducers ( state={} ,  action ) {
             objExportFile(jsonObj, filename )
 
             return state
+
+        case todoActions.IMPORT_TODO:
+            // 
+            let fromfiles = state.fromfiles
+            let result = fromfiles.find(item => {
+                return item.text === action.fromfile 
+            })
+            if (! result ) {
+                fromfiles.push({text: action.fromfile})
+            } 
+            return state
+
         case todoActions.EXPORT_SELECT:
             let t  = state
             jsonObj = {
                 tags: state.tags ,
-                todos: visibleTodos (t.todos.present, t.visibilityFilter, t.sort ),
+                todos: visibleTodos (t.todos.present, t.visibilityFilter, t.sort, t.selectFile ),
             }
             jsonObj.todos = visibleTodos (t.todos.present, t.visibilityFilter, t.sort )
                             .filter(item =>{
@@ -495,7 +521,6 @@ function afterReducers ( state={} ,  action ) {
             filename = `todo_${ new Date().toLocaleDateString() }.json`
             objExportFile(jsonObj, filename )
             return state
-
     }
     return state 
 }
@@ -506,11 +531,14 @@ function todoApp(state = {}, action) {
     const actionb = beforeReducers(state,  action) 
     const undoTodo = undoable(todos, { filter: distinctState() })
 
-    // 下级reducers 处理
+    // 下
+    // 级reducers 处理
     const combineState =  {
           tags: tags(state.tags, actionb ),
+          fromfiles: state.fromfiles || [],
           visibilityFilter: visibilityFilter(state.visibilityFilter, actionb),
           sort: sort(state.sort, actionb ),
+          selectFile: selectFile(state.selectFile, actionb ),
           todos: undoTodo(state.todos, actionb ),
           mode: actionb.currentMode ,   // mode 需要优先处理， 其他需要根据mode来作处理的
         

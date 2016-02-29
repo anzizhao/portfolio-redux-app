@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react'
+import SelectTags from './selectTags';
 
 export default class Footer extends Component {
     style = {
@@ -90,6 +91,19 @@ export default class Footer extends Component {
     )
   }
 
+  renderFromfile() {
+    return (
+      <div>
+        <span style={this.style.showTip }>源文件: </span>
+        <SelectTags  
+            onChange={ this.props.selectFromfile } 
+            allTags = { this.props.fromfiles } 
+        />
+      </div>
+    )
+  }
+
+
   renderUndo() {
     return (
       <p>
@@ -104,6 +118,7 @@ export default class Footer extends Component {
       <div>
         {this.renderFilters()}
         {this.renderSorts()}
+        {this.renderFromfile()}
         {this.renderUndo()}
       </div>
     )
@@ -117,6 +132,11 @@ Footer.propTypes = {
   onRedo: PropTypes.func.isRequired,
   undoDisabled: PropTypes.bool.isRequired,
   redoDisabled: PropTypes.bool.isRequired,
+
+  fromfiles: PropTypes.arrayOf(PropTypes.shape({
+      text: PropTypes.string.isRequired,
+  }).isRequired).isRequired,
+
   sort : PropTypes.oneOf([
     'SORT_ORIGIN',
      'SORT_IMPORTANCE_UP',
@@ -130,5 +150,7 @@ Footer.propTypes = {
     'SHOW_ALL',
     'SHOW_COMPLETED',
     'SHOW_ACTIVE'
-  ]).isRequired
+  ]).isRequired,
+  selectFromfile: PropTypes.func.isRequired,
+  
 }

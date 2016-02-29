@@ -3,6 +3,16 @@ import * as todoActions  from '../../actions/todo/actions'
 
 
 
+function selectFile (todos, fromfile) {
+    if ( fromfile  === '') {
+        return todos 
+    } else {
+        return todos.filter(item => {
+            return item.fromfile === fromfile 
+        }) 
+    }
+}
+
 function sortTodos (todos, cmd) {
     let cmds = todoActions.sorts   
     switch (cmd) {
@@ -39,15 +49,16 @@ function sortTodos (todos, cmd) {
 }
 
 
-export default function selectTodos(todos, filter, sort ) {
-  switch (filter) {
-    default:
-    case VisibilityFilters.SHOW_ALL:
-      return sortTodos( todos, sort)
-    case VisibilityFilters.SHOW_COMPLETED:
-      return sortTodos(  todos.filter(todo => todo.completed) , sort)
-    case VisibilityFilters.SHOW_ACTIVE:
-      return sortTodos(todos.filter(todo => !todo.completed), sort)
-  }
+export default function selectTodos(_todos, filter, sort, selectedFile ) { 
+   const todos = selectFile(_todos, selectedFile) 
+   switch (filter) {
+       default:
+           case VisibilityFilters.SHOW_ALL:
+           return sortTodos( todos, sort)
+       case VisibilityFilters.SHOW_COMPLETED:
+           return sortTodos(  todos.filter(todo => todo.completed) , sort)
+       case VisibilityFilters.SHOW_ACTIVE:
+           return sortTodos(todos.filter(todo => !todo.completed), sort)
+   }
 }
 
