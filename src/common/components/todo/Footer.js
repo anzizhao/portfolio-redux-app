@@ -98,6 +98,8 @@ export default class Footer extends Component {
         <SelectTags  
             onChange={ this.props.selectFromfile } 
             allTags = { this.props.fromfiles } 
+            disableTag = { true }
+            singleSelect = { true }
         />
       </div>
     )

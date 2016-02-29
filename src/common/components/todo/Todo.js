@@ -208,9 +208,9 @@ export default class Todo extends Component {
                         {...takeRateParam} />
 
                         <SelectTags  
-                        onChange={ this.handleTagChange.bind(this)} 
-                        allTags = { allTags } 
-                        select={ this.props.tags }
+                            onChange={ this.handleTagChange.bind(this)} 
+                            allTags = { allTags } 
+                            select={ this.props.tags }
                         />
 
                         <div style={style.opButGroup }>
