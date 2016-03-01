@@ -13,6 +13,8 @@ import ConfirmDlg from './confirmDlg'
 
 import * as todoActions  from '../../actions/todo/actions'
 
+import  Immutable from 'immutable'
+
 var {exportFile, readFile } = require('../../util')
 
 export default class TodoList extends Component {
@@ -199,11 +201,12 @@ export default class TodoList extends Component {
                 <List  style={style.list}>
                 {this.props.todos.map((todo, index)  =>
                                       <Todo {...todo}
-                                          key={todo.uuid}
                                           index={index}
                                           actions={actions}
                                           allTags={ tags }
                                           mode={mode}
+                                          key={todo.get("uuid")}
+                                          todo={todo}
                                           onClick={() => this.props.onTodoClick} />
                                      )}
 
@@ -229,11 +232,13 @@ TodoList.propTypes = {
   }).isRequired).isRequired,
 
   mode: PropTypes.number.isRequired,
-  todos: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.number.isRequired,
-    text: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired
-  }).isRequired).isRequired
+  todos: React.PropTypes.instanceOf(Immutable.List),
+
+  //todos: PropTypes.arrayOf(PropTypes.shape({
+      //id: PropTypes.number.isRequired,
+    //text: PropTypes.string.isRequired,
+    //completed: PropTypes.bool.isRequired
+  //}).isRequired).isRequired
 }
 
 TodoList.style = {

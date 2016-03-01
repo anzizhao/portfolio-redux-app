@@ -15,6 +15,7 @@ import TakeRate from './takeRate';
 import SelectTags from './selectTags';
 import TodoItemList from './todoItemList';
 
+import  Immutable from 'immutable'
 
 export default class Todo extends Component {
     // 本地的变量  因为要需要取消掉的 其实可以考虑undo
@@ -33,8 +34,12 @@ export default class Todo extends Component {
         itemText: ''
     };
 
-    componentWillReceiveProps (nextProps) {
-        const props = nextProps
+    componentWillReceiveProps (nProps) {
+        if (Immutable.is(nProps.todo, this.props.todo ))  {
+                return 
+        }
+
+        const props = nProps.todo.toObject() 
         this.setState({
             importance: props.importance,
             urgency : props.urgency ,
@@ -42,11 +47,20 @@ export default class Todo extends Component {
             itemText: props.text,
             tags: props.tags,
         });
+
+    }
+
+    shouldComponentUpdate (nProps, nState) {
+        if (Immutable.is(nProps.todo, this.props.todo ))  {
+                return false  
+        }
+        return true  
     }
 
     componentDidMount () {
         const props = this.props 
-        if( ! this.props.collapse )  {
+        const todo  = this.props.todo.toObject()
+        if( ! todo.collapse )  {
             const ele = ReactDOM.findDOMNode(this._input)
             ele.getElementsByTagName('textarea')[1].focus()
         }
@@ -55,7 +69,8 @@ export default class Todo extends Component {
 
     componentDidUpdate() {
         const props = this.props 
-        if( ! this.props.collapse )  {
+        const todo  = this.props.todo.toObject()
+        if( ! todo.collapse )  {
             const ele = ReactDOM.findDOMNode(this._input)
             ele.getElementsByTagName('textarea')[1].focus()
         }
@@ -98,7 +113,8 @@ export default class Todo extends Component {
     }
 
     handleSaveTodo(){
-        let id = this.props.id
+        let todo  = this.props.todo.toObject()
+        let id = todo.id
         let item = {
             text: this.state.itemText, 
             importance: this.state.importance,
@@ -110,7 +126,9 @@ export default class Todo extends Component {
         this._leaveEditMode(id)
     }
     handleUnsaveTodo(){
-        let id = this.props.id
+        let todo  = this.props.todo.toObject()
+        let id = todo.id
+
         this._leaveEditMode(id)
     }
 
@@ -135,26 +153,22 @@ export default class Todo extends Component {
             ) 
         }
         this.setState({ tags: tags })
-        //this.state.tags = tags 
     }
 
     getStyle (){
         const style =  this.constructor.style
+        const todo  = this.props.todo.toObject()
         const dStyle = {
             listItemDiv: {
-                display:  this.props.collapse ? 'block' : 'none'
+                display:  todo.collapse ? 'block' : 'none'
             },
-
             listItem: {
-                //textDecoration: this.props.completed ? 'line-through' : 'none',
-                //cursor: this.props.completed ? 'default' : 'pointer',
-                //display:  this.props.collapse ? 'block' : 'none'
             },
             editTodo: {
-                display: ! this.props.collapse ? 'block' : 'none',
+                display: ! todo.collapse ? 'block' : 'none',
             },
             listTextSpan: {
-                textDecoration: this.props.completed ? 'line-through' : 'none',
+                textDecoration: todo.completed ? 'line-through' : 'none',
             },
         }
         return Object.assign({}, style, dStyle) 
@@ -179,7 +193,7 @@ export default class Todo extends Component {
 
 
     render() {
-        const { id, conclusion, allTags, actions } = this.props
+        const { actions,allTags } = this.props
         const style = this.getStyle() 
         const takeRateParam = this.getTakeRateParam() 
         const _tags = allTags.map((item, index) => {
@@ -188,6 +202,7 @@ export default class Todo extends Component {
                 text: item.text
             } 
         })
+        const todo = this.props.todo.toObject()
 
 
         return (
@@ -197,19 +212,22 @@ export default class Todo extends Component {
                             difficulty={this.state.difficulty}
                             importance={this.state.importance} 
                             urgency={this.state.urgency} 
-                            {...this.props}
+                            todo={this.props.todo }
+                            index={this.props.index }
+                            actions={actions}
+                            mode={this.props.mode}
                         />
                     </div>
                     <div style={style.editTodo } >
                         <label>{ this.props.index + 1 } </label>
                         <TextField
-                        className='item-input'
-                        fullWidth
-                        multiLine={true}
-                        value={this.state.itemText}
-                        onChange={(e)=>this.handleChangeItem(e)}
-                        onEnterKeyDown ={(e) => this.handleSaveTodo()}
-                        ref={(c) => this._input = c}
+                            className='item-input'
+                            fullWidth
+                            multiLine={true}
+                            value={this.state.itemText}
+                            onChange={(e)=>this.handleChangeItem(e)}
+                            onEnterKeyDown ={(e) => this.handleSaveTodo()}
+                            ref={(c) => this._input = c}
                         />
                         <TakeRate 
                         {...takeRateParam} />
@@ -217,7 +235,7 @@ export default class Todo extends Component {
                         <SelectTags  
                             onChange={ this.handleTagChange.bind(this)} 
                             allTags = { _tags } 
-                            select={ this.props.tags }
+                            select={ todo.tags }
                         />
 
                         <div style={style.opButGroup }>
@@ -232,16 +250,7 @@ export default class Todo extends Component {
 }
 
 Todo.propTypes = {
-    id: PropTypes.number.isRequired,
-    tags: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        text: PropTypes.string.isRequired,
-    })),
-    conclusion: PropTypes.object,
-    collapse: PropTypes.bool.isRequired,
-
-    text: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired,
+    todo: React.PropTypes.instanceOf(Immutable.Map),
     actions: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired,
     mode: PropTypes.number.isRequired,

@@ -1,6 +1,7 @@
 import {  setVisibilityFilter, VisibilityFilters } from '../../actions/todo/actions'
 import * as todoActions  from '../../actions/todo/actions'
 
+import {fromJS, Map, List} from 'immutable'
 
 
 function selectFile (todos, files) {

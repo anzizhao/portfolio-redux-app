@@ -12,6 +12,8 @@ import Footer from '../../components/todo/Footer'
 
 import visibleTodos from '../../components/todo/visibleTodos'
 
+import  {List} from 'immutable'
+
 
 class App extends Component {
     componentWillMount() {
@@ -103,10 +105,11 @@ class App extends Component {
 
 App.propTypes = {
   dispatch: PropTypes.func.isRequired,
-  visibleTodos: PropTypes.arrayOf(PropTypes.shape({
-    text: PropTypes.string.isRequired,
-    completed: PropTypes.bool.isRequired
-  }).isRequired).isRequired,
+  visibleTodos: React.PropTypes.instanceOf(List),
+  //visibleTodos: PropTypes.arrayOf(PropTypes.shape({
+    //text: PropTypes.string.isRequired,
+    //completed: PropTypes.bool.isRequired
+  //}).isRequired).isRequired,
   sort : PropTypes.oneOf([
                          'SORT_ORIGIN',
                          'SORT_IMPORTANCE_UP',
@@ -139,9 +142,11 @@ App.propTypes = {
 function select(state) {
     let t  = state.todo
     return {
-        undoDisabled: t.todos.past.length === 0,
-        redoDisabled: t.todos.future.length === 0,
-        visibleTodos: visibleTodos (t.todos.present, t.visibilityFilter, t.sort, t.selectFile ),
+        //undoDisabled: t.todos.past.length === 0,
+        //redoDisabled: t.todos.future.length === 0,
+        undoDisabled: false ,
+        redoDisabled: false , 
+        visibleTodos: visibleTodos (t.todos, t.visibilityFilter, t.sort, t.selectFile ),
         visibilityFilter: t.visibilityFilter,
         sort: t.sort,
         tags: t.tags,

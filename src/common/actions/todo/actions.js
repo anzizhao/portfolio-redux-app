@@ -127,10 +127,8 @@ export function addTodo (text, tags) {
 }
 
 export function initTodo () {
-    const db = storeTodoState()
     return {
       type: INIT_TODO,
-      todos:  db,
     }
 }
 

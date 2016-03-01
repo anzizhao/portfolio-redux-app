@@ -20,7 +20,6 @@ export default class TodoItemList extends Component {
     getStyle (){
         const style =  this.constructor.style
         const collapse  = this.props.todo.get("collapse")
-        const completed = this.props.todo.get("completed")
         const dStyle = {
             listItemDiv: {
                 display:  collapse ? 'block' : 'none'
@@ -137,11 +136,10 @@ export default class TodoItemList extends Component {
                 )
     }
     renderRightIconMenu(){
-        const id = this.props.todo.get("id")
         return (
             <a className="btn" type="button"> 
                 <TodoMenu
-                    todoId={id}
+                    todoId={this.props.id}
                     actions={ this.props.actions }
                 />
             </a> 
@@ -150,16 +148,13 @@ export default class TodoItemList extends Component {
 
     clickCheckbox(e, checked ){
         //e.preventDefault()
-        const { actions } = this.props
-        const id = this.props.todo.get("id")
+        const { actions, id } = this.props
         const value =  checked
         actions.selectTodo(id, value)
     }
 
     renderCheckbox(){
-        const id = this.props.todo.get("id")
-        const select = this.props.todo.get("select")
-        const { actions } = this.props
+        const { actions, id, select } = this.props
         return (
             <Checkbox 
                 checked={ select }
