@@ -58,6 +58,9 @@ function storeTodoState(data) {
 function storeTodoTags (data) {
     return store('todotags', data );
 }
+function storeTodoFromfiles (data) {
+    return store('fromfiles', data );
+}
 
 function readFile(file, afterRead){
     let reader = new FileReader();
@@ -94,5 +97,8 @@ function parseInput (text) {
 }
 
 module.exports = {
-    loadState,  exportFile, storeTodoState, storeTodoTags, readFile, parseInput 
+    loadState,  
+    parseInput ,
+    exportFile, readFile,  
+    storeTodoFromfiles, storeTodoState, storeTodoTags, 
 }

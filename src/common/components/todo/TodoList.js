@@ -21,7 +21,7 @@ export default class TodoList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            allSelect: false,
+            allSelect: true ,
         };
     }
     

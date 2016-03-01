@@ -88,7 +88,7 @@ module.exports  = function(grunt) {
                  exec: 'npm run build',
             },
             tag: {
-                 exec: 'git archive static_i | tar -x -C ../anzizhao.github.io',
+                 exec: 'git archive selectExport | tar -x -C ../anzizhao.github.io',
             }
         }
     });

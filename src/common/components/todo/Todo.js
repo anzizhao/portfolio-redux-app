@@ -182,6 +182,13 @@ export default class Todo extends Component {
         const { id, conclusion, allTags, actions } = this.props
         const style = this.getStyle() 
         const takeRateParam = this.getTakeRateParam() 
+        const _tags = allTags.map((item, index) => {
+            return {
+                id: index+1,
+                text: item.text
+            } 
+        })
+
 
         return (
                 <div className="todo-item">
@@ -208,9 +215,9 @@ export default class Todo extends Component {
                         {...takeRateParam} />
 
                         <SelectTags  
-                        onChange={ this.handleTagChange.bind(this)} 
-                        allTags = { allTags } 
-                        select={ this.props.tags }
+                            onChange={ this.handleTagChange.bind(this)} 
+                            allTags = { _tags } 
+                            select={ this.props.tags }
                         />
 
                         <div style={style.opButGroup }>

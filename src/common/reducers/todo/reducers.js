@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import undoable, { distinctState } from 'redux-undo'
-var {storeTodoState, storeTodoTags, exportFile } = require('../../util')
+var {storeTodoState, storeTodoTags, storeTodoFromfiles,  exportFile } = require('../../util')
 
 import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters, EXPORT_TODO, INIT_TODO, DEL_TODO, SAVE_TODO } from '../../actions/todo/actions'
 
@@ -32,11 +32,11 @@ function sort (state = SORT_ORIGIN , action) {
     }
 }
 
-function selectFile (state = '', action) {
+function selectFile (state = [], action) {
     let cmds = todoActions
-    switch (action.type) {
+    switch ( action.type) {
         case cmds.SET_SELECT_FILE:
-            return action.filename
+            return action.files
         default:
             return state
     }
@@ -50,7 +50,7 @@ function mode (state = todoActions.todoMode.default, action) {
             return action.mode  
         case cmds.TOGGLE_MODE:
             if( action.mode === cmds.todoMode.select && state !==  cmds.todoMode.select ) {
-                //如果关注的selectmode 且原来的不是select mode， 改为select mode
+                //关注的selectmode 且原来的不是select mode， 改为select mode
                 return  todoActions.todoMode.select 
             }
             return todoActions.todoMode.default
@@ -82,6 +82,9 @@ function tags (state = [], action) {
     let cmds = todoActions
     let newItem, index 
     switch (action.type) {
+        case todoActions.INIT_ALL:
+            return storeTodoTags()
+
         case cmds.INIT_TAGS:
             return action.tags 
 
@@ -116,6 +119,19 @@ function tags (state = [], action) {
     }
 }
 
+function fromfiles (state = [], action) {
+    let cmds = todoActions
+    let newItem, index 
+    switch (action.type) {
+        case todoActions.INIT_ALL:
+            return storeTodoFromfiles()
+
+        case cmds.INIT_FROMFILES:
+            return action.fromfiles
+        default:
+            return state
+    }
+}
 
 
 function todo(state, action) {
@@ -133,7 +149,7 @@ function todo(state, action) {
                 timestamp: Date.now(),
                 process: [],
                 select: false,   //是否被选择
-                fromfile: '',  //从那个文件导入
+                fromfile: action.fromfile ,  //从那个文件导入
                 conclusion: null,
                 uuid: uuid.v1(),
                 tags: ( action.tags && action.tags instanceof Array )? action.tags : []
@@ -275,8 +291,11 @@ function todos(state = [], action) {
     let db = []
     let db2 = []
     switch (action.type) {
+        case todoActions.INIT_ALL:
+            return storeTodoState()
+
         case todoActions.INIT_TODO:
-                return action.todos
+                return action.todos 
 
         case todoActions.CLEAR_ALL_TODO:
             storeTodoState([]);
@@ -291,7 +310,7 @@ function todos(state = [], action) {
         case todoActions.TOGGLE_MODE:
             if ( action.currentMode === todoActions.todoMode.select ) {
                 return state.map(item =>{
-                    item.select = false 
+                    item.select = true 
                     return item 
                 })
             }
@@ -463,6 +482,7 @@ function todos(state = [], action) {
 function beforeReducers(state, action){
     action.currentMode = mode(state.mode, action) 
 
+    let tmp 
     switch (action.type) {
         case todoActions.IMPORT_TODO:
             action.todos = action.fileJson.todos || []
@@ -473,6 +493,20 @@ function beforeReducers(state, action){
             let t  = state
             action.visibilityFilter = t.visibilityFilter
             action.sort = t.sort 
+            break
+        case todoActions.ADD_TODO:
+            let t  = state
+            action.fromfile = '' 
+
+            tmp = t.selectFile.find(file => {
+                return file.text === '[全部文件]'  ||  file.text === '[浏览器的]' 
+            }) 
+            let files = t.selectFile
+            if( files.length && files[0].text  !== '[全部文件]' 
+                    && files[0].text  !== '[全部文件]' 
+              ) {
+                action.fromfile = t.selectFile[0].text
+            }
             break
 
     }
@@ -505,6 +539,7 @@ function afterReducers ( state={} ,  action ) {
             })
             if (! result ) {
                 fromfiles.push({text: action.fromfile})
+                storeTodoFromfiles(fromfiles)
             } 
             return state
 
@@ -512,13 +547,17 @@ function afterReducers ( state={} ,  action ) {
             let t  = state
             jsonObj = {
                 tags: state.tags ,
-                todos: visibleTodos (t.todos.present, t.visibilityFilter, t.sort, t.selectFile ),
             }
-            jsonObj.todos = visibleTodos (t.todos.present, t.visibilityFilter, t.sort )
+            jsonObj.todos = visibleTodos (t.todos.present, t.visibilityFilter, t.sort, t.selectFile )
                             .filter(item =>{
                                 return item.select 
                             })
-            filename = `todo_${ new Date().toLocaleDateString() }.json`
+            if( state.selectFile.length !==  0 ) {
+                filename = state.selectFile[0].text  
+            } else {
+                filename = `todo_${ new Date().toLocaleDateString() }.json`
+            }
+
             objExportFile(jsonObj, filename )
             return state
     }
@@ -535,7 +574,7 @@ function todoApp(state = {}, action) {
     // 级reducers 处理
     const combineState =  {
           tags: tags(state.tags, actionb ),
-          fromfiles: state.fromfiles || [],
+          fromfiles: fromfiles(  state.fromfiles, actionb ),
           visibilityFilter: visibilityFilter(state.visibilityFilter, actionb),
           sort: sort(state.sort, actionb ),
           selectFile: selectFile(state.selectFile, actionb ),

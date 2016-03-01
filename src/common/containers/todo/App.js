@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { ActionCreators } from 'redux-undo'
-import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters, exportTodo,   initTodo, initTags } from '../../actions/todo/actions'
+import { addTodo, completeTodo, setVisibilityFilter, VisibilityFilters, exportTodo, initAll  } from '../../actions/todo/actions'
 
 import { bindActionCreators } from 'redux'
 
@@ -16,8 +16,9 @@ import visibleTodos from '../../components/todo/visibleTodos'
 class App extends Component {
     componentWillMount() {
         //初始化todo 和 tags
-        this.props.dispatch(initTodo());
-        this.props.dispatch(initTags());
+        //this.props.dispatch(initTodo());
+        //this.props.dispatch(initTags());
+        this.props.dispatch(initAll());
     }
     _selectMode(){
         return this.props.mode ===   todoActions.todoMode.select
@@ -36,14 +37,27 @@ class App extends Component {
     selectFilterFile(e) {
         // target options array,  the last ele id is empty '', that means add new value
         var opts = e.target.selectedOptions
-        var filename = ''
-        if( ! opts || ! opts.length ){
-            this.props.actions.selectFile('')
-            return 
-        } 
-        var ele = opts[opts.length-1]
-        this.props.actions.selectFile(ele.text)
+        //if( ! opts || ! opts.length ){
+            //return 
+        //} 
+        var files = []
+        for(let i=0; i<opts.length; i++) {
+            let item = opts[i]
+            files.push(
+                { id: item.id, text:item.text }
+            ) 
+        }
+        this.props.actions.selectFile(files)
 
+        // target options array,  the last ele id is empty '', that means add new value
+        //var opts = e.target.selectedOptions
+        //var filename = ''
+        //var ele = opts[0]
+        //var text = ''
+        //if ( ele.index !== 0) {
+            //text = ele.text 
+        //}
+        //this.props.actions.selectFile(text)
     }
 
     renderFooter(){
