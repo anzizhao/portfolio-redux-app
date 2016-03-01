@@ -104,34 +104,37 @@ export default class TodoItemList extends Component {
     }
 
     renderText(style){
-
+        const {index, text, tags, process, importance, urgency, difficulty, fromfile } = this.props
+        let info  
+        if( this._selectMode() ) {
+            info = fromfile 
+        } else {
+            info = process.length || '' 
+        }
         return  ( 
                  <span > 
                  <span  style={style.listTextSpan}>
-                 { `${ String( this.props.index  + 1) }.  ${this.props.text}        ` } 
+                 { `${ String( index  + 1) }.  ${text}        ` } 
                  </span>
-                 <Tags tags={this.props.tags } /> 
+                 <Tags tags={tags } /> 
                  <span  style={style.processNum}>
-                 { this.props.process.length || '' }
+                     { info }
                  </span>
                  <Mertic 
-                 importance={this.props.importance}
-                 urgency = { this.props.urgency}
-                 difficulty={ this.props.difficulty}
+                     importance={importance}
+                     urgency = { urgency}
+                     difficulty={ difficulty}
                  />
                  </span>
                 )
     }
     renderRightIconMenu(){
-        //if ( this._selectMode() ) {
-            //return 
-        //}
         return (
             <a className="btn" type="button"> 
-            <TodoMenu
-            todoId={this.props.id}
-            actions={ this.props.actions }
-            />
+                <TodoMenu
+                    todoId={this.props.id}
+                    actions={ this.props.actions }
+                />
             </a> 
         ) 
     }
@@ -147,17 +150,12 @@ export default class TodoItemList extends Component {
 
     renderCheckbox(){
         const { actions, id, select } = this.props
-        //if ( this._selectMode() ) {
-            return (
-                <Checkbox 
-                    checked={ select }
-                    onCheck={ (e, checked)=> { this.clickCheckbox(e, checked) }} 
-                    />
-            )  
-        
-        //} 
-
-        //return  
+        return (
+            <Checkbox 
+                checked={ select }
+                onCheck={ (e, checked)=> { this.clickCheckbox(e, checked) }} 
+                />
+        )  
     }
 
     render() {
@@ -220,6 +218,7 @@ TodoItemList.propTypes = {
     collapse: PropTypes.bool.isRequired,
     select: PropTypes.bool.isRequired,
     text: PropTypes.string.isRequired,
+    fromfile: PropTypes.string.isRequired,
     importance: PropTypes.number.isRequired,
     urgency: PropTypes.number.isRequired,
 

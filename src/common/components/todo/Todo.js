@@ -194,10 +194,10 @@ export default class Todo extends Component {
                 <div className="todo-item">
                     <div style={style.listItemDiv }>
                         <TodoItemList 
-                        difficulty={this.state.difficulty}
-                        importance={this.state.importance} 
-                        urgency={this.state.urgency} 
-                        {...this.props}
+                            difficulty={this.state.difficulty}
+                            importance={this.state.importance} 
+                            urgency={this.state.urgency} 
+                            {...this.props}
                         />
                     </div>
                     <div style={style.editTodo } >

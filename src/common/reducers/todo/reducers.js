@@ -128,6 +128,10 @@ function fromfiles (state = [], action) {
 
         case cmds.INIT_FROMFILES:
             return action.fromfiles
+
+        case cmds.CLEAR_ALL_TODO:
+            storeTodoFromfiles([]);
+            return [];
         default:
             return state
     }
@@ -482,7 +486,7 @@ function todos(state = [], action) {
 function beforeReducers(state, action){
     action.currentMode = mode(state.mode, action) 
 
-    let tmp 
+    let tmp , t 
     switch (action.type) {
         case todoActions.IMPORT_TODO:
             action.todos = action.fileJson.todos || []
@@ -490,12 +494,12 @@ function beforeReducers(state, action){
             break
 
         case todoActions.DEL_SELECT:
-            let t  = state
+            t  = state
             action.visibilityFilter = t.visibilityFilter
             action.sort = t.sort 
             break
         case todoActions.ADD_TODO:
-            let t  = state
+            t  = state
             action.fromfile = '' 
 
             tmp = t.selectFile.find(file => {

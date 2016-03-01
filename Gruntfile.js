@@ -37,12 +37,24 @@ module.exports  = function(grunt) {
                     cwd: "../anzizhao.github.io" 
                 }
             },
+            profile:{
+                options: {
+                    all: true,
+                    cwd: "." 
+                }
+            },
         },
         gitcommit: {
             mainPage: {
                 options: {
                     cwd: "../anzizhao.github.io",
                     message: mainPageCommitMessage 
+                },
+            },
+            profile: {
+                options: {
+                    cwd: ".",
+                    message: "上线自动化步骤" 
                 },
             },
         },
@@ -146,6 +158,8 @@ module.exports  = function(grunt) {
                                             'gitpull:mainPage',
                                             'run:npmBuild',
                                             'run:tag',
+                                            'gitadd:profile',
+                                            'gitcommit:profile',
                                             'gitadd:mainPage',
                                             'gitcommit:mainPage',
                                             'gitpush:mainPage']);
