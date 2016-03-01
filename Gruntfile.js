@@ -157,9 +157,9 @@ module.exports  = function(grunt) {
                              grunt.task.run([
                                             'gitpull:mainPage',
                                             'run:npmBuild',
-                                            'run:tag',
                                             'gitadd:profile',
                                             'gitcommit:profile',
+                                            'run:tag',
                                             'gitadd:mainPage',
                                             'gitcommit:mainPage',
                                             'gitpush:mainPage']);
