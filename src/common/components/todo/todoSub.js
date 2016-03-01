@@ -121,6 +121,22 @@ export default class TodoSubItem extends Component {
             //ele.getElementsByTagName('textarea')[1].focus()
         //}
     //}
+    //
+    componentShouldUpdate(nProps, nState) {
+        // 这里有对象的比较   immutablejs 就有用武之地
+        // text 和tags 相等时候 不更新
+        if ( this.props.text === nProps.text && 
+             this.props.tags.length === nProps.tags.length  
+           )  {
+            let equal = this.props.tags.every((item, index) =>{
+                    return item.text === nProps[index].text
+            }) 
+            if ( equal ) {
+                return false 
+            }
+        }
+        return true  
+    }
 
     render() {
         const style = this.getStyle() 
