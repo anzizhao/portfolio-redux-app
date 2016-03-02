@@ -162,7 +162,7 @@ function todo(state=Map(), action) {
             })
     }
     // common code 
-    if (state.id !== action.id) {
+    if (state.get('id') !== action.id) {
         return state
     }
     let index, process, item 
@@ -200,17 +200,18 @@ function todo(state=Map(), action) {
                 state = state.set("process", []) 
             }
             tmp = {
-                id:   state.process.length,
+                id:   state.get('process').length,
                 text: '', 
                 createTime: Date.now(),
                 lastTime: Date.now(),
                 type: todoActions.todoSubItemType.process,  // 0 progress 1 conclusion  
                 status: todoActions.todoSubItemStatus.edit, // 0 show  1 edit 
             }
+
             if ( action.type === todoActions.ADD_TODO_SUB_PROCESS ){
                 // find the max id  
                 let id 
-                if( state.get("process").size ) {
+                if( state.get("process").length ) {
                     let maxItem = state.get("process").reduce((f, s)=>{
                         return f.id > s.id ? f: s 
                     }) 
@@ -291,10 +292,10 @@ function todo(state=Map(), action) {
                                 }
                                 return false
             })
-            return state.update("process", process =>  {
+            return state.update("process", item =>  {
                 return  [
-                    ...process.slice(0, index),
-                    ...process.slice(index+1),
+                    ...item.slice(0, index),
+                    ...item.slice(index+1),
                 ] 
             })
 
@@ -306,6 +307,22 @@ function todo(state=Map(), action) {
         default:
             return state
     }
+}
+
+function _setTodo(state, action, key, fn_value) {
+    let tmp = state.findIndex(t =>{
+        return t.get("id") === action.id 
+    })
+    if ( tmp === -1 ) {
+        return state  
+    }
+    db = state.update(tmp , todo => {
+        return value.set( key , fn_value(todo) )
+    })
+
+    storeTodoState(db.toObject())
+    return db 
+
 }
 
 function todos(state = List(), action) {
@@ -348,7 +365,7 @@ function todos(state = List(), action) {
              let sortTodos = action.todos.sort((f, s)=>{
                     return f.id - s.id 
              })
-             if ( state.length ) {
+             if ( state.size ) {
                  let maxItem = state.reduce((f, s)=>{
                         return f.id > s.id ? f: s 
                  })
@@ -394,6 +411,26 @@ function todos(state = List(), action) {
             db =  state.push( todo(undefined, action)) 
             storeTodoState(db.toObject());
             return db;
+        case todoActions.SAVE_TODO:
+            let tmp = state.findIndex(t =>{
+                return t.get("id") === action.id 
+            })
+            if ( tmp === -1 ) {
+                return state  
+            }
+            db = state.update(tmp , todo => {
+                return todo.set("text", action.text)
+                            .set("urgency", action.urgency)
+                            .set("importance", action.importance)
+                            .set("difficulty", action.difficulty)
+                            .set("collapse", action.collapse)
+                            .set("timestamp", Date.now())
+                            .set("tags", action.tags)
+            })
+
+            storeTodoState(db.toObject())
+            return db 
+
 
         case todoActions.DEL_TODO:
             //db = state.filter((item)=>{ return item.id == action.id ? false: true } ) 
@@ -445,15 +482,104 @@ function todos(state = List(), action) {
 
 
         case todoActions.COMPLETE_TODO: 
+            return _setTodo(state, action, "completed", (todo)=> true )
+
         case todoActions.UNCOMPLETE_TODO: 
-        case todoActions.SAVE_TODO:
+            return _setTodo(state, action, "completed", (todo)=> false )
+
         case todoActions.ADD_TODO_SUB_PROCESS:
+            return _setTodo(state,action,"process", (todo, action)=> {
+            let tmp = {
+                    id: 0 ,
+                    text: '', 
+                    createTime: Date.now(),
+                    lastTime: Date.now(),
+                    type: todoActions.todoSubItemType.process,  // 0 progress 1 conclusion  
+                    status: todoActions.todoSubItemStatus.edit, // 0 show  1 edit 
+            }
+            // find the max id  
+            if( state.get("process").length ) {
+                let maxItem = state.get("process").reduce((f, s)=>{
+                    return f.id > s.id ? f: s 
+                }) 
+                tmp.id = maxItem.id  + 1
+            }
+            return todo.get("process").push(tmp)
+        })
+
         case todoActions.ADD_TODO_SUB_CONCLUSION:
+            return _setTodo(state, action, "conclusion", (todo)=> {
+            let tmp = {
+                    id: 0 ,
+                    text: '', 
+                    createTime: Date.now(),
+                    lastTime: Date.now(),
+                    type : todoActions.todoSubItemType.conclusion,
+                    status: todoActions.todoSubItemStatus.edit, // 0 show  1 edit 
+            }
+            return tmp
+        })
+
         case todoActions.SAVE_TODO_SUB_PROCESS:
-        case todoActions.SAVE_TODO_SUB_CONCLUSION:
+            return _setTodo(state, action, "process", (todo)=> {
+                let process = todo.get("process")
+                let index = process.findIndex((ele ) => {
+
+                    return  ele.id === action.processId   
+                })
+
+                let selItem = process[index]
+                selItem.lastTime = Date.now()
+                selItem.status = todoActions.todoSubItemStatus.show  
+                selItem.text = action.item.text
+                selItem.tags = action.item.tags 
+
+                return process 
+        })
+
         case todoActions.TOEDIT_TODO_SUB_PROCESS:
+            return _setTodo(state, action, "process", (todo)=> {
+                let process = todo.get("process")
+                let index = process.findIndex((ele ) => {
+
+                    return  ele.id === action.processId   
+                })
+                let selItem = process[index]
+                selItem.status = todoActions.todoSubItemStatus.show  
+
+                return process 
+        })
+
+
+        case todoActions.SAVE_TODO_SUB_CONCLUSION:
+            return _setTodo(state, action, "conclusion", (todo)=> {
+                let item = todo.get("conclusion")
+                item.text = action.text
+                item.lastTime = Date.now() 
+                item.status = todoActions.todoSubItemStatus.show 
+                return item  
+        })
+
         case todoActions.TOEDIT_TODO_SUB_CONCLUSION:
+            return _setTodo(state, action, "conclusion", (todo)=> {
+                let item = todo.get("conclusion")
+                item.status = todoActions.todoSubItemStatus.edit
+                return item  
+        })
+
         case todoActions.TODEL_TODO_SUB_PROCESS:
+            return _setTodo(state, action, "conclusion", (todo)=> {
+
+            process = state.get("process")
+            let index = process.findIndex((ele) => {
+                return  ele.id === action.processId   
+            })
+            return  [
+                ...process.slice(0, index),
+                ...process.slice(index+1),
+            ] 
+        })
+
         case todoActions.TODEL_TODO_SUB_CONCLUSION:
 
             tmp = state.findIndex(t =>{
