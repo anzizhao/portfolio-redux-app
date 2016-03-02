@@ -4,6 +4,7 @@ import ListItem from 'material-ui/lib/lists/list-item';
 import Icon from 'react-fa'
 import ReactTooltip from "react-tooltip"
 
+import  Immutable from 'immutable'
 
 export default class TodoSubBut extends Component {
     constructor(props, context) {
@@ -12,7 +13,15 @@ export default class TodoSubBut extends Component {
         };
     }
 
+    shouldComponentUpdate (nProps, nState) {
+        if (Immutable.is(nProps.todo, this.props.todo))  {
+            return false 
+        }
+        return true  
+    }
+
     componentWillReceiveProps (nextProps) {
+
     }
 
     handleAddProgress(e){
@@ -60,4 +69,5 @@ export default class TodoSubBut extends Component {
 TodoSubBut.propTypes = {
   actions: PropTypes.object.isRequired,
   todoId: PropTypes.number.isRequired,
+  todo: React.PropTypes.instanceOf(Immutable.Map),
 }

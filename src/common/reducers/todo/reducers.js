@@ -140,7 +140,7 @@ function fromfiles (state = [], action) {
 }
 
 
-function todo(state=Map(), action) {
+function todo(state=Map(), action ) {
     let tmp
     // 特殊的 先特别对待
     if ( action.type ===   todoActions.ADD_TODO ) {
@@ -224,7 +224,6 @@ function todos(state = List(), action) {
             // 1. 对actions的todo项根据id进行排序
             // 2. 找出state的最大的id
             // 3. 匹配uuid, 相同选择更改时间戳大的,不相同的后面添加 id 为nextId  
-             let match = false 
              let nextId  
              let sortTodos = action.todos.sort((f, s)=>{
                     return f.id - s.id 
@@ -233,19 +232,18 @@ function todos(state = List(), action) {
                  let maxItem = state.reduce((f, s)=>{
                         return f.id > s.id ? f: s 
                  })
-                 nextId = maxItem.id + 1 
+                 nextId = maxItem.get('id') + 1 
              } else {
                 nextId = 0 
              }
              db = List()
              for(let i of sortTodos ) {
-                  match = false 
                   i.fromfile = action.fromfile
-                  match = state.findIndex((value, index ) =>{
+                  tmp = state.findIndex((value, index ) =>{
                       return value.get("uuid") === i.uuid 
                   })
 
-                  if ( match !== -1 ) {
+                  if ( tmp !== -1 ) {
                       if( i.timestamp > state.get(tmp).get("timestamp") ){
                           state = state.set(tmp, i)
                       } 
@@ -254,8 +252,8 @@ function todos(state = List(), action) {
                       nextId += 1
                       db = db.push( Map(i) )
                   }
-            }
-            db = db.concat(state) 
+             }
+            db = state.concat(db) 
             storeTodoState(db.toObject());
             return db
 
@@ -267,7 +265,7 @@ function todos(state = List(), action) {
                 let maxItem = state.reduce((f, s) => {
                     return f.id > s.id ? f: s 
                 })
-                action.id = maxItem.id + 1
+                action.id = maxItem.get('id') + 1
             }
             db =  state.push( todo(undefined, action)) 
             storeTodoState(db.toObject());
@@ -295,19 +293,20 @@ function todos(state = List(), action) {
 
         case todoActions.DEL_TODO:
             //db = state.filter((item)=>{ return item.id == action.id ? false: true } ) 
-            tmp = state.findIndex((item)=>  { return item.id == action.id ? false: true} )
+            tmp = state.findIndex((item)=>  { return item.get("id") == action.id  } )
             if ( tmp === -1 ) {
                 return state 
             }
-            db =  state.deleteIn(tmp) 
+            db =  state.delete(tmp) 
             storeTodoState(db.toObject());
             return db;
 
         case todoActions.DEL_SELECT:
             let t  = action 
-            db = visibleTodos (state, t.visibilityFilter, t.sort )
+            db = visibleTodos (state, t.visibilityFilter, t.sort, t.selectFile )
                             .filter(item =>{
-                                return item.get("select")
+                                // 选择为需要删除的内容
+                                return ! item.get("select")
                             })
             storeTodoState(db.toObject());
             return db 
@@ -326,7 +325,7 @@ function todos(state = List(), action) {
             }
 
             db = state.map(t => {
-                t.set("select", action.select) 
+                return t.set("select", action.select) 
             })
 
             storeTodoState(db.toObject())
@@ -341,6 +340,7 @@ function todos(state = List(), action) {
 
         case todoActions.ADD_TODO_SUB_PROCESS:
             return _setTodo(state,action,"process", (todo, action)=> {
+            let process = todo.get("process") || [] 
             let tmp = {
                     id: 0 ,
                     text: '', 
@@ -350,13 +350,18 @@ function todos(state = List(), action) {
                     status: todoActions.todoSubItemStatus.edit, // 0 show  1 edit 
             }
             // find the max id  
-            if( state.get("process").length ) {
-                let maxItem = state.get("process").reduce((f, s)=>{
+            if( process.length ) {
+                let maxItem = process.reduce((f, s)=>{
                     return f.id > s.id ? f: s 
                 }) 
                 tmp.id = maxItem.id  + 1
             }
-            return todo.get("process").push(tmp)
+            //immutable list, 如果key对应为array, 对array增删 is检测不了变化, 需要创建新的数据
+            //process.push(tmp)
+            return [
+                ...process ,
+                tmp 
+            ] 
         })
 
         case todoActions.ADD_TODO_SUB_CONCLUSION:
@@ -386,7 +391,7 @@ function todos(state = List(), action) {
                 selItem.text = action.item.text
                 selItem.tags = action.item.tags 
 
-                return process 
+                return  [ ...process ] 
         })
 
         case todoActions.TOEDIT_TODO_SUB_PROCESS:
@@ -399,13 +404,14 @@ function todos(state = List(), action) {
                 let selItem = process[index]
                 selItem.status = todoActions.todoSubItemStatus.show  
 
-                return process 
+                return  [ ...process ] 
         })
 
 
         case todoActions.SAVE_TODO_SUB_CONCLUSION:
             return _setTodo(state, action, "conclusion", (todo)=> {
-                let item = todo.get("conclusion")
+                //创建一个新的
+                let item = {  ... todo.get("conclusion") }
                 item.text = action.text
                 item.lastTime = Date.now() 
                 item.status = todoActions.todoSubItemStatus.show 
@@ -414,14 +420,14 @@ function todos(state = List(), action) {
 
         case todoActions.TOEDIT_TODO_SUB_CONCLUSION:
             return _setTodo(state, action, "conclusion", (todo)=> {
-                let item = todo.get("conclusion")
+                let item = { ...todo.get("conclusion") }
                 item.status = todoActions.todoSubItemStatus.edit
                 return item  
         })
 
         case todoActions.TODEL_TODO_SUB_PROCESS:
             return _setTodo(state, action, "process", (todo)=> {
-                process = state.get("process")
+                let process = todo.get("process")
                 let index = process.findIndex((ele) => {
                     return  ele.id === action.processId   
                 })
@@ -438,12 +444,12 @@ function todos(state = List(), action) {
 
         case todoActions.EDIT_TODO:
             return _setTodo(state, action, "collapse", (todo)=> {
-                return  true 
+                return false 
             })
 
         case todoActions.UNEDIT_TODO:
             return _setTodo(state, action, "collapse", (todo)=> {
-                return false 
+                return true 
             })
 
         case todoActions.SIGN_STAR:
@@ -469,7 +475,7 @@ function beforeReducers(state, action){
     action.currentMode = mode(state.mode, action) 
 
     let tmp , t 
-    switch (action.type) {
+    switch (     action.type ) {
         case todoActions.IMPORT_TODO:
             action.todos = action.fileJson.todos || []
             action.tags = action.fileJson.tags || []
@@ -479,6 +485,7 @@ function beforeReducers(state, action){
             t  = state
             action.visibilityFilter = t.visibilityFilter
             action.sort = t.sort 
+            action.selectFile = t.selectFile
             break
         case todoActions.ADD_TODO:
             t  = state
@@ -510,7 +517,7 @@ function afterReducers ( state={} ,  action ) {
         case todoActions.EXPORT_TODO:
             jsonObj = {
                 //todos: state.todos.present.toObject(),
-                todos: state.todos.toObject(),
+                todos: state.todos.map(todo=> todo.toObject() ).toArray(),
                 tags: state.tags 
             }
             filename = `todo_${ new Date().toLocaleDateString() }.json`
@@ -538,8 +545,10 @@ function afterReducers ( state={} ,  action ) {
             //jsonObj.todos = visibleTodos (t.todos.present, t.visibilityFilter, t.sort, t.selectFile )
             jsonObj.todos = visibleTodos (t.todos, t.visibilityFilter, t.sort, t.selectFile )
                             .filter(item =>{
-                                return item.select 
+                                return item.get("select")
                             })
+                            .map(todo => todo.toObject())
+                            .toArray()
             if( state.selectFile.length !==  0 ) {
                 filename = state.selectFile[0].text  
             } else {

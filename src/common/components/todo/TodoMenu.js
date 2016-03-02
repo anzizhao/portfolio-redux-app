@@ -8,6 +8,13 @@ import Colors from 'material-ui/lib/styles/colors';
 
 export default class TodoMenu extends Component {
 
+    shouldComponentUpdate (nProps, nState) {
+        if( nProps.todoId === this.props.todoId ) {
+            return false  
+        }
+        return true  
+    }
+
     handleDel (e ) {
         //e.stopPropagation()
         const del = this.props.actions.delTodo 
@@ -32,7 +39,6 @@ export default class TodoMenu extends Component {
     }
 
     render() {
-        const { onEdit, onDel, onComplete, onUnComplete} = this.props
         const iconButtonElement = (
                 <IconButton
                     touch={true}

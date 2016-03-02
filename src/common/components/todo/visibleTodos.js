@@ -26,7 +26,7 @@ function selectFile (todos, files) {
 
         return todos.filter(item =>{
             return files.some(file => {
-                return file.text === item.fromfile
+                return file.text === item.get('fromfile')
             }) 
         })
     }
@@ -37,32 +37,32 @@ function sortTodos (todos, cmd) {
     switch (cmd) {
         case cmds.SORT_IMPORTANCE_UP:
             return todos.sort((a, b)=>{
-                return a.importance - b.importance 
+                return a.get("importance") - b.get("importance")
         })
         case cmds.SORT_IMPORTANCE_DOWN:
             return todos.sort((a, b)=>{
-                return b.importance - a.importance 
+                return b.get("importance") - a.get("importance")
         })
         case cmds.SORT_URGENCY_UP:
             return todos.sort((a, b)=>{
-                return a.urgency- b.urgency
+                return a.get("urgency") - b.get("urgency")
         })
         case cmds.SORT_URGENCY_DOWN:
             return todos.sort((a, b)=>{
-                return b.urgency- a.urgency
+                return b.get("urgency") - a.get("urgency")
         })
         case cmds.SORT_DIFFICULTY_UP:
             return todos.sort((a, b)=>{
-                return a.difficulty - b.difficulty
+                return a.get("difficulty") - b.get("difficulty")
         })
         case cmds.SORT_DIFFICULTY_DOWN:
             return todos.sort((a, b)=>{
-                return b.difficulty - a.difficulty
+                return b.get("difficulty") - a.get("difficulty")
         })
         //cmds.SORT_ORIGIN
         default: 
             return todos.sort((a, b)=>{
-                return b.id - a.id
+                return b.get("id") - a.get("id")
         })
     }
 }
@@ -75,9 +75,9 @@ export default function selectTodos(_todos, filter, sort, selectedFiles ) {
            case VisibilityFilters.SHOW_ALL:
            return sortTodos( todos, sort)
        case VisibilityFilters.SHOW_COMPLETED:
-           return sortTodos(  todos.filter(todo => todo.completed) , sort)
+           return sortTodos(  todos.filter(todo => todo.get("completed") ) , sort)
        case VisibilityFilters.SHOW_ACTIVE:
-           return sortTodos(todos.filter(todo => !todo.completed), sort)
+           return sortTodos( todos.filter(todo => !todo.get("completed") ), sort)
    }
 }
 

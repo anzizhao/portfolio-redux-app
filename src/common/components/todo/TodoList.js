@@ -60,7 +60,7 @@ export default class TodoList extends Component {
     clickCheckbox(e, checked){
         // 这个的确是不需要的
         //e.preventDefault()
-        const { actions, id } = this.props
+        const { actions } = this.props
         const value =  checked
         this.setState({
             allSelect: value 
@@ -191,17 +191,17 @@ export default class TodoList extends Component {
     }
 
     render() {
-        const { actions, tags, mode } = this.props
+        const { actions, tags, mode, todos } = this.props
 
         const style = this.getStyle() 
-
+        const todoLen = todos.size 
         return (           
                 <div  className="todoList">
                  { this.renderBanner () }
                 <List  style={style.list}>
-                {this.props.todos.map((todo, index)  =>
+                { todos.map((todo, index)  =>
                                       <Todo {...todo}
-                                          index={index}
+                                          index={ todoLen - index - 1}
                                           actions={actions}
                                           allTags={ tags }
                                           mode={mode}

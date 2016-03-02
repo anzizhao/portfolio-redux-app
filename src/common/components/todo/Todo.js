@@ -1,171 +1,59 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
-import FlatButton from 'material-ui/lib/flat-button';
-import FontIcon from 'material-ui/lib/font-icon';
-import TextField from 'material-ui/lib/text-field';
-
-import ActionGrade from 'material-ui/lib/svg-icons/action/grade';
-
-import Colors from 'material-ui/lib/styles/colors';
 
 
-
-
-import TakeRate from './takeRate';
-import SelectTags from './selectTags';
-import TodoItemList from './todoItemList';
-
+import * as todoActions  from '../../actions/todo/actions'
 import  Immutable from 'immutable'
 
+import ListItem from 'material-ui/lib/lists/list-item';
+import TodoItemList from './todoItemList';
+import ItemEdit from './itemEdit';
+import TodoText from './todoText';
+import TodoMenu from './TodoMenu';
+import SubSecondaryText from './subSecondaryText';
+import TodoSubBut from './todoSubBut';
+import TodoSubItem from './todoSub';
+
+
+import Checkbox from 'material-ui/lib/checkbox';
+
+//import SelectItemCheckbox from './selectItemCheckbox';
+
+
 export default class Todo extends Component {
-    // 本地的变量  因为要需要取消掉的 其实可以考虑undo
-    static rateType = {
-        importance: 1,
-        urgency: 2,
-        difficulty: 3,
-    };    
-    state = {
-        toEditItem : false,
-        initRate: false,
-        tags: [],
-        urgency: 0, //紧急程度
-        importance: 0,  //重要程度
-        difficulty: 0,   //困难程度
-        itemText: ''
-    };
+    //state = {
+        //toEditItem : false,
+        //initRate: false,
+        //tags: [],
+        //urgency: 0, //紧急程度
+        //importance: 0,  //重要程度
+        //difficulty: 0,   //困难程度
+        //itemText: ''
+    //};
 
-    componentWillReceiveProps (nProps) {
-        if (Immutable.is(nProps.todo, this.props.todo ))  {
-                return 
-        }
-
-        const props = nProps.todo.toObject() 
-        this.setState({
-            importance: props.importance,
-            urgency : props.urgency ,
-            difficulty: props.difficulty,
-            itemText: props.text,
-            tags: props.tags,
-        });
-
-    }
-
+    //componentWillReceiveProps (nProps) {
+        //const props = nProps.todo.toObject() 
+    //}
+    //
     shouldComponentUpdate (nProps, nState) {
-        if (Immutable.is(nProps.todo, this.props.todo ))  {
-                return false  
+        if (Immutable.is(nProps.todo, this.props.todo)
+           &&  nProps.index === this.props.index 
+           &&  nProps.mode === this.props.mode){
+               return false 
+
         }
         return true  
     }
-
-    componentDidMount () {
-        const props = this.props 
-        const todo  = this.props.todo.toObject()
-        if( ! todo.collapse )  {
-            const ele = ReactDOM.findDOMNode(this._input)
-            ele.getElementsByTagName('textarea')[1].focus()
-        }
-
+    //
+    _selectMode(){
+        return  this.props.mode ===   todoActions.todoMode.select
     }
-
-    componentDidUpdate() {
-        const props = this.props 
-        const todo  = this.props.todo.toObject()
-        if( ! todo.collapse )  {
-            const ele = ReactDOM.findDOMNode(this._input)
-            ele.getElementsByTagName('textarea')[1].focus()
-        }
-    }
-
-
-    handleChangeItem(e) {
-        this.setState({
-            itemText: e.target.value,
-        });
-    }
-    handleRate (e, type, count){ 
-        const r = Todo.rateType
-        let state = {
-            initRate: false, 
-        }
-        switch(type) {
-            case r.importance:
-                state.importance = count;
-                break;
-            case r.urgency:
-                state.urgency = count
-                break;
-            case r.difficulty:
-                state.difficulty = count
-                break;
-                defalut: 
-                    return 
-        }
-        //更新相关的对象
-        this.setState(state);
-    } 
-
-
-    _leaveEditMode(id){
-        this.props.actions.uneditTodo(id)
-        this.setState({
-            initRate: true, 
-        })
-    }
-
-    handleSaveTodo(){
-        let todo  = this.props.todo.toObject()
-        let id = todo.id
-        let item = {
-            text: this.state.itemText, 
-            importance: this.state.importance,
-            difficulty: this.state.difficulty,
-            urgency: this.state.urgency, 
-            tags: this.state.tags 
-        }
-        this.props.actions.saveTodo(id, item)
-        this._leaveEditMode(id)
-    }
-    handleUnsaveTodo(){
-        let todo  = this.props.todo.toObject()
-        let id = todo.id
-
-        this._leaveEditMode(id)
-    }
-
-
-    handleTagChange(e) {
-        // target options array,  the last ele id is empty '', that means add new value
-        var opts = e.target.selectedOptions
-        if( ! opts || ! opts.length ){
-            return 
-        } 
-        var ele = opts[opts.length-1]
-        if ( ele.id === '' ) {
-            //new value, set  
-            this.props.actions.addTags(ele.id, ele.text)
-        }
-        // 这个不需要render的
-        var tags = []
-        for(let i=0; i<opts.length; i++) {
-            let item = opts[i]
-            tags.push(
-                {id: item.id, text:item.text }
-            ) 
-        }
-        this.setState({ tags: tags })
-    }
-
     getStyle (){
         const style =  this.constructor.style
         const todo  = this.props.todo.toObject()
         const dStyle = {
             listItemDiv: {
                 display:  todo.collapse ? 'block' : 'none'
-            },
-            listItem: {
-            },
-            editTodo: {
-                display: ! todo.collapse ? 'block' : 'none',
             },
             listTextSpan: {
                 textDecoration: todo.completed ? 'line-through' : 'none',
@@ -174,75 +62,143 @@ export default class Todo extends Component {
         return Object.assign({}, style, dStyle) 
     } 
 
-    getTakeRateParam(){
-        return  {
-            values: {
-                importance: this.state.importance  ,
-                urgency: this.state.urgency, 
-                difficulty: this.state.difficulty ,
-            } ,
-            handles: {
-                importance: (e, count)=>{ this.handleRate(e, Todo.rateType.importance, count)}  ,
-                    urgency:   (e, count)=>{ this.handleRate(e, Todo.rateType.urgency, count)}, 
-                        difficulty:  (e, count)=>{ this.handleRate(e, Todo.rateType.difficulty, count)}  
-            } ,
-            initRate: this.state.initRate
-        }
+    clickCheckbox(e, checked, todo ){
+        const { actions} = this.props
+        const { id } = todo 
+        const value =  checked
+        actions.selectTodo(id, value)
     }
 
+    renderCheckbox(todo){
+        // List 限制为checkout
+        //return (
+            //<SelectItemCheckbox 
+                //id={todo.id} 
+                //actions={todo.actions} 
+                //select={todo.select}
+                //mode={ this.props.mode}
+            ///>
+        //)  
+        if ( this._selectMode() ) {
+            return (
+                <Checkbox 
+                    checked={ todo.select }
+                    onCheck={ (e, checked)=> { this.clickCheckbox(e, checked, todo) }} 
+                    />
+            )  
+        } 
+        return     
+       
+    }
 
+    renderText(style, todo ){
+        return  ( 
+                 <TodoText 
+                    todo={ this.props.todo }  
+                    isSelect={ this._selectMode.bind(this)}
+                    index={ this.props.index }
+                 />
+                )
+    }
 
+    renderMenu (todo){
+        return (
+            todo.collapse  && 
+            <a className="btn" type="button"> 
+                <TodoMenu
+                    todoId={ todo.id}
+                    actions={ this.props.actions }
+                />
+            </a> 
+        ) 
+    }
+
+    renderSub(todo){
+        const {conclusion,process, id} = todo 
+        let subItems = []
+        let index = 1
+        //结论
+        if ( conclusion ) {
+            subItems.push(<TodoSubItem
+                              todoId = { id }
+                              key="conclusion" 
+                              index={1} 
+                              parentIndex={index+1}
+                              {...conclusion } 
+                              actions={this.props.actions} /> )
+        }
+
+        //过程描述
+        if ( process instanceof Array &&  process.length != 0 ) {
+            for( let item of process ) {
+                subItems.push(<TodoSubItem
+                                  todo={this.props.todo}
+                                  todoId = { id }
+                                  key={item.id} 
+                                  index={index} 
+                                  parentIndex={this.props.index+1 }
+                                  {...item} 
+                                  actions={this.props.actions} /> )
+
+                index += 1
+            }
+        }
+
+        // 操作按钮
+        subItems.push(<TodoSubBut 
+                          todo={this.props.todo}
+                          todoId = { id }
+                          key="addBut"
+                          actions={this.props.actions } /> )
+        return subItems 
+    }
+     
     render() {
-        const { actions,allTags } = this.props
+        const { actions } = this.props
         const style = this.getStyle() 
-        const takeRateParam = this.getTakeRateParam() 
-        const _tags = allTags.map((item, index) => {
-            return {
-                id: index+1,
-                text: item.text
-            } 
-        })
         const todo = this.props.todo.toObject()
 
+        const listText =  this.renderText(style ,todo) 
+        const secondText = ! todo.conclusion ? '': 
+                ( 
+                     <span  style= {style.secondtext} > 
+                     结论:  { todo.conclusion.text }
+                     </span>
+                ) 
+        let leftCheckbox, rightIconMenu, subItems 
 
+        if ( this._selectMode() ) {
+            leftCheckbox = this.renderCheckbox(todo)
+            //toggleNestedList = false  
+        } else  {
+            // listItem 组建必需的左右icon button 必需为button  所有使用a 包裹住
+            rightIconMenu = this.renderMenu(todo) 
+            subItems =  this.renderSub(todo)
+        }
+
+                            //secondaryText = {<SubSecondaryText text={secondText} />}
         return (
                 <div className="todo-item">
                     <div style={style.listItemDiv }>
-                        <TodoItemList 
-                            difficulty={this.state.difficulty}
-                            importance={this.state.importance} 
-                            urgency={this.state.urgency} 
-                            todo={this.props.todo }
-                            index={this.props.index }
-                            actions={actions}
-                            mode={this.props.mode}
+                        <ListItem 
+                            leftCheckbox={ leftCheckbox }
+                            primaryText={ listText } 
+                            style={style.listItem }
+                            rightIconButton ={ rightIconMenu }
+                            primaryTogglesNestedList={true}
+
+                            secondaryText = {secondText}
+                            secondaryTextLines =  {2}
+                            nestedItems={ subItems }
                         />
                     </div>
-                    <div style={style.editTodo } >
-                        <label>{ this.props.index + 1 } </label>
-                        <TextField
-                            className='item-input'
-                            fullWidth
-                            multiLine={true}
-                            value={this.state.itemText}
-                            onChange={(e)=>this.handleChangeItem(e)}
-                            onEnterKeyDown ={(e) => this.handleSaveTodo()}
-                            ref={(c) => this._input = c}
-                        />
-                        <TakeRate 
-                        {...takeRateParam} />
-
-                        <SelectTags  
-                            onChange={ this.handleTagChange.bind(this)} 
-                            allTags = { _tags } 
-                            select={ todo.tags }
-                        />
-
-                        <div style={style.opButGroup }>
-                            <FlatButton label="完成" onClick={(e) => this.handleSaveTodo() }  style={ style.flatButton }  />
-                            <FlatButton label="取消" onClick={(e) => this.handleUnsaveTodo() }  style={ style.flatButton }  />
-                        </div>
-                    </div>
+                     <ItemEdit 
+                        todo={this.props.todo}
+                        index={this.props.index }
+                        collapse = { todo.collapse }
+                        actions={actions}
+                        allTags = { this.props.allTags }
+                     />
                 </div>
         )
     }
@@ -263,16 +219,8 @@ Todo.propTypes = {
 
 //static style 
 Todo.style = {
-    opButGroup: {
-        float: 'right',
-    },
     listTextSpan: {
         float: 'left',
-    },
-    secondtext: {
-        marginTop: '25px',
-        marginLeft: '30px',
-        marginRight: '30px',
     },
     selectTag:{
         width: "100%" 

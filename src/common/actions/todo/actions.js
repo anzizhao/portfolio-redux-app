@@ -120,7 +120,6 @@ let nextTodoId = 0
 export function addTodo (text, tags) {
     return {
         type: ADD_TODO, 
-        id : nextTodoId ++, 
         tags,
         text
     }
