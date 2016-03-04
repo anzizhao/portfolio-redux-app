@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import SelectTags from './selectTags';
+import  Immutable from 'immutable'
+import OriginFileSelect from './originFileSelect';
 
 export default class Footer extends Component {
     style = {
@@ -107,11 +109,10 @@ export default class Footer extends Component {
       return (
           <div>
               <span style={this.style.showTip }>源文件: </span>
-              <SelectTags  
-                  onChange={ this.props.selectFromfile } 
-                  allTags = { files } 
-                  select={ this.props.tags }
-                  disableTag = { true }
+              <OriginFileSelect  
+                  files={ this.props.fromfiles} 
+                  selects={ this.props.selectFiles }
+                  actions={ this.props.actions }
               />
           </div>
       )
@@ -148,9 +149,9 @@ Footer.propTypes = {
   undoDisabled: PropTypes.bool.isRequired,
   redoDisabled: PropTypes.bool.isRequired,
 
-  fromfiles: PropTypes.arrayOf(PropTypes.shape({
-      text: PropTypes.string.isRequired,
-  }).isRequired).isRequired,
+  actions: PropTypes.object.isRequired,
+  fromfiles: React.PropTypes.instanceOf(Immutable.List),
+  selectFiles: React.PropTypes.instanceOf(Immutable.List),
 
   sort : PropTypes.oneOf([
     'SORT_ORIGIN',
@@ -166,6 +167,4 @@ Footer.propTypes = {
     'SHOW_COMPLETED',
     'SHOW_ACTIVE'
   ]).isRequired,
-  selectFromfile: PropTypes.func.isRequired,
-  
 }
