@@ -97,14 +97,15 @@ export default class Footer extends Component {
       const { fromfiles } = this.props
       // 选择文件的需求
       const files = [
-          {id: 0, text:'[全部文件]'},  //default show all item 
-          {id: 1, text:'[浏览器的]'},  //default show all item 
-          ... fromfiles.map((item, index) => {
-              return {
-                  id: index+2,
-                  text: item.text
-              } 
-          })
+          //{id: 0, text:'[全部文件]'},  //default show all item 
+          //{id: 1, text:'[浏览器的]'},  //default show all item 
+          //... fromfiles.map((item, index) => {
+              //return {
+                  //id: index+2,
+                  //text: item.text
+              //} 
+          //})
+          ... fromfiles
       ]
       return (
           <div>

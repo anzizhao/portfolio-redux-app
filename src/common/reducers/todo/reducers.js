@@ -126,9 +126,9 @@ function fromfiles (state = fromfilesInitState, action) {
             return List(
                 [
                     ... storeTodoFromfiles(),
-                    ... fromfilesInitState.toArray()
                 ]
             ) 
+                    //... fromfilesInitState.toArray()
         case cmds.CLEAR_ALL_TODO:
             storeTodoFromfiles([])
             return fromfilesInitState 
@@ -182,17 +182,20 @@ function todo(state=Map(), action ) {
                 id: action.id,
                 text: action.text,
                 completed: false,
-                collapse: true,
                 urgency: 2,
                 importance: 2,
                 difficulty: 2,
                 timestamp: Date.now(),
                 process: [],
-                select: false,   //是否被选择
                 fromfile: action.fromfile ,  //从那个文件导入
                 conclusion: null,
                 uuid: uuid.v1(),
-                tags: ( action.tags && action.tags instanceof Array )? action.tags : []
+                tags: ( action.tags && action.tags instanceof Array )? action.tags : [],
+                // view status 
+                collapse: true,
+                select: false,   //是否被选择
+                toEditFromfile: false,  // 是否去修改from file 
+                
             })
     }
 
@@ -486,6 +489,16 @@ function todos(state = List(), action) {
                 return true 
             })
 
+        case todoActions.TOCHANGE_TODO_FROMFILE:
+            return _setTodo(state, action, "toEditFromfile", (todo)=> {
+                return action.show 
+            })
+
+        case todoActions.CHANGE_TODO_FROMFILE:
+            return _setTodo(state, action, "fromfile", (todo)=> {
+                return action.fromfile 
+            })
+
         case todoActions.SIGN_STAR:
             return _setTodo(state, action, "urgency", (todo)=> {
                 return action.count 
@@ -547,7 +560,7 @@ function beforeReducers(state, action){
             break
 
     }
-    return action 
+    return action
 }
 
 function objExportFile(obj, filename) {
@@ -612,7 +625,7 @@ function todoApp(state = {}, action) {
     //const undoTodo = undoable(todos, { filter: distinctState() })
 
     // save todos 
-    var preTodos = state.todos 
+    //var preTodos = state.todos 
 
     // 级reducers 处理
     const combineState =  {
@@ -625,9 +638,9 @@ function todoApp(state = {}, action) {
           todos:  todos( state.todos, actionb ),
           mode: actionb.currentMode ,   // mode 需要优先处理， 其他需要根据mode来作处理的
     }
-    if( ! combineState.todos.equals( preTodos ) ) {
-        console.log( 'todos has changed') 
-    }
+    //if( ! combineState.todos.equals( preTodos ) ) {
+        //console.log( 'todos has changed') 
+    //}
     // 本级reducers处理 
     const retState = afterReducers(combineState, actionb )
 

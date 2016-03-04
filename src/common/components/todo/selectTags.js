@@ -12,7 +12,7 @@ export default class SelectTags extends Component {
     } 
     render() {
         const style = this.getStyle() 
-        const { onChange, allTags ,select } = this.props
+        const { onChange, allTags ,select, selectOne } = this.props
         let multiple  
         let options    = {}
         if (! this.props.disableTag ) {
@@ -31,21 +31,21 @@ export default class SelectTags extends Component {
                 //})
             //]
 
-        let _select, _tags   
-        if ( this.props.singleSelect ) {
-            _select  = 0 
-            multiple = false  
+        let _select, _tags, arr    
+        multiple = ! this.props.singleSelect
 
-        } else {
+        if (  multiple ){
             _select  = []
-            multiple = true 
-            if ( select ) {
-                select.forEach(item => {
-                    let result = allTags.find(tag =>  item.text === tag.text ) 
-                    if ( result ) {
-                        _select.push  ( result.id )
-                    }
-                })
+            select.forEach(item => {
+                let result = allTags.find(tag =>  item.text === tag.text ) 
+                if ( result ) {
+                    _select.push  ( result.id )
+                }
+            })
+        } else {
+            let result = allTags.find(tag =>  selectOne === tag.text ) 
+            if ( result ) {
+                _select = result.id
             }
         }
 
@@ -71,6 +71,7 @@ SelectTags.propTypes = {
         text: PropTypes.string.isRequired,
     })).isRequired,
     singleSelect: PropTypes.bool,
+    selectOne: PropTypes.string.isRequired,
     select: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.isRequired,
         text: PropTypes.string.isRequired,

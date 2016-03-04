@@ -39,6 +39,7 @@ export default class TodoMenu extends Component {
     }
 
     render() {
+        const { actions , todoId } = this.props
         const iconButtonElement = (
                 <IconButton
                     touch={true}
@@ -65,6 +66,10 @@ export default class TodoMenu extends Component {
                 <MenuItem
                     onClick={ this.handleUnComplete.bind(this) } 
                     primaryText="未完成"
+                />
+                <MenuItem
+                    onClick={e => actions.toChangeFromfile(todoId, true)} 
+                    primaryText="归属文件"
                 />
             </IconMenu>
         )

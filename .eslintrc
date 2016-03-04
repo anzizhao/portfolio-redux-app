@@ -25,10 +25,11 @@
 
         "extends": "plugin:react/recommended",
 
-        /*"rules": {*/
+        "rules": {
+            "strict": 0,
+            "react/jsx-no-undef": 1,
             /*"react/jsx-boolean-value": 1,*/
             /*prop-types: 1,*/
-            /*"react/jsx-no-undef": 1,*/
             /*"react/jsx-quotes": 1,*/
             /*"react/jsx-sort-prop-types": 1,*/
             /*"react/jsx-sort-props": 1,*/
@@ -43,9 +44,8 @@
             /*"react/self-closing-comp": 1,*/
             /*"react/sort-comp": 1,*/
             /*"react/wrap-multilines": 1,*/
-            /*"strict": 0,*/
             /*"indent": [2, 4],*/
             /*"quotes": [2, 'single'],*/
             /*"no-unused-vars": 0 // see https://github.com/babel/babel-eslint/issues/21*/
-        /*},*/
+        },
 }

@@ -8,6 +8,8 @@ import  Immutable from 'immutable'
 import ListItem from 'material-ui/lib/lists/list-item';
 import TodoItemList from './todoItemList';
 import ItemEdit from './itemEdit';
+import SelectFromfile from './selectFromfile';
+
 import TodoText from './todoText';
 import TodoMenu from './TodoMenu';
 import SubSecondaryText from './subSecondaryText';
@@ -193,11 +195,18 @@ export default class Todo extends Component {
                         />
                     </div>
                      <ItemEdit 
-                        todo={this.props.todo}
                         index={this.props.index }
+                        todo={this.props.todo}
                         collapse = { todo.collapse }
                         actions={actions}
                         allTags = { this.props.allTags }
+                     />
+                     <SelectFromfile
+                        todo={this.props.todo}
+                        index={this.props.index }
+                        toEditItem = { todo.toEditItem }
+                        actions={actions}
+                        files = { this.props.fromfiles }
                      />
                 </div>
         )
@@ -210,6 +219,7 @@ Todo.propTypes = {
     actions: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired,
     mode: PropTypes.number.isRequired,
+    fromfiles: React.PropTypes.instanceOf(Immutable.List),
     onClick: PropTypes.func.isRequired,
     allTags: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,

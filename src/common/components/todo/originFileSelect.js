@@ -15,7 +15,11 @@ export default class OriginFileSelect extends Component {
         return true  
     }
     handleClickFile(file, toSelect) {
-       this.props.actions.toggleSelectFile(file, toSelect)  
+       let sf = file
+       if ( file.text === eFilename.browser )  {
+            sf.text  =  '' 
+       }
+       this.props.actions.toggleSelectFile( sf , toSelect)  
     }
 
     getStyle (){
@@ -34,7 +38,7 @@ export default class OriginFileSelect extends Component {
                         return (
                                 <span 
                                     className='tagBadge' 
-                                    key={ file.id }
+                                    key={ file.id + 1 }
                                     style={fileButStyle}
                                     onClick={ e =>  this.handleClickFile( file, !select) }
                                 > 

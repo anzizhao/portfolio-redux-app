@@ -70,4 +70,5 @@ TodoSubBut.propTypes = {
   actions: PropTypes.object.isRequired,
   todoId: PropTypes.number.isRequired,
   todo: React.PropTypes.instanceOf(Immutable.Map),
+
 }

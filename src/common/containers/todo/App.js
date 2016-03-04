@@ -96,6 +96,7 @@ class App extends Component {
               actions={actions}
               mode={mode}
               tags={tags}
+              fromfiles={this.props.fromfiles}
               
               onExportClick={() => dispatch(exportTodo()) }
               onTodoClick={id => dispatch(completeTodo(id))} />

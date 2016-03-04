@@ -71,6 +71,8 @@
     margin-top: 20px;
     margin-bottom: 20px;
     font-size: 13px;
+    margin-left: 40px;
+    width: 90%;
 }
 
 .select2-container--default.select2-container--focus .select2-selection--multiple ,

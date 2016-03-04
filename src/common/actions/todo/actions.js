@@ -17,6 +17,9 @@ export const SAVE_TODO = 'SAVE_TODO'
 export const EDIT_TODO = 'EDIT_TODO' 
 export const UNEDIT_TODO = 'UNEDIT_TODO' 
 
+export const CHANGE_TODO_FROMFILE= 'CHANGE_TODO_FROMFILE'   //修改fromfile
+export const TOCHANGE_TODO_FROMFILE= 'TOCHANGE_TODO_FROMFILE'  // 去修改fromfile
+
 export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
 export const SET_SORT = 'SET_SORT'
 export const SET_SELECT_FILE= 'SET_SELECT_FILE'
@@ -244,4 +247,11 @@ export function toggleSelectFile (file, toSelect ){
     }
 }
 
+export function changeFromfile ( id, fromfile){
+    return { type: CHANGE_TODO_FROMFILE, id, fromfile} 
+}
+
+export function toChangeFromfile ( id, show ){
+    return { type: TOCHANGE_TODO_FROMFILE, id, show} 
+}
 

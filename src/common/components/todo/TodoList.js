@@ -207,6 +207,7 @@ export default class TodoList extends Component {
                                           mode={mode}
                                           key={todo.get("uuid")}
                                           todo={todo}
+                                          fromfiles= { this.props.fromfiles }
                                           onClick={() => this.props.onTodoClick} />
                                      )}
 
@@ -231,6 +232,7 @@ TodoList.propTypes = {
     text: PropTypes.string.isRequired,
   }).isRequired).isRequired,
 
+  fromfiles: React.PropTypes.instanceOf(Immutable.List).isRequired,
   mode: PropTypes.number.isRequired,
   todos: React.PropTypes.instanceOf(Immutable.List),
 
