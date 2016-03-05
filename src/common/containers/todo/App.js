@@ -100,6 +100,7 @@ class App extends Component {
               
               onExportClick={() => dispatch(exportTodo()) }
               onTodoClick={id => dispatch(completeTodo(id))} />
+
             { this.renderFooter() }
 
           </div>

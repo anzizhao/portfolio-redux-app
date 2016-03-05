@@ -119,15 +119,25 @@ const fromfilesInitState = List([
 ])
 function fromfiles (state = fromfilesInitState, action) {
     let cmds = todoActions
-    let newItem, index 
+    let newItem, index , db
     switch (action.type) {
         case todoActions.INIT_ALL:
         case cmds.INIT_FROMFILES:
-            return List(
-                [
-                    ... storeTodoFromfiles(),
-                ]
-            ) 
+            db = storeTodoFromfiles()
+            if( !db || !db[0] || db[0].text === eFilename.all ) {
+                return List(
+                    [
+                        ... db
+                    ]
+                ) 
+            } else {
+                return List(
+                    [
+                        ... state, 
+                        ... db
+                    ]
+                ) 
+            }
                     //... fromfilesInitState.toArray()
         case cmds.CLEAR_ALL_TODO:
             storeTodoFromfiles([])

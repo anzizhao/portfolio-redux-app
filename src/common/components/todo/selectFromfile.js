@@ -13,12 +13,7 @@ import { eFilename }  from '../../constants';
 export default class SelectFromfile extends Component {
     constructor(props) {
         super(props);
-        // 本地的变量  因为要需要取消掉的 其实可以考虑undo
-        this.rateType = {
-            importance: 1,
-            urgency: 2,
-            difficulty: 3,
-        }    
+
         this.local  =  {
             selectFile : ''
         }   
@@ -49,10 +44,7 @@ export default class SelectFromfile extends Component {
         // target options array,  the last ele id is empty '', that means add new value
         var opts = e.target.selectedOptions
         var ele = opts[0]
-        var text = ''
-        if ( ele.index !== 0) {
-            text = ele.text === eFilename.browser ? '': ele.text  
-        }
+        var text = ele.text === eFilename.browser ? '': ele.text  
         this.local.selectFile = text 
         //actions.changeFromfile(id, this.local.selectFile)
         //const { actions } =   this.props
@@ -73,7 +65,10 @@ export default class SelectFromfile extends Component {
         const style = this.getStyle(todo) 
         const item =  files.find(file => file.text === todo.fromfile )
         const selectId = item ? item.id  : -1
-        const allFiles = files.toArray().filter(item => item.id !== 0 )
+        // 这里是bug的 根源 调试了2个小时  奇怪那里改变了这个
+        //const allFiles = files.toArray().filter(item => item.id !== 0 )
+        //allFiles[0].text = eFilename.browser
+        const allFiles = files.toJS().filter(item => item.id !== 0 )
         allFiles[0].text = eFilename.browser
 
         if ( ! todo.toEditFromfile ) { 
