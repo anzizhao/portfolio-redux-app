@@ -27,7 +27,9 @@ function selectFile (todos, files) {
         //}) 
         return todos.filter(item =>{
             return files.some(file => {
-                return file.text === item.get('fromfile')
+                let fromfile = item.get('fromfile')
+                // 不知道为何  会将‘’ 变为存放浏览器项  可变项的不好处
+                return file.text === fromfile || fromfile === eFilename.browser || fromfile === '' 
             }) 
         })
     }
