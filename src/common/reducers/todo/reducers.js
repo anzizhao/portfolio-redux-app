@@ -124,7 +124,7 @@ function fromfiles (state = fromfilesInitState, action) {
         case todoActions.INIT_ALL:
         case cmds.INIT_FROMFILES:
             db = storeTodoFromfiles()
-            if( !db || !db[0] || db[0].text === eFilename.all ) {
+            if( !db && !db[0] &&  db[0].text === eFilename.all ) {
                 return List(
                     [
                         ... db
