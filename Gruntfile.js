@@ -148,21 +148,48 @@ module.exports  = function(grunt) {
 
 
     // 清理  编译 打包 推git
-    grunt.registerTask('tag', "grunt tag --message= ",
+    grunt.registerTask('tag', "grunt tag --message=  --start=   --list",
                         function(){
                              var message = grunt.option("message");
-                             if ( message ) {
-                                 grunt.config.set('gitcommit.mainPage.message', message);
-                             }
-                             grunt.task.run([
-                                            'gitpull:mainPage',
+                             var start = grunt.option("start") || 1;
+                             var list = grunt.option("list");
+                             var cmds = [   'gitpull:mainPage',
                                             'run:npmBuild',
                                             'gitadd:profile',
                                             'gitcommit:profile',
                                             'run:tag',
                                             'gitadd:mainPage',
                                             'gitcommit:mainPage',
-                                            'gitpush:mainPage']);
+                                            'gitpush:mainPage'];
+                             if ( message ) {
+                                 grunt.config.set('gitcommit.mainPage.message', message);
+                             }
+
+                             if ( list ) {
+                                 cmds.forEach(function(item, index ){
+                                     console.log( (index+1) +'. ' + item ) 
+                                 })
+                                 return 
+                             }
+
+                             var runCmds = cmds.filter(function(item, index){
+                                    return  (index+1) >= start  
+                             })
+
+                             grunt.task.run( runCmds )
+                             //runCmds.forEach(function(item, index ){
+                                 //console.log( (index+1) +'. ' + item ) 
+                             //})
+                        
+                             //grunt.task.run([
+                                            //'gitpull:mainPage',
+                                            //'run:npmBuild',
+                                            //'gitadd:profile',
+                                            //'gitcommit:profile',
+                                            //'run:tag',
+                                            //'gitadd:mainPage',
+                                            //'gitcommit:mainPage',
+                                            //'gitpush:mainPage']);
                         }
                       );
 
