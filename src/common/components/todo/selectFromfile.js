@@ -9,7 +9,7 @@ import TakeRate from './takeRate';
 import SelectTags from './selectTags';
 import { eFilename }  from '../../constants';
 
-
+// 选择归属文件组建
 export default class SelectFromfile extends Component {
     constructor(props) {
         super(props);

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 
-
+// 编辑item里面的  打星操作组建
 export default class StarRate extends Component {
     constructor(props, context) {
         super(props, context);

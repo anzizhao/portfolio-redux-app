@@ -1,5 +1,4 @@
 import React, { Component, PropTypes } from 'react'
-import SelectTags from './selectTags';
 import  Immutable from 'immutable'
 import OriginFileSelect from './originFileSelect';
 

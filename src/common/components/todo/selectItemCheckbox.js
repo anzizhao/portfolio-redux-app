@@ -2,6 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import ReactDOM from 'react-dom';
 
 import Checkbox from 'material-ui/lib/checkbox';
+
+
+// 选择模式下  勾选框组建
 export default class SelectItemCheckbox extends Component {
     shouldComponentUpdate (nProps, nState) {
         if ( nProps.select === this.props.select && nProps.mode === this.props.mode ) {
