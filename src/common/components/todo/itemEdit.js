@@ -63,9 +63,8 @@ export default class ItemEdit extends Component {
             .every(key => {
                 return n[key]  === l[key]
             })
-
-    
     }
+
     shouldComponentUpdate (nProps, nState) {
         if (Immutable.is(nProps.todo, this.props.todo ) &&
              this.localStateCompare(nState) 
@@ -194,9 +193,8 @@ export default class ItemEdit extends Component {
         if ( todo.collapse ) { 
             return <div></div> 
         }
-            //<div style={style.editTodo } >
         return (
-            
+            <div >
                 <label>{ this.props.index + 1 } </label>
                 <TextField
                     className='item-input'
@@ -205,8 +203,8 @@ export default class ItemEdit extends Component {
                     value={this.state.itemText}
                     onChange={(e)=>this.handleChangeItem(e)}
                     onEnterKeyDown ={(e) => this.handleSaveTodo(todo)}
-                    ref={(c) => this._input = c}
-                />
+                    ref={(c) => this._input = c} 
+                    />
                 <TakeRate 
                 {...takeRateParam} />
 
@@ -221,12 +219,6 @@ export default class ItemEdit extends Component {
                     <FlatButton label="取消" onClick={(e) => this.handleUnsaveTodo(todo) }  />
                 </div>
             </div>
-        
-        
-        
-        
-        
-        
         )
     }
 }
