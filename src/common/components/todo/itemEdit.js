@@ -56,9 +56,20 @@ export default class ItemEdit extends Component {
     componentDidUpdate() {
         this.focusInput()
     }
+    localStateCompare(nState) {
+        var l = this.state
+        var n = nState 
+        return ["itemText", "urgency", "importance", "difficulty"]
+            .every(key => {
+                return n[key]  === l[key]
+            })
 
+    
+    }
     shouldComponentUpdate (nProps, nState) {
-        if (Immutable.is(nProps.todo, this.props.todo ) )  {
+        if (Immutable.is(nProps.todo, this.props.todo ) &&
+             this.localStateCompare(nState) 
+           )  {
             if( nProps.index === this.props.index ) {
                 return false  
             } else if ( nProps.collpase === this.props.collapse && nProps.collapse === true ) {
