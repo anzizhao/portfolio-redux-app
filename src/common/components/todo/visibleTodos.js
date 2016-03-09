@@ -7,7 +7,7 @@ import {fromJS, Map, List} from 'immutable'
 
 function selectFile (todos, files) {
     //select file 数组为空, 返回全部
-    if ( files.size === 0) {
+    if ( ! files ||  files.size === 0) {
         return todos 
     } else {
         // 一些特殊的值 全部 没有源文件的

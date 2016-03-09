@@ -60,10 +60,12 @@
     /*font-style: italic;*/
 }
 .todo-sub-but {
+    clear: both;
     margin-left: 40px;
     cursor: pointer;
 }
 .todo-item-sub{
+    clear: both;
     margin: 20px 40px 5px 0;
 }
 

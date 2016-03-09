@@ -124,7 +124,7 @@ function fromfiles (state = fromfilesInitState, action) {
         case todoActions.INIT_ALL:
         case cmds.INIT_FROMFILES:
             db = storeTodoFromfiles()
-            if( !db && !db[0] &&  db[0].text === eFilename.all ) {
+            if( db && db[0] &&  db[0].text === eFilename.all ) {
                 return List(
                     [
                         ... db
@@ -250,7 +250,7 @@ function todos(state = List(), action) {
             }
             return db 
 
-        //case todoActions.INIT_TODO:
+
                 //return action.todos 
 
         case todoActions.CLEAR_ALL_TODO:
@@ -617,7 +617,7 @@ function afterReducers ( state={} ,  action ) {
                             .map(todo => todo.toObject())
                             .toArray()
             if( state.selectFiles.size !==  0 ) {
-                filename = state.selectFile.get(0).text  
+                filename = state.selectFiles.get(0).text  
             } else {
                 filename = `todo_${ new Date().toLocaleDateString() }.json`
             }
