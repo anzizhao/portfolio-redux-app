@@ -196,7 +196,7 @@ export default class ItemEdit extends Component {
         }
             //<div style={style.editTodo } >
         return (
-            <div >
+            
                 <label>{ this.props.index + 1 } </label>
                 <TextField
                     className='item-input'
