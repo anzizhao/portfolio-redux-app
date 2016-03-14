@@ -150,3 +150,8 @@
 .todo-list-banner{
     max-width: 300;
 }
+.at-view{
+    margin: 5px;
+    font-style: italic;
+    color: gray;
+}

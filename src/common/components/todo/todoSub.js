@@ -134,29 +134,56 @@ export default class TodoSubItem extends Component {
     }
 
     renderText(subIndex,  style){
-        let before = `${subIndex}.    ${this.props.text} `
+        let indexView, atView, beforeATagView ,
+            ATagView, afterATagView 
+
+        let atSubProcess = /@[0-9\\.]*/ 
+        let match , at  
+
+        indexView = `${subIndex}.    `
         if ( ! this.props.aTag ) {
-            return (
-                <span  style={style.listTextSpan}>
-                    {`${subIndex}.    ${this.props.text} `}
-                </span>
-            )
+            // 默认beforeATagView  
+            beforeATagView = this.props.text 
         } else {
             //before url, after url 
             let startIndex = this.props.text.indexOf(this.props.aTag)
-            let before = this.props.text.substring(0, startIndex)
-            let after = this.props.text.substring(startIndex+this.props.aTag.length)
-            return   (
-                <span  style={style.listTextSpan}>
-                    { `${subIndex}.    ${before} ` }
-
+            beforeATagView = this.props.text.substring(0, startIndex)
+            afterATagView  = this.props.text.substring(startIndex+this.props.aTag.length)
+            ATagView = (
                     <a href={this.props.aTag } target="_blank" >
                         {this.props.aTag }
                     </a>
-                    { after } 
-                </span>
             ) 
         }
+
+        //@1.2  sub process
+        match = atSubProcess.exec( beforeATagView ) 
+        if( match ) {
+            at = match[0] 
+        } else {
+            if ( afterATagView ) {
+                match = atSubProcess.exec(afterATagView) 
+                if ( match ) {
+                    at = match[0] 
+                }
+            }
+        }
+        atView = (
+            at &&
+                <a href={'#' + at.substring(1) } className="at-view">
+                { at }
+                </a>
+        )
+        return   (
+            <span  style={style.listTextSpan} id={subIndex}>
+                { indexView }
+                { atView }
+                { beforeATagView }
+                { ATagView  }
+                { afterATagView }
+            </span>
+        ) 
+
     }
 
     render() {
