@@ -4,7 +4,7 @@ import { routerStateReducer } from 'redux-router';
 import layout from './layout';
 import { reposByUser } from './about';
 
-import todo from './todo/reducers';
+import todo from './todo';
 
 const rootReducer = combineReducers({
   layout : layout,

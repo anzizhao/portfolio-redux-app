@@ -77,23 +77,31 @@ function readFile(file, afterRead){
 }
 
 function parseInput (text) {
-    let tags = []
-    let pureText = ''
+    let tags = null
+    let aTag = null 
+    let pureText   = text 
     //正则表达式 匹配开头标签部分() 
     //加？ 可以尽可能小的匹配 
     //\uff08  \u0029 中文括号的匹配
     let reg = /^[\(\uff08].*?[\)\uff09]/ 
     let match = reg.exec(text);
-    if ( ! match  ) {
-        return { text } 
-    }
-    pureText = text.slice( match[0].length )
-    //匹配的第一个 slice() split ,  中文逗号 
-    tags = match[0].slice(1, -1)
-        .split(/[,\uff0c]/)
-        .map(text=> { return { id:text, text }})
+    if (  match  ) {
 
+        pureText = text.slice( match[0].length )
+        //匹配的第一个 slice() split ,  中文逗号 
+        
+        tags = match[0].slice(1, -1)
+            .split(/[,\uff0c]/)
+            .map(text=> { return { id:text, text }})
+
+    }
+    let urlPattern = new RegExp("https?://[\\w-]+(\\.[\\w-]+)+([\\w.,@?^=%&amp;:/~+#-]*[\\w@?^=%&amp;/~+#-])?")
+    match = urlPattern.exec(pureText);
+    if (  match  ) {
+        aTag = match[0]
+    }
     return {
+        aTag,
         tags, 
         text: pureText,
     }

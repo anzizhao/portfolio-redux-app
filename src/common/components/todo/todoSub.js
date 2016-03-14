@@ -115,22 +115,48 @@ export default class TodoSubItem extends Component {
         }
     }
     //componentWillReceiveProps() {
-        //const props = this.props 
-        //if( this.isEditStatus(props.status) ) {
-            //const ele = ReactDOM.findDOMNode(this._input)
-            //ele.getElementsByTagName('textarea')[1].focus()
-        //}
+    //const props = this.props 
+    //if( this.isEditStatus(props.status) ) {
+    //const ele = ReactDOM.findDOMNode(this._input)
+    //ele.getElementsByTagName('textarea')[1].focus()
+    //}
     //}
     //
     //
     shouldComponentUpdate (nProps, nState) {
-        if (Immutable.is(nProps.todo, this.props.todo ) && nProps.index === this.props.index)  {
+        if (Immutable.is(nProps.todo, this.props.todo ) && nProps.index === this.props.index && nProps.status === this.props.status )  {
             //这个组件有自己的状态的 ,状态相同时候  不更新   应该将接受外面变量的跟自己有状态变化分开
             if ( nState.itemText === this.state.itemText ) {
                 return false 
             }
         }
         return true  
+    }
+
+    renderText(subIndex,  style){
+        let before = `${subIndex}.    ${this.props.text} `
+        if ( ! this.props.aTag ) {
+            return (
+                <span  style={style.listTextSpan}>
+                    {`${subIndex}.    ${this.props.text} `}
+                </span>
+            )
+        } else {
+            //before url, after url 
+            let startIndex = this.props.text.indexOf(this.props.aTag)
+            let before = this.props.text.substring(0, startIndex)
+            let after = this.props.text.substring(startIndex+this.props.aTag.length)
+            return   (
+                <span  style={style.listTextSpan}>
+                    { `${subIndex}.    ${before} ` }
+
+                    <a href={this.props.aTag } target="_blank" >
+                        {this.props.aTag }
+                    </a>
+                    { after } 
+                </span>
+            ) 
+        }
     }
 
     render() {
@@ -147,15 +173,16 @@ export default class TodoSubItem extends Component {
        } else {
            leftIcon  = <Icon size="lg" name="tag" style={style.iconTag} />
        }
-       let subIndex = String(this.props.parentIndex) + '.'  + String(this.props.index)
        const lastDate = new Date(this.props.lastTime).toLocaleDateString()
-       const textPart = `${subIndex}.    ${this.props.text} `
+       //const textPart = `${subIndex}.    ${this.props.text} `
+       //const textPart =  this.renderText() 
+
+       let subIndex = String(this.props.parentIndex) + '.'  + String(this.props.index)
+
        //const lastDate = this.props.lastTime 
        const listText = (
            <span >
-               <span  style={style.listTextSpan}>
-                   { textPart } 
-               </span>
+               { this.renderText( subIndex, style ) }
                <Tags tags={this.props.tags } subTag={true} /> 
                <div style={style.lastDate } >最后编辑
                    <span style={style.date }>{lastDate}</span>  
@@ -206,6 +233,7 @@ TodoSubItem.propTypes = {
     parentIndex: PropTypes.number.isRequired,
     type: PropTypes.number.isRequired,
     text: PropTypes.string.isRequired,
+    aTag: PropTypes.string,
     tags: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.string.isRequired,
         text: PropTypes.string.isRequired,
@@ -231,6 +259,9 @@ TodoSubItem.style = {
         color: 'rgba(93, 89, 89, 0.74)'
     },
     iconReply: {
+        color: 'rgba(102, 214, 91, 0.89)',
+    },
+    iconATag: {
         color: 'rgba(102, 214, 91, 0.89)',
     },
     iconTag: {
