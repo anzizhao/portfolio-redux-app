@@ -20,7 +20,7 @@ class Home extends Component {
       	<div className="posts">
   
   			<div className="post banner">
-			    <h1 className="post-title">本人男，仍单着，喜欢罗宾这样知性的女孩。作为一位长期待在小黑屋的程序员，有志于利用技术改变一些事情。现从事前端开发，关注<em>可复用</em>, <em>可维护</em> <em>高性能</em>  <em>最新的</em> 技术发展。对js近几年发展充满惊讶</h1>
+			    <h2 className="post-title">本人男，仍单着，喜欢罗宾这样知性的女孩。作为一位长期待在小黑屋的程序员，有志于利用技术改变一些事情。现从事前端开发，关注<em>可复用</em>, <em>可维护</em> <em>高性能</em>  <em>最新的</em> 技术发展。对js近几年发展充满惊讶</h2>
 
 			</div>
   
