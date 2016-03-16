@@ -30,12 +30,18 @@ const rootElement = document.getElementById('root');
   //require('../server/devtools')(store);
 //}
 
+//render(
+  //<Provider store={store}>
+    //<ReduxRouter>
+      //<Router children={routes} history={history} />
+    //</ReduxRouter>
+  //</Provider>,
+  //document.getElementById('root')
+//);
+
 render(
   <Provider store={store}>
-    <ReduxRouter>
       <Router children={routes} history={history} />
-    </ReduxRouter>
   </Provider>,
   document.getElementById('root')
 );
-
