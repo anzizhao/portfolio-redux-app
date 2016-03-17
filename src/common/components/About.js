@@ -23,26 +23,24 @@ class About extends Component {
 
       	  <div className="about">
 
-      	  	<h3>About Me</h3>
+      	  	<h3>关于我</h3>
 
-      	  	<p>I have been developing web sites for over 15 years. Over the years, I have adopted, mastered and moved on from many languages, frameworks and architectures. I currently focus on Javascript heavy web application development.</p> 
+      	  	<p>13年毕业，投身于安防大业，在海康工作两年，然而对工作的无感和家乡的思念，15年离职回广东发展。因一个外包项目，转向于前端技术. </p> 
 
-      	  	<p>I created my first start-up in 2004 which raised £30K pounds investment which sold custom built software to companies like News International, NHS and Guardian.</p>
+      	  	<p>现从事前端开发工作，关注前端最新发展。使用npm，bower，grunt现代技术管理前端项目，使用angular+bootstrap + restful api前后端分离技术开发网站。 </p> 
 
-      	  	<p>In 2007, I was the CTO of <a href="https://en.wikipedia.org/wiki/MyFootballClub" target="_blank">My Football Club</a>. MyFC crowdsourced over £1.5 Million to buy a British football club. In the following year, we got to Wembley and won the FA Trophy.</p>
 
-      	  	<p>Over the years, I have developed web apps for start-ups (<a href="http://www.covestor.com" target="_blank">Covestor</a>, <a href="https://www.isubscribe.co.uk" target="_blank">iSubscribe</a>, <a href="http://www.shipserv.com/" target="_blank">Shipserv</a>), for multi-national bluechip companies (<a href="http://www.goldmansachs.com" target="_blank">Goldman Sachs</a>, <a href="http://www.tesco.com" target="_blank">Tesco</a>, <a href="http://www.timeout.com" target="_blank">Timeout</a>, <a href="http://www.wiley.com" target="_blank">John Wiley and Sons</a>) and created my own companies (<a href="http://www.pwul.net" target="_blank">PWUL</a>, <a href="http://www.muffleit.com/" target="_blank">Muffle</a>, <a href="http://pencil.training" target="_blank">Pencil Training</a>)</p>
+      	  	<h3>关于网站</h3>
 
-      	  	<h3>About Site</h3>
-
-      	  	<p>This site is a single page web app built with React and Redux. It is Isomorphic (all the code renders on the server and well as the browser) which has the advantage of initially rendering quicker and being indexed by search engines.</p>
-      	  	<p>I built the site as a simple example of what can be built with React and Redux. You can get the code base forfrom <a href="https://github.com/caljrimmer/portfolio-redux-app">my github repo</a>.</p>
+      	  	<p>这是一个单页面网站，基于react和redux技术， 参考于<a href="https://github.com/caljrimmer/portfolio-redux-app">portfolio-redux-app模板</a> 网站。这网站将用于提供小工具和展示简历 </p>
+      	  	<p>如果对网站的小工具感兴趣，可以从github上获取该网站的代码<a href="https://github.com/anzizhao/portfolio-redux-app">portfolio-redux-ap</a>.</p>
+      	  	<p>就像caljrimmer所说的，</p>
       	  	<p>Feel free to use this sites code for whatever you want. I hope it inspires you to build something awesome or learn something new</p>
-
+，
 	      </div>
 
 	      <div className="repos">
-	      	<h3><a href="https://github.com/caljrimmer?tab=repositories" target="_blank">My GitHub</a> Repos</h3>
+	      	<h3><a href="https://github.com/anzizhao?tab=repositories" target="_blank">我的GitHub</a></h3>
 	        {isFetching && results.length === 0 &&
 	          	<Loader />
 	        }
