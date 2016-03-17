@@ -1,104 +1,28 @@
 export function getPortfolio() {
   return [
     {
-    	link : 'http://www.goldmansachs.com',
-    	title : 'Goldman Sachs',
-    	classname : 'goldmans',
+        link : 'http://www.koalac.com',
+    	title : '考拉先生',
+    	classname : 'koalac',
     	roles : [
     		{
-    			title : 'Front End Developer',
-    			skills : 'React, Backbone, D3'
+                name: 'js研发工程师',
+    			job: '公司oa前端开发',
+    			skills : 'Angularjs, restfulApi, requirejs'
     		},
-    		{
-    			title : 'Back End Developer',
-    			skills : 'Node, MongoDB, Webpack'
-    		}
     	]
     },
     {
-    	link : 'http://www.libon.com/',
-    	title : 'Orange (Libon)',
-    	classname : 'orange',
+        link : 'http://www.hikvision.com/cn/index.html?jmode=j1',
+    	title : '海康威视数字',
+    	classname : 'hikvision',
     	roles : [
     		{
-    			title : 'Front End Developer',
-    			skills : 'Backbone, WebRTC, FireFoxOS'
+                name: 'c++研发工程师',
+    			job: '网络sdk的开发',
+    			skills : 'c++, MFC, '
     		},
-    		{
-    			title : 'Back End Developer',
-    			skills : 'Node, MongoDB, Grunt'
-    		}
     	]
     },
-    {
-    	link : 'http://www.pwul.net',
-    	title : 'Pay What You Like',
-    	classname : 'pwul',
-    	roles : [
-    		{
-    			title : 'Front End Developer',
-    			skills : 'React, Backbone, D3'
-    		},
-    		{
-    			title : 'Back End Developer',
-    			skills : 'Node, MongoDB, Gulp'
-    		}
-    	]
-    },
-    {
-    	link : 'http://www.timeout.com/london/card',
-    	title : 'Timeout',
-    	classname : 'timeout',
-    	roles : [
-    		{
-    			title : 'Front End Developer',
-    			skills : 'Backbone, CSS3, HTML5'
-    		}
-    	]
-    },
-    {
-    	link : 'http://www.tesco.com/direct',
-    	title : 'Tesco Entertainment',
-    	classname : 'tesco',
-    	roles : [
-    		{
-    			title : 'Front End Developer',
-    			skills : 'Backbone, CSS3, HTML5'
-    		}
-    	]
-    },
-    {
-    	link : 'http://onlinelibrary.wiley.com',
-    	title : 'John Wiley and Sons',
-    	classname : 'wiley',
-    	roles : [
-    		{
-    			title : 'Front End Developer',
-    			skills : 'Backbone, CSS3, HTML5'
-    		}
-    	]
-    },
-    {
-    	link : 'http://www.covestor.com',
-    	title : 'Covestor',
-    	classname : 'covestor',
-    	roles : [
-    		{
-    			title : 'Front End Developer',
-    			skills : 'OO Javascript, CSS3, HTML5'
-    		}
-    	]
-    },
-    {
-    	link : 'http://www.shipserv.com',
-    	title : 'ShipServ',
-    	classname : 'shipserv',
-    	roles : [
-    		{
-    			title : 'Front End Developer',
-    			skills : 'OO Javascript, CSS3, HTML5'
-    		}
-    	]
-    }
   ]
 }
