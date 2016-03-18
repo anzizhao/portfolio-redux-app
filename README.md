@@ -2,6 +2,8 @@
 
 A Portfolio example of an application in React and Redux. [Live Example Here](https://anzizhao.github.io)
 
+<img src="http://7xld7r.com1.z0.glb.clouddn.com/portfolio%2Ftodo.png" width="728" />
+
 <img src="http://7xld7r.com1.z0.glb.clouddn.com/portfolio%2Fop2.gif" width="728" />
 
 ## Development Installation

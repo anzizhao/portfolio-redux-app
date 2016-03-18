@@ -19,6 +19,7 @@ class Sidebar extends Component {
   	this.props.toggleSidebar(!this.props.layout.sidebarOpen);
   }
 
+			//<Link to="/services" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">有趣的</Link>
   render() {
 
     return (
@@ -33,7 +34,6 @@ class Sidebar extends Component {
 		    <Link to="/home" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">首页</Link>
 		    <Link to="/todo" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">代办事项</Link>
 		    <Link to="/portfolio" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">简历</Link>
-		    <Link to="/services" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">有趣的</Link>
 		    <Link to="/about" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">关于</Link>
 		  </div >
 
