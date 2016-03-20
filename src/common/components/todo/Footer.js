@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import  Immutable from 'immutable'
 import OriginFileSelect from './originFileSelect';
+import ImuSelectTags from './imuSelectTags';
 
 export default class Footer extends Component {
     style = {
@@ -16,6 +17,23 @@ export default class Footer extends Component {
         }
     };
 
+    handleTagChange(e) {
+        var opts = e.target.selectedOptions
+        if( ! opts || ! opts.length ){
+
+            this.props.actions.changeFilterTags()
+            return 
+        } 
+        // 这个不需要render的
+        var tags = []
+        for(let i=0; i<opts.length; i++) {
+            let item = opts[i]
+            tags.push(
+                {id: item.id, text:item.text }
+            ) 
+        }
+        this.props.actions.changeFilterTags(tags )
+    }
   renderFilter(filter, name) {
     if (filter === this.props.filter) {
       return (
@@ -68,12 +86,6 @@ export default class Footer extends Component {
       </a>
     )
   }
-
-        //{this.renderSort('SORT_IMPORTANCE_UP', '重要up')}
-        //{', '}
-        //{this.renderSort('SORT_URGENCY_UP', '紧急up')}
-        //{', '}
-
   renderSorts() {
     return (
       <p>
@@ -92,18 +104,24 @@ export default class Footer extends Component {
     )
   }
 
+  renderTags() {
+    return (
+      <div  className="footer-tags" >
+        <span>tags: </span>
+        <ImuSelectTags  
+            onChange={ this.handleTagChange.bind(this) } 
+            allTags = { this.props.tags } 
+            selects={ this.props.selectTags }
+        />
+
+      </div>
+    )
+  }
+
   renderFromfile() {
       const { fromfiles } = this.props
       // 选择文件的需求
       const files = [
-          //{id: 0, text:'[全部文件]'},  //default show all item 
-          //{id: 1, text:'[浏览器的]'},  //default show all item 
-          //... fromfiles.map((item, index) => {
-              //return {
-                  //id: index+2,
-                  //text: item.text
-              //} 
-          //})
           ... fromfiles
       ]
       return (
@@ -116,7 +134,6 @@ export default class Footer extends Component {
               />
           </div>
       )
-      //singleSelect = { true }
   }
 
 
@@ -134,6 +151,7 @@ export default class Footer extends Component {
       <div>
         {this.renderFilters()}
         {this.renderSorts()}
+        {this.renderTags()}
         {this.renderFromfile()}
         {this.renderUndo()}
       </div>
@@ -152,6 +170,9 @@ Footer.propTypes = {
   actions: PropTypes.object.isRequired,
   fromfiles: React.PropTypes.instanceOf(Immutable.List),
   selectFiles: React.PropTypes.instanceOf(Immutable.List),
+  
+  selectTags: React.PropTypes.instanceOf(Immutable.List),
+  tags: React.PropTypes.instanceOf(Immutable.List),
 
   sort : PropTypes.oneOf([
     'SORT_ORIGIN',
@@ -167,4 +188,5 @@ Footer.propTypes = {
     'SHOW_COMPLETED',
     'SHOW_ACTIVE'
   ]).isRequired,
+
 }

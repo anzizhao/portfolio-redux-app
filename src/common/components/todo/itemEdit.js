@@ -180,8 +180,13 @@ export default class ItemEdit extends Component {
     }
 
     render() {
-        const { actions, allTags } = this.props
         const todo = this.props.todo.toObject()
+        if ( todo.collapse ) { 
+            return <div></div> 
+        }
+
+        const { actions } = this.props
+        const allTags = this.props.allTags.toArray()
         const style = this.getStyle(todo) 
         const takeRateParam = this.getTakeRateParam() 
         const _tags = allTags.map((item, index) => {
@@ -190,9 +195,6 @@ export default class ItemEdit extends Component {
                 text: item.text
             } 
         })
-        if ( todo.collapse ) { 
-            return <div></div> 
-        }
         return (
             <div >
                 <label>{ this.props.index + 1 } </label>
@@ -228,10 +230,7 @@ ItemEdit.propTypes = {
     index: PropTypes.number.isRequired,
     collapse: PropTypes.bool.isRequired,
     actions: PropTypes.object.isRequired,
-    allTags: PropTypes.arrayOf(PropTypes.shape({
-        id: PropTypes.string.isRequired,
-        text: PropTypes.string.isRequired,
-    })).isRequired
+    allTags : React.PropTypes.instanceOf(Immutable.List),
 }
 
 

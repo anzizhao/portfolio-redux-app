@@ -81,6 +81,9 @@ class App extends Component {
                 selectFiles={ this.props.selectFiles }
                 actions={actions}
 
+                tags={this.props.tags}
+                selectTags={ this.props.selectTags }
+
                 undoDisabled={this.props.undoDisabled}
                 redoDisabled={this.props.redoDisabled} />
         )
@@ -114,6 +117,9 @@ App.propTypes = {
   fromfiles: React.PropTypes.instanceOf(List),
   selectFiles: React.PropTypes.instanceOf(List),
 
+  tags :  React.PropTypes.instanceOf(List),
+  selectTags:  React.PropTypes.instanceOf(List),
+
   sort : PropTypes.oneOf([
                          'SORT_ORIGIN',
                          'SORT_IMPORTANCE_UP',
@@ -128,10 +134,7 @@ App.propTypes = {
                                     'SHOW_COMPLETED',
                                     'SHOW_ACTIVE'
   ]).isRequired,
-  tags: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string.isRequired,
-      text: PropTypes.string.isRequired,
-  }).isRequired).isRequired,
+
   actions: PropTypes.object.isRequired,
   undoDisabled: PropTypes.bool.isRequired,
   mode: PropTypes.number.isRequired,
@@ -147,13 +150,14 @@ function select(state) {
         //redoDisabled: t.todos.future.length === 0,
         undoDisabled: false ,
         redoDisabled: false , 
-        visibleTodos: visibleTodos (t.todos, t.visibilityFilter, t.sort, t.selectFiles ),
         visibilityFilter: t.visibilityFilter,
         sort: t.sort,
         tags: t.tags,
         mode: t.mode,
         selectFiles: t.selectFiles,
+        selectTags: t.selectTags,
         fromfiles: t.fromfiles,
+        visibleTodos: visibleTodos (t.todos, t.visibilityFilter, t.sort, t.selectFiles, t.selectTags ),
         layout : state.layout
     }
 }

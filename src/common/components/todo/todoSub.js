@@ -212,7 +212,7 @@ export default class TodoSubItem extends Component {
                { this.renderText( subIndex, style ) }
                <Tags tags={this.props.tags } subTag={true} /> 
                <div style={style.lastDate } >最后编辑
-                   <span style={style.date }>{lastDate}</span>  
+                   <span> { lastDate }</span>  
                </div>
            </span>
        )

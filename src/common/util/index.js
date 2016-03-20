@@ -56,13 +56,16 @@ function storeTodoState(data) {
 }
 
 function storeTodoTags (data) {
-    return store('todotags', data );
+    return store('tags', data );
 }
 function storeTodoFromfiles (data) {
     return store('fromfiles', data );
 }
 function storeTodoSelectFiles(data) {
     return store('selectFiles', data );
+}
+function storeTodoSelectTags(data) {
+    return store('selectTags', data );
 }
 
 function readFile(file, afterRead){
@@ -111,5 +114,5 @@ module.exports = {
     loadState,  
     parseInput ,
     exportFile, readFile,  
-    storeTodoFromfiles, storeTodoState, storeTodoTags, storeTodoSelectFiles
+    storeTodoFromfiles, storeTodoState, storeTodoTags, storeTodoSelectFiles, storeTodoSelectTags,
 }

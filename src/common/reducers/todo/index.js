@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import undoable, { distinctState } from 'redux-undo'
-var {storeTodoState, storeTodoTags, storeTodoFromfiles, storeTodoSelectFiles,  exportFile } = require('../../util')
+var { storeTodoState, storeTodoTags, storeTodoFromfiles, storeTodoSelectFiles, storeTodoSelectTags, exportFile } = require('../../util')
 
 import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters, EXPORT_TODO, INIT_TODO, DEL_TODO, SAVE_TODO } from '../../actions/todo/actions'
 
@@ -57,56 +57,90 @@ function mode (state = todoActions.todoMode.default, action) {
 function addTagsItem(state, item ){
     //array find not found return undefine 
     let index = state.find((ele, index, arr) => {
-        if ( ele.text === item.text )  {
-            return true
-        }
-        return false
+        return ele.text === item.text
     })
+
     if ( ! index ) {
         let newItem = {
             id: item.text,
             text: item.text 
         }
-        state.push(newItem)
+        return state.push(newItem)
     } 
-
     return state 
 }
 
-function tags (state = [], action) {
+function tags (state = List(), action) {
     let cmds = todoActions
     let newItem, index 
     switch (action.type) {
         case todoActions.INIT_ALL:
-            return storeTodoTags()
-
         case cmds.INIT_TAGS:
-            return action.tags 
+            return List( storeTodoTags() ) 
 
-            
         case todoActions.IMPORT_TODO:
-            // 新加的  跟原来的比较  uuid是否相同  日期更新
             // add array 
             for(let item of action.tags )  {
-                addTagsItem(state,{ text: item.text })
+                state = addTagsItem(state,{ text: item.text })
             }
-            storeTodoState(state);
+            storeTodoState(state.toArray() );
             return state 
 
-            return state;
         case cmds.ADD_TAGS:
             if ( action.tags ) {
                 // add array 
                 for(let item of action.tags )  {
-                    addTagsItem(state,{ text: item.text })
+                    state = addTagsItem(state,{ text: item.text })
                 }
             } else {
                 // add item 
-                addTagsItem(state,{text: action.text} )
+                state = addTagsItem(state,{text: action.text} )
             
             }
             //store tags
-            storeTodoTags(state)           
+            storeTodoState(state.toArray() );
+
+            return state 
+
+        default:
+            return state
+    }
+}
+
+function selectTags (state = List() , action) {
+    let cmds = todoActions
+    let newItem, index 
+    switch (action.type) {
+        case todoActions.INIT_ALL:
+        case cmds.INIT_TAGS:
+            return List( storeTodoSelectTags() ) 
+
+
+        case cmds.CLEAR_ALL_TODO:
+            storeTodoSelectTags([])
+            return List()
+
+        case cmds.ADD_FILTER_TAGS:
+            index =  state.findIndex(tag => tag.text  === action.tag.text )
+            if ( index !== -1 ) {
+                return state 
+            }
+            state = state.push( action.tag )
+            storeTodoSelectTags( state.toArray() )  
+            return state 
+
+        case cmds.DEL_FILTER_TAGS:
+            index =  state.findIndex(tag => tag.text  === action.tag.text )
+            if ( index === -1 ) {
+                return state 
+            }
+            state = state.delete(index)
+            storeTodoSelectTags( state.toArray() )  
+            return state 
+
+        case cmds.CHANGE_FILTER_TAGS:
+            state = List( action.tags )
+            storeTodoSelectTags( state.toArray() )  
             return state 
 
         default:
@@ -303,6 +337,7 @@ export default function todoApp(state = {}, action) {
     // 级reducers 处理
     const combineState =  {
           tags: tags(state.tags, actionb ),
+          selectTags: selectTags(state.selectTags, actionb ),
           fromfiles: fromfiles(  state.fromfiles, actionb ),
           visibilityFilter: visibilityFilter(state.visibilityFilter, actionb),
           sort: sort(state.sort, actionb ),

@@ -77,6 +77,15 @@
     width: 90%;
 }
 
+.imu-select-tag{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    margin-left: 20px;
+    width: 600px;
+    display: inline-block;
+}
+
 .select2-container--default.select2-container--focus .select2-selection--multiple ,
 .select2-container--default .select2-selection--multiple {
     border: none;
@@ -154,4 +163,7 @@
     margin: 5px;
     font-style: italic;
     color: gray;
+}
+.footer-tags {
+    display: inline-block;
 }

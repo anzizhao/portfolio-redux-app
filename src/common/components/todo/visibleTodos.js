@@ -4,7 +4,17 @@ import { eFilename }  from '../../constants'
 
 import {fromJS, Map, List} from 'immutable'
 
+// sort rule:   src file ->  complete status -> metric -> tag -> date -> key word 
+export default function selectTodos(_todos, filter, sort, selectedFiles, selectTags ) { 
+   let todos = selectFile(_todos, selectedFiles) 
+       todos = filterItemStatus(todos, filter )
+       todos = filterMertics (todos, sort )
+       todos = filterTags(todos, selectTags)
+       return todos
+}
 
+
+// src file 
 function selectFile (todos, files) {
     //select file 数组为空, 返回全部
     if ( ! files ||  files.size === 0) {
@@ -35,7 +45,7 @@ function selectFile (todos, files) {
     }
 }
 
-function sortTodos (todos, cmd) {
+function filterMertics (todos, cmd) {
     let cmds = todoActions.sorts   
     switch (cmd) {
         case cmds.SORT_IMPORTANCE_UP:
@@ -71,16 +81,29 @@ function sortTodos (todos, cmd) {
 }
 
 
-export default function selectTodos(_todos, filter, sort, selectedFiles ) { 
-   const todos = selectFile(_todos, selectedFiles) 
+function filterItemStatus (todos, filter) { 
    switch (filter) {
-       default:
-           case VisibilityFilters.SHOW_ALL:
-           return sortTodos( todos, sort)
        case VisibilityFilters.SHOW_COMPLETED:
-           return sortTodos(  todos.filter(todo => todo.get("completed") ) , sort)
+           return   todos.filter(todo => todo.get("completed"))  
        case VisibilityFilters.SHOW_ACTIVE:
-           return sortTodos( todos.filter(todo => !todo.get("completed") ), sort)
+           return  todos.filter(todo => !todo.get("completed") ) 
+
+       case VisibilityFilters.SHOW_ALL:
+       default:
+           return todos
    }
 }
 
+function filterTags (todos, selectTags ) {
+    if(selectTags.size === 0) {
+        return todos 
+    }
+    return todos.filter(todo =>{
+        let result = todo.get("tags").find(tag => {
+            let result = selectTags.find( selTag => selTag.text === tag.text ) 
+            return result ? true: false 
+        })
+        return result ? true: false 
+    })
+
+}

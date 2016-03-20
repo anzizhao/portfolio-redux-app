@@ -35,6 +35,7 @@ export default class TodoText extends Component {
         } else {
             info = todo.process.length || '' 
         }
+       const createDate = new Date(todo.timestamp).toLocaleDateString()
 
         return  ( 
              <span > 
@@ -50,6 +51,9 @@ export default class TodoText extends Component {
                      urgency = {todo.urgency}
                      difficulty={ todo.difficulty}
                  />
+                 <div style={style.lastDate } >
+                     <span >{ createDate }</span>  
+                 </div>
              </span>
         )
     }
@@ -65,6 +69,13 @@ TodoText.propTypes = {
 TodoText.style = {
     listTextSpan: {
         float: 'left',
+    },
+    lastDate: {
+        float: 'right', 
+        fontSize: '12px',
+        fontStyle: 'italic',
+        margin: '18px',
+        color: 'rgba(93, 89, 89, 0.74)'
     },
     processNum:{
         fontSize: '11px',

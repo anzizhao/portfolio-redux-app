@@ -227,10 +227,7 @@ TodoList.propTypes = {
   actions: PropTypes.object.isRequired,
   onTodoClick: PropTypes.func.isRequired,
   onExportClick: PropTypes.func.isRequired,
-  tags: PropTypes.arrayOf(PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    text: PropTypes.string.isRequired,
-  }).isRequired).isRequired,
+  tags: React.PropTypes.instanceOf(Immutable.List),
 
   fromfiles: React.PropTypes.instanceOf(Immutable.List).isRequired,
   mode: PropTypes.number.isRequired,

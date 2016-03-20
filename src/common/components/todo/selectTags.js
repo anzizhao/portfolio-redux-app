@@ -71,7 +71,7 @@ SelectTags.propTypes = {
         text: PropTypes.string.isRequired,
     })).isRequired,
     singleSelect: PropTypes.bool,
-    selectOne: PropTypes.string.isRequired,
+    selectOne: PropTypes.string,
     select: PropTypes.arrayOf(PropTypes.shape({
         id: PropTypes.isRequired,
         text: PropTypes.string.isRequired,
