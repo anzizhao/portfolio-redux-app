@@ -95,11 +95,11 @@ h1, h2, h3, h4, h5, h6 {
   font-weight:bold;
 }
 .masthead-title small {
-  font-size: 75%;
+  font-size: 60%;
   font-weight: 400;
   color: #c0c0c0;
   letter-spacing: 0;
-  margin-left:0.6em;
+  margin-left:0.7em;
 }
 
 @media (max-width: 48em) {

@@ -60,7 +60,7 @@ class Home extends Component {
 
 
 				<div className="skill-item clearfix">
-					<h4>客户端和服务器端开发</h4>
+					<h4>客户端服务器端</h4>
 					<ul>
 						<li><em><b>*</b><b>*</b>C/C++</em></li>
 						<li><em>MFC</em></li>
@@ -101,8 +101,7 @@ class Home extends Component {
 				</div>
 
 				<div className="exclaimation">
-					<em><b>*</b> github上有一些使用上面相关技术的项目 ,可跳到<a href="https://github.com/anzizhao">anzizhao repo</a>查看</em><br/>
-					<em><b>**</b>这个网站是基于xxxx项目, 使用react和redux技术.</em>
+					<em><b>*</b> <a href="https://github.com/anzizhao">我的github仓库</a>记录使用这些技术的项目查看</em><br/>
 				</div>
 
   			</div>
@@ -113,8 +112,8 @@ class Home extends Component {
 				<h2>工作过的公司:</h2>
 
 				<ul className="clients">
-					<li className="goldmans-logo">杭州海康威视数字技术有公司</li>
-					<li className="orange-logo">考拉先生</li>
+					<li className="hikvision-logo">杭州海康威视数字技术有公司</li>
+					<li className="koalac-logo">考拉先生</li>
 				</ul>
 
 			</div>

@@ -1,6 +1,8 @@
 # Portfolio Redux App
 
-A Portfolio example of an isomorphic rendering application in React and Redux. [Live Example Here](http://www.callumrimmer.co.uk)
+A Portfolio example of an application in React and Redux. [Live Example Here](https://anzizhao.github.io)
+
+<img src="http://7xld7r.com1.z0.glb.clouddn.com/portfolio%2Ftodo.png" width="728" />
 
 <img src="http://7xld7r.com1.z0.glb.clouddn.com/portfolio%2Fop2.gif" width="728" />
 
@@ -16,7 +18,7 @@ $ npm start
 Then Visit
 
 ```
-http://localhost:3002
+http://localhost:3000
 ```
 
 ## Releasing to Production
@@ -33,13 +35,9 @@ $ npm run start-prod
 Then Visit
 
 ```
-http://localhost:3002
+http://localhost:3000
 ```
-
-## Other Boilerplate code
-
-[General Redux App (with Undo)](https://github.com/caljrimmer/isomorphic-redux-app)
 
 ## Credit
 
-App template was based on [Lanyon Theme](https://github.com/poole/lanyon) by [mdo](https://github.com/mdo)
+App template was based on [caljrimmer portfolio-redux-app](https://github.com/calirimmer/portfolio-redux-app) 
