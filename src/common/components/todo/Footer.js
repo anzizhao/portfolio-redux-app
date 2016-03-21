@@ -44,18 +44,29 @@ FilterText.propTypes = {
 
 
 export default class Footer extends Component {
+    
     style = {
         showTip : {
             marginRight: '15px' ,
         } ,
         a: {
             fontSize: '15px' ,
+            cursor: 'pointer',
+            color: '#535353',
         } ,
         selectFilter: {
             marginLeft: '10px', 
             fontSize: '15px' ,
+            cursor: 'pointer',
+            color: '#1db7a9',
         }
     };
+
+    constructor(props){
+        super(props);
+        this.onAddSort = this.onAddSort.bind(this)
+        this.onDelSort = this.onDelSort.bind(this)
+    }
 
     handleTagChange(e) {
         var opts = e.target.selectedOptions
@@ -108,38 +119,108 @@ export default class Footer extends Component {
     )
   }
 
-  renderSort (cmd, name) {
-    if ( cmd === this.props.sort ) {
-      return (
-         <span style={this.style.selectFilter }> { name } </span>
-         )
-    }
-
-    return (
-      <a href="#" onClick={e => {
+  onDelSort(e, cmd) {
         e.preventDefault()
-        this.props.onSortChange(cmd)
-      }}
-        style={ this.style.a } 
-      >
-        {name}
-      </a>
-    )
+        this.props.actions.delSort(cmd)
+  }
+
+  onAddSort(e, cmd, desc) {
+        e.preventDefault()
+        this.props.actions.addSort(cmd, desc)
+  }
+
+  renderSort ( type ) {
+    let result = this.props.sort.find( sort => type.cmd=== sort.cmd && type.desc === sort.desc )
+    if ( result ) {
+        return (
+            <a
+                style={this.style.selectFilter }
+                onClick={e => this.onDelSort(e, type.cmd)}
+            > 
+                { type.name  } 
+            </a>
+        )
+    } else {
+        return (
+            <a 
+                onClick={e => this.onAddSort(e, type.cmd, type.desc )}
+                style={ this.style.a } 
+            >
+                { type.name  } 
+            </a>
+        )
+    }
+  }
+        //{this.renderSort('SORT_ORIGIN', '默认')}
+        //{', '}
+  renderSortResult(sorts, relate ){
+      if( sorts.length === 0 ) {
+            return <span></span> 
+      } else {
+          return (
+              <span className="sort-result">
+                  {
+                      sorts.map((sort, index) =>{
+                                let result  
+                                for(let r in relate ) {
+                                    if( relate[r].cmd === sort.cmd && relate[r].desc === sort.desc )  {
+                                        result = relate[r] 
+                                        break
+                                    }
+                                }
+                                if ( ! result ) {
+                                    return <span key={index} ></span> 
+                                }
+                                return (
+                                      <span key={index} >
+                                          { result.name }
+                                          { index <  sorts.length-1 &&  '<- ' }
+                                      </span> 
+                                ) 
+                      }) 
+                  }
+              </span> 
+          ) 
+      } 
   }
   renderSorts() {
+    const sorts = this.props.sort.toArray() 
+    const relate = {
+        importance: {
+                name: '重要',
+                desc: true,
+                cmd: 'SORT_IMPORTANCE',
+        },
+        urgency : {
+                name: '紧急',
+                desc: true,
+                cmd: 'SORT_URGENCY',
+        },
+        difficulty: {
+                name: '困难',
+                desc: true,
+                cmd: 'SORT_DIFFICULTY',
+        },
+        easy: {
+                name: '容易',
+                desc: false,
+                cmd: 'SORT_DIFFICULTY',
+        },
+    }
+
     return (
       <p>
         <span style={this.style.showTip }>排序: </span>
         {' '}
-        {this.renderSort('SORT_ORIGIN', '默认')}
+        {this.renderSort(relate.importance)}
         {', '}
-        {this.renderSort('SORT_IMPORTANCE_DOWN', '重要')}
+        {this.renderSort( relate.urgency )}
         {', '}
-        {this.renderSort('SORT_URGENCY_DOWN', '紧急')}
+        {this.renderSort( relate.difficulty )}
         {', '}
-        {this.renderSort('SORT_DIFFICULTY_DOWN', '困难')}
-        {', '}
-        {this.renderSort('SORT_DIFFICULTY_UP', '容易')}
+        {this.renderSort( relate.easy )}
+
+        { this.renderSortResult(sorts, relate ) }
       </p>
     )
   }
@@ -218,15 +299,16 @@ Footer.propTypes = {
   selectTags: React.PropTypes.instanceOf(Immutable.List),
   tags: React.PropTypes.instanceOf(Immutable.List),
 
-  sort : PropTypes.oneOf([
-    'SORT_ORIGIN',
-     'SORT_IMPORTANCE_UP',
-     'SORT_IMPORTANCE_DOWN',
-    'SORT_URGENCY_UP',
-    'SORT_URGENCY_DOWN',
-     'SORT_DIFFICULTY_UP',
-    'SORT_DIFFICULTY_DOWN'
-  ]).isRequired,
+  sort: React.PropTypes.instanceOf(Immutable.List),
+  //sort : PropTypes.oneOf([
+    //'SORT_ORIGIN',
+     //'SORT_IMPORTANCE_UP',
+     //'SORT_IMPORTANCE_DOWN',
+    //'SORT_URGENCY_UP',
+    //'SORT_URGENCY_DOWN',
+     //'SORT_DIFFICULTY_UP',
+    //'SORT_DIFFICULTY_DOWN'
+  //]).isRequired,
   filter: PropTypes.oneOf([
     'SHOW_ALL',
     'SHOW_COMPLETED',

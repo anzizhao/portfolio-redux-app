@@ -26,11 +26,23 @@ function visibilityFilter(state = SHOW_ALL, action) {
     }
 }
 
-function sort (state = SORT_ORIGIN , action) {
+function sort (state =  List() , action) {
     let cmds = todoActions
+    let result  
     switch (action.type) {
-        case cmds.SET_SORT:
-            return action.cmd 
+        case cmds.ADD_SORT:
+            state = state.map((sort,index)  => {
+                if ( sort.cmd === action.cmd )  {
+                    result = true 
+                    sort.desc = action.desc ?  true: false
+                }
+                return sort 
+            })
+            return result ? state : state.push( {cmd:action.cmd, desc:action.desc ? true: false} )
+
+        case cmds.DEL_SORT:
+            return state.filter ( sort => sort.cmd != action.cmd ) 
+
         default:
             return state
     }

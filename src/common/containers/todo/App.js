@@ -117,18 +117,19 @@ App.propTypes = {
   fromfiles: React.PropTypes.instanceOf(List),
   selectFiles: React.PropTypes.instanceOf(List),
 
+  sort: React.PropTypes.instanceOf(List),
   tags :  React.PropTypes.instanceOf(List),
   selectTags:  React.PropTypes.instanceOf(List),
 
-  sort : PropTypes.oneOf([
-                         'SORT_ORIGIN',
-                         'SORT_IMPORTANCE_UP',
-                         'SORT_IMPORTANCE_DOWN',
-                         'SORT_URGENCY_UP',
-                         'SORT_URGENCY_DOWN',
-                         'SORT_DIFFICULTY_UP',
-                         'SORT_DIFFICULTY_DOWN'
-  ]).isRequired,
+  //sort : PropTypes.oneOf([
+                         //'SORT_ORIGIN',
+                         //'SORT_IMPORTANCE_UP',
+                         //'SORT_IMPORTANCE_DOWN',
+                         //'SORT_URGENCY_UP',
+                         //'SORT_URGENCY_DOWN',
+                         //'SORT_DIFFICULTY_UP',
+                         //'SORT_DIFFICULTY_DOWN'
+  //]).isRequired,
   visibilityFilter: PropTypes.oneOf([
                                     'SHOW_ALL',
                                     'SHOW_COMPLETED',

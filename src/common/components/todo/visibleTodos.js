@@ -48,38 +48,30 @@ function selectFile (todos, files) {
 }
 
 function filterMertics (todos, cmd) {
-    let cmds = todoActions.sorts   
-    switch (cmd) {
-        case cmds.SORT_IMPORTANCE_UP:
-            return todos.sort((a, b)=>{
-                return a.get("importance") - b.get("importance")
-        })
-        case cmds.SORT_IMPORTANCE_DOWN:
-            return todos.sort((a, b)=>{
-                return b.get("importance") - a.get("importance")
-        })
-        case cmds.SORT_URGENCY_UP:
-            return todos.sort((a, b)=>{
-                return a.get("urgency") - b.get("urgency")
-        })
-        case cmds.SORT_URGENCY_DOWN:
-            return todos.sort((a, b)=>{
-                return b.get("urgency") - a.get("urgency")
-        })
-        case cmds.SORT_DIFFICULTY_UP:
-            return todos.sort((a, b)=>{
-                return a.get("difficulty") - b.get("difficulty")
-        })
-        case cmds.SORT_DIFFICULTY_DOWN:
-            return todos.sort((a, b)=>{
-                return b.get("difficulty") - a.get("difficulty")
-        })
-        //cmds.SORT_ORIGIN
-        default: 
-            return todos.sort((a, b)=>{
-                return b.get("id") - a.get("id")
-        })
+    if ( ! cmd || cmd.size === 0 ){
+        return todos
     }
+
+    let cmds = todoActions.sorts   
+    // 生成计算方法 
+    let calExpress = (function(sorts) {
+        return function (todo){
+            return value( sorts[0] )  * 100 + value( sorts[1]) * 10 + value(sorts[2] )
+            function value(sort) {
+                if ( ! sort ){
+                    return 0
+                } 
+                let mertic = cmds[ sort.cmd ]
+                if ( sort.desc ) {
+                    return 10 - todo.get( mertic )
+                } else {
+                    return  todo.get( mertic ) 
+                }
+            }
+        }
+    } ) ( cmd.toArray() )
+    // a-b > 0 升序  
+    return todos.sort((a, b) => calExpress(a) - calExpress(b) )
 }
 
 

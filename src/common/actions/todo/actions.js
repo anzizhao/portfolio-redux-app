@@ -22,6 +22,9 @@ export const TOCHANGE_TODO_FROMFILE= 'TOCHANGE_TODO_FROMFILE'  // 去修改fromf
 
 export const SET_VISIBILITY_FILTER = 'SET_VISIBILITY_FILTER'
 export const SET_SORT = 'SET_SORT'
+export const ADD_SORT = 'ADD_SORT'
+export const DEL_SORT = 'DEL_SORT'
+
 export const SET_SELECT_FILE= 'SET_SELECT_FILE'
 export const ADD_SELECT_FILE= 'ADD_SELECT_FILE'
 export const DEL_SELECT_FILE= 'DEL_SELECT_FILE'
@@ -71,14 +74,12 @@ export const VisibilityFilters = {
   SHOW_ACTIVE: 'SHOW_ACTIVE'
 }
 
+
 export const sorts = {
-    SORT_ORIGIN: 'SORT_ORIGIN',
-    SORT_IMPORTANCE_UP: 'SORT_IMPORTANCE_UP',
-    SORT_IMPORTANCE_DOWN: 'SORT_IMPORTANCE_DOWN',
-    SORT_URGENCY_UP:'SORT_URGENCY_UP',
-    SORT_URGENCY_DOWN: 'SORT_URGENCY_DOWN',
-    SORT_DIFFICULTY_UP: 'SORT_DIFFICULTY_UP',
-    SORT_DIFFICULTY_DOWN :'SORT_DIFFICULTY_DOWN'
+    SORT_ORIGIN: 'origin',
+    SORT_IMPORTANCE: 'importance',
+    SORT_URGENCY:'urgency',
+    SORT_DIFFICULTY: 'difficulty',
 }
 
 export const todoSubItemStatus= {
@@ -108,6 +109,14 @@ export function setVisibilityFilter(filter) {
 
 export function setSort (cmd) {
   return { type: SET_SORT, cmd }
+}
+
+export function addSort (cmd, desc) {
+  return { type: ADD_SORT, cmd, desc }
+}
+
+export function delSort (cmd) {
+    return { type: DEL_SORT, cmd } 
 }
 
 export function setSelectMode () {
