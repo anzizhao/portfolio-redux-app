@@ -18,8 +18,6 @@ import  Immutable from 'immutable'
 var {exportFile, readFile } = require('../../util')
 
 export default class TodoList extends Component {
-
-    
     constructor(props) {
         super(props);
         this.state = {

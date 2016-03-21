@@ -15,7 +15,19 @@ import visibleTodos from '../../components/todo/visibleTodos'
 import  {List} from 'immutable'
 
 
+import FlatButton from 'material-ui/lib/flat-button';
+import FloatingActionButton from 'material-ui/lib/floating-action-button';
+import ContentAdd from 'material-ui/lib/svg-icons/content/add';
+import Dialog from 'material-ui/lib/dialog';
+
 class App extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showOpDlg: false,
+        };
+    }
+
     componentWillMount() {
         //初始化todo 和 tags
         //this.props.dispatch(initTodo());
@@ -88,27 +100,67 @@ class App extends Component {
                 redoDisabled={this.props.redoDisabled} />
         )
     }
-      render() {
+
+    handleClose = () => {
+        this.setState({showOpDlg: false});
+    };
+
+    handleOpen = () => {
+        this.setState({ showOpDlg: true, }) 
+    };
+
+    render() {
+        const style = {
+            floatButton: {
+                position: 'fixed',
+                bottom : '100px',
+                right: '10%',
+            },
+            dialog: {
+                position: 'fixed',
+                bottom : '50px',
+                left: '15%',
+            }
+        }
         const { dispatch, visibleTodos,  actions, tags, mode} = this.props
-        
+
         return (
-          <div>
-            { this.renderAddTodo() }
-            <TodoList
-              todos={visibleTodos}
-              actions={actions}
-              mode={mode}
-              tags={tags}
-              fromfiles={this.props.fromfiles}
-              
-              onExportClick={() => dispatch(exportTodo()) }
-              onTodoClick={id => dispatch(completeTodo(id))} />
+            <div>
+                { this.renderAddTodo() }
+                <TodoList
+                    todos={visibleTodos}
+                    actions={actions}
+                    mode={mode}
+                    tags={tags}
+                    fromfiles={this.props.fromfiles}
 
-            { this.renderFooter() }
+                    onExportClick={() => dispatch(exportTodo()) }
+                    onTodoClick={id => dispatch(completeTodo(id))} 
+                />
 
-          </div>
+                { this.renderFooter() }
+
+                <FloatingActionButton 
+                    secondary={true} 
+                    style={ style.floatButton } 
+                    onClick ={ this.handleOpen  }
+                 >
+                    <ContentAdd />
+                </FloatingActionButton>
+
+                <Dialog
+                    title={ "操作"}
+                    modal={false}
+                    contentStyle={style.dialog }
+                    open={this.state.showOpDlg }
+                    onRequestClose={this.handleClose}
+                >
+                    { this.renderFooter() }
+                </Dialog>
+
+            </div>
         )
-      }
+    }
 }
 
 App.propTypes = {
