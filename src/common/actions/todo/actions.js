@@ -28,6 +28,10 @@ export const DEL_SELECT_FILE= 'DEL_SELECT_FILE'
 
 
 export const EXPORT_SELECT  = 'EXPORT_SELECT'
+export const EXPORT_PAGE = 'EXPORT_PAGE'
+
+export const DEL_PAGE = 'DEL_PAGE ' 
+
 export const DEL_SELECT  = 'DEL_SELECT'
 
 export const SIGN_STAR= 'SIGN_STAR' 
@@ -53,6 +57,13 @@ export const ADD_TAGS ='ADD_TAGS'
 export const ADD_FILTER_TAGS ='ADD_FILTER_TAGS'
 export const DEL_FILTER_TAGS ='DEL_FILTER_TAGS'
 export const CHANGE_FILTER_TAGS ='CHANGE_FILTER_TAGS'
+//footer filter
+export const FILTER_ITEM_TEXT= 'FILTER_ITEM_TEXT' 
+
+
+
+//fromfile 
+export const ADD_FROMFILE ='ADD_FROMFILE' 
 
 export const VisibilityFilters = {
   SHOW_ALL: 'SHOW_ALL',
@@ -122,6 +133,10 @@ export function importTodo (fileJson, fromfile) {
 
 export function clearAllTodo () {
     return { type: CLEAR_ALL_TODO }
+}
+
+export function delPage () {
+    return { type: DEL_PAGE }
 }
 
 let nextTodoId = 0
@@ -231,6 +246,11 @@ export function selectAllTodo ( select  ) {
 export function exportSelect () {
     return { type:  EXPORT_SELECT } 
 }
+
+export function exportPage() {
+    return { type:  EXPORT_PAGE} 
+}
+
 export function delSelect () {
     return { type:  DEL_SELECT } 
 }
@@ -256,6 +276,10 @@ export function toChangeFromfile ( id, show ){
     return { type: TOCHANGE_TODO_FROMFILE, id, show} 
 }
 
+export function addFromfile(  fromfile ){
+    return { type: ADD_FROMFILE, fromfile} 
+}
+
 export function addFilterTags ( tag ){
     return { type: ADD_FILTER_TAGS, tag:{text: tag} } 
 }
@@ -266,5 +290,9 @@ export function delFilterTags ( tags ){
 
 export function changeFilterTags ( tags ){
     return { type: CHANGE_FILTER_TAGS, tags}  
+}
+
+export function filterText ( text ){
+    return { type: FILTER_ITEM_TEXT, text }  
 }
 

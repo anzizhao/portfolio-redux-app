@@ -41,14 +41,15 @@ export default class SelectFromfile extends Component {
 
 
     changeFile(e, id ) {
-        // target options array,  the last ele id is empty '', that means add new value
+        const { actions } =   this.props
         var opts = e.target.selectedOptions
         var ele = opts[0]
         var text = ele.text === eFilename.browser ? '': ele.text  
         this.local.selectFile = text 
-        //actions.changeFromfile(id, this.local.selectFile)
-        //const { actions } =   this.props
-        //actions.changeFromfile(id, text)
+        // when value equal to text , it means new add 
+        if ( ele.value === ele.text ) {
+            actions.addFromfile({text: ele.text } )
+        }
     }
 
     handleSave(id){
@@ -60,20 +61,22 @@ export default class SelectFromfile extends Component {
 
 
     render() {
-        const { actions, files } = this.props
         const todo = this.props.todo.toObject()
+        if ( ! todo.toEditFromfile ) { 
+            return <div></div> 
+        }
+
+        const { actions, files } = this.props
         const style = this.getStyle(todo) 
         const item =  files.find(file => file.text === todo.fromfile )
         const selectId = item ? item.id  : -1
         // 这里是bug的 根源 调试了2个小时  奇怪那里改变了这个
         //const allFiles = files.toArray().filter(item => item.id !== 0 )
         //allFiles[0].text = eFilename.browser
-        const allFiles = files.toJS().filter(item => item.id !== 0 )
+        
+        const allFiles = Array.from( files.toArray().filter((v, index)=> index != 0) )
         allFiles[0].text = eFilename.browser
 
-        if ( ! todo.toEditFromfile ) { 
-            return <div></div> 
-        }
                     //select={ todo.fromfile }
         return (
             <div >

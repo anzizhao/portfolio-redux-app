@@ -157,7 +157,8 @@ function select(state) {
         selectFiles: t.selectFiles,
         selectTags: t.selectTags,
         fromfiles: t.fromfiles,
-        visibleTodos: visibleTodos (t.todos, t.visibilityFilter, t.sort, t.selectFiles, t.selectTags ),
+        filter: t.filter,
+        visibleTodos: visibleTodos (t),
         layout : state.layout
     }
 }

@@ -124,7 +124,7 @@ export default class Todo extends Component {
             subItems.push(<TodoSubItem
                               todoId = { id }
                               key="conclusion" 
-                              index={1} 
+                              index={index} 
                               parentIndex={index+1}
                               {...conclusion } 
                               actions={this.props.actions} /> )

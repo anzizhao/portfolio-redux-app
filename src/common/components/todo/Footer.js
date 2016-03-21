@@ -1,7 +1,47 @@
 import React, { Component, PropTypes } from 'react'
 import  Immutable from 'immutable'
-import OriginFileSelect from './originFileSelect';
+import FooterFromfile from './footerFromfile.js';
 import ImuSelectTags from './imuSelectTags';
+import TextField from 'material-ui/lib/text-field';
+
+
+class FilterText extends Component {
+    handleEnterKeyDown(e) {
+        e.preventDefault()
+        const value =  e.target.value 
+        if ( value ) {
+            const text = value.trim()
+            this.props.actions.filterText(text)
+        } else {
+            // 取消率选
+            this.props.actions.filterText()
+        }
+    }
+    render() {
+        const style ={
+            marginLeft: '20px',
+            width: '600px',
+            background: 'white',
+        }
+        return (
+              <div  className="footer-tags" >
+                <span>内容: </span>
+                <TextField
+                    hintText="输入关键字，支持正则, 按Enter确认"
+                    style={style}
+                    onEnterKeyDown = {(e) => this.handleEnterKeyDown (e) }
+                />
+              </div>
+        )
+    }
+}
+
+FilterText.propTypes = {
+    actions: PropTypes.object.isRequired,
+}
+
+
+
 
 export default class Footer extends Component {
     style = {
@@ -107,7 +147,7 @@ export default class Footer extends Component {
   renderTags() {
     return (
       <div  className="footer-tags" >
-        <span>tags: </span>
+        <span>标签: </span>
         <ImuSelectTags  
             onChange={ this.handleTagChange.bind(this) } 
             allTags = { this.props.tags } 
@@ -127,7 +167,7 @@ export default class Footer extends Component {
       return (
           <div>
               <span style={this.style.showTip }>源文件: </span>
-              <OriginFileSelect  
+              <FooterFromfile
                   files={ this.props.fromfiles} 
                   selects={ this.props.selectFiles }
                   actions={ this.props.actions }
@@ -151,6 +191,10 @@ export default class Footer extends Component {
       <div>
         {this.renderFilters()}
         {this.renderSorts()}
+        <FilterText 
+            actions={ this.props.actions } 
+        />
+
         {this.renderTags()}
         {this.renderFromfile()}
         {this.renderUndo()}

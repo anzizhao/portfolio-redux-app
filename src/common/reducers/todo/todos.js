@@ -5,7 +5,7 @@ var {storeTodoState, storeTodoTags, storeTodoFromfiles, storeTodoSelectFiles,  e
 import { ADD_TODO, COMPLETE_TODO, SET_VISIBILITY_FILTER, VisibilityFilters, EXPORT_TODO, INIT_TODO, DEL_TODO, SAVE_TODO } from '../../actions/todo/actions'
 
 import * as todoActions  from '../../actions/todo/actions'
-import visibleTodos from '../../components/todo/visibleTodos'
+import {_selectTodos } from '../../components/todo/visibleTodos'
 
 import { eFilename }  from '../../constants'
             
@@ -72,6 +72,8 @@ function _setTodo(state, action, key, fn_value) {
 export function todos(state = List(), action) {
     let db    
     let tmp
+    let isDelSelect 
+
     switch (action.type) {
         case todoActions.INIT_ALL:
         case todoActions.INIT_TODO:
@@ -182,18 +184,22 @@ export function todos(state = List(), action) {
             return db;
 
         case todoActions.DEL_SELECT:
+            isDelSelect = true
+        case todoActions.DEL_PAGE:
             let t  = action 
             // 找出准备删除项
-            tmp  = visibleTodos (state, t.visibilityFilter, t.sort, t.selectFile )
-                            .filter(item =>{
+            tmp  = _selectTodos (state, t.visibilityFilter, t.sort, t.selectFiles, t.selectTags, t.filter)
+            if ( isDelSelect ) {
+                tmp =  tmp.filter(item =>{
                                 return  item.get("select")
-                            })
+                       })
+            }
 
             // 删除选择的项
             db = state.filter(t =>{
                 let result =  tmp.find(dt => {
                     return dt.get("id")  === t.get("id") 
-                })
+                }) 
                 return result ? false : true 
             })
 
