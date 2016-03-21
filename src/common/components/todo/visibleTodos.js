@@ -49,7 +49,8 @@ function selectFile (todos, files) {
 
 function filterMertics (todos, cmd) {
     if ( ! cmd || cmd.size === 0 ){
-        return todos
+        //默认反向显示
+        return todos.reverse()
     }
 
     let cmds = todoActions.sorts   
