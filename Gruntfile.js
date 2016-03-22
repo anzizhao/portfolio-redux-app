@@ -21,12 +21,12 @@ module.exports  = function(grunt) {
             
         },
         copy_mate: {
-            ghPages: {
+            mainPage: {
                 options: {
                     type: "recursive"
                 },
-                src: "_site/",
-                destDir: '../FarmPrivateKitchen_gh-pages/'
+                src: "dist/",
+                destDir: "../anzizhao.github.io" 
             },
         },
 
@@ -158,6 +158,7 @@ module.exports  = function(grunt) {
                                             'gitadd:profile',
                                             'gitcommit:profile',
                                             'run:tag',
+                                            'copy_mate:mainPage',   // 拷贝dist目录
                                             'gitadd:mainPage',
                                             'gitcommit:mainPage',
                                             'gitpush:mainPage'];
