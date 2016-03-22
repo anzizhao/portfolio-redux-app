@@ -25,8 +25,8 @@ module.exports  = function(grunt) {
                 options: {
                     type: "recursive"
                 },
-                src: "dist/",
-                destDir: "../anzizhao.github.io" 
+                src: "dist",
+                destDir: "../anzizhao.github.io/dist" 
             },
         },
 
