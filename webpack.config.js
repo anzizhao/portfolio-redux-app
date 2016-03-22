@@ -66,8 +66,9 @@ if (process.env.NODE_ENV === 'production') {
         app:  [
             'webpack-dev-server/client?http://localhost:3000',
             'webpack/hot/only-dev-server',
-            './src/client',
+            './src/client/index.js',
         ],
+        //todo: ['./src/common/containers/todo/App.js']
     } ,
     plugins : [
         new CommonsChunkPlugin("commons.chunk.js"),

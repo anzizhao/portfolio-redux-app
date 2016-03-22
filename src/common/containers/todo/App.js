@@ -224,3 +224,4 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(select, mapDispatchToProps)(App)
+module.exports = connect(select, mapDispatchToProps)(App)

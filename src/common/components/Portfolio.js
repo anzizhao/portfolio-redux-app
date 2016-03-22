@@ -39,3 +39,4 @@ class Portfolio extends Component {
 }
 
 export default Portfolio;
+module.exports = Portfolio;
