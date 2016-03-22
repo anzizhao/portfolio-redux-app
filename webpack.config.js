@@ -2,11 +2,12 @@ var path = require('path');
 var webpack = require('webpack');
 var merge = require('merge');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var CommonsChunkPlugin = require("webpack/lib/optimize/CommonsChunkPlugin");
 
 var webpackConfig = {
   output: {
     path: path.join(__dirname, 'dist'),
-    filename: 'bundle.js',
+    filename: '[name]bundle.js',
     publicPath: '/dist/'
   },
   externals: {
@@ -20,9 +21,9 @@ var webpackConfig = {
 if (process.env.NODE_ENV === 'production') {
   webpackConfig = merge(webpackConfig,{
     devtool: "source-map",
-    entry : [
-      './src/client/index.js'
-    ],
+    entry : {
+        app: './src/client',
+    },
     module: {
       loaders: [
       {test: /\.js$/, loaders: ['react-hot', 'babel'], include: path.join(__dirname, 'src')},
@@ -39,6 +40,7 @@ if (process.env.NODE_ENV === 'production') {
           NODE_ENV: JSON.stringify('production')
         }
       }),
+      new CommonsChunkPlugin("commons.chunk.js"),
       new webpack.HotModuleReplacementPlugin(),
       new webpack.optimize.OccurenceOrderPlugin(),
       new ExtractTextPlugin("app.css"),
@@ -60,12 +62,15 @@ if (process.env.NODE_ENV === 'production') {
       },
       { test: /\.css$/, loader: 'style-loader!css-loader' }
     ]},
-    entry : [
-        'webpack-dev-server/client?http://localhost:3000',
-        'webpack/hot/only-dev-server',
-        './src/client/index.js'
-    ],
+    entry :{
+        app:  [
+            'webpack-dev-server/client?http://localhost:3000',
+            'webpack/hot/only-dev-server',
+            './src/client',
+        ],
+    } ,
     plugins : [
+        new CommonsChunkPlugin("commons.chunk.js"),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.NoErrorsPlugin()

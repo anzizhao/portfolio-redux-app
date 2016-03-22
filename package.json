@@ -52,6 +52,7 @@
     "babel-preset-stage-0": "~6.3.13",
     "babel-preset-stage-1": "~6.3.13",
     "babel-preset-stage-3": "~6.3.13",
+    "bundle-loader": "^0.5.4",
     "css-loader": "^0.9.0",
     "extract-text-webpack-plugin": "^0.8.2",
     "file-loader": "0.8.5",
