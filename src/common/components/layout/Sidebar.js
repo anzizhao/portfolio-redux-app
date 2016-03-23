@@ -10,44 +10,45 @@ import classNames from 'classnames';
 class Sidebar extends Component {
 
 
-  constructor(props){
-	super(props);
-	this.eventCloseSidebar = this.eventCloseSidebar.bind(this)
-  }
+    constructor(props){
+        super(props);
+        this.eventCloseSidebar = this.eventCloseSidebar.bind(this)
+    }
 
-  eventCloseSidebar (e) {
-  	this.props.toggleSidebar(!this.props.layout.sidebarOpen);
-  }
+    eventCloseSidebar (e) {
+        this.props.toggleSidebar(!this.props.layout.sidebarOpen);
+    }
 
-			//<Link to="/services" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">有趣的</Link>
-  render() {
+    //<Link to="/services" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">有趣的</Link>
+    render() {
 
-    return (
+        return (
 
-    	<div className="sidebar">
+            <div className="sidebar">
 
-		  <div className="sidebar-item sidebar-footer">
+                <div className="sidebar-item sidebar-footer">
 
-		  </div>
+                </div>
 
-		  <div className="sidebar-item  sidebar-nav">
-		    <Link to="/home" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">首页</Link>
-		    <Link to="/todo" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">代办事项</Link>
-		    <Link to="/portfolio" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">简历</Link>
-		    <Link to="/about" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">关于</Link>
-		  </div >
+                <div className="sidebar-item  sidebar-nav">
+                    <Link to="/home" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">首页</Link>
+                    <Link to="/todo" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">代办事项</Link>
+                    <Link to="/mindmap" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">思维导图</Link>
+                    <Link to="/portfolio" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">简历</Link>
+                    <Link to="/about" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">关于</Link>
+                </div >
 
-		  <div className="sidebar-item sidebar-footer">
-		    <p>
-				Visit <a href="https://github.com/anzizhao">my git repo </a><br/>
-				Visit <a href="mailto:#">anzizhao@126.com</a><br/>
-		    </p>
+                <div className="sidebar-item sidebar-footer">
+                    <p>
+                        Visit <a href="https://github.com/anzizhao">my git repo </a><br/>
+                        Visit <a href="mailto:#">anzizhao@126.com</a><br/>
+                    </p>
 
-		  </div>
+                </div>
 
-		</div>
-    );
-  }
+            </div>
+        );
+    }
 }
 
 export default Sidebar;

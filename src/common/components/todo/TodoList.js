@@ -80,7 +80,8 @@ export default class TodoList extends Component {
                     <FlatButton label=  { butLable }
                         style ={style.selectBut } 
                         onClick={e => actions.toggleSelectMode() }
-                        primary={true}  />
+                        primary={true}  
+                    />
                 </div>
                 {
                     this._selectMode() 

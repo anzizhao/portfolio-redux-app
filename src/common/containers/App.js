@@ -18,57 +18,56 @@ import ThemeDecorator from 'material-ui/lib/styles/theme-decorator';
 //@ThemeDecorator(ThemeManager.getMuiTheme(DarkRawTheme))
 
 class App extends Component {
+    constructor(props){
+        super(props)
+        this.eventToggleSidebar = this.eventToggleSidebar.bind(this)
+    }
 
-  constructor(props){
-    super(props);
-    this.eventToggleSidebar = this.eventToggleSidebar.bind(this)
-  }
+    static childContextTypes = {
+        muiTheme: React.PropTypes.object
+    };
 
-  static childContextTypes = {
-      muiTheme: React.PropTypes.object
-  };
+    getChildContext() {
+        return {
+            muiTheme: ThemeManager.getMuiTheme(LightRawTheme)
+        };
+    }
 
-  getChildContext() {
-      return {
-          muiTheme: ThemeManager.getMuiTheme(LightRawTheme)
-      };
-  }
-  
-  eventToggleSidebar(e) {
-    e.preventDefault();
-    this.props.toggleSidebar(!this.props.layout.sidebarOpen);
-  }
+    eventToggleSidebar(e) {
+        e.preventDefault();
+        this.props.toggleSidebar(!this.props.layout.sidebarOpen);
+    }
 
-  render() {
+    render() {
 
-    const { layout, toggleSidebar } = this.props;
-    const { sidebarOpen } = layout;
-    const layoutClass = classNames({open : sidebarOpen});
+        const { layout, toggleSidebar } = this.props;
+        const { sidebarOpen } = layout;
+        const layoutClass = classNames({open : sidebarOpen});
 
-    return (
-      <div className={layoutClass}>
-        <Sidebar layout={layout} toggleSidebar={toggleSidebar} />
-  	    <div className="wrap">
-          <Header />
-          <div className="container content">
-            {!this.props.children && <Home layout={layout} toggleSidebar={toggleSidebar} />}
-            {this.props.children}
-          </div>
-        </div>
-        <label className="sidebar-toggle" onClick={this.eventToggleSidebar}></label>
-      </div>
-    );
-  }
+        return (
+            <div className={layoutClass}>
+                <Sidebar layout={layout} toggleSidebar={toggleSidebar} />
+                <div className="wrap">
+                    <Header />
+                    <div className="container content">
+                        {!this.props.children && <Home layout={layout} toggleSidebar={toggleSidebar} />}
+                        {this.props.children}
+                    </div>
+                </div>
+                <label className="sidebar-toggle" onClick={this.eventToggleSidebar}></label>
+            </div>
+        );
+    }
 }
 
 function mapStateToProps(state) {
-  return {
-    layout : state.layout
-  };
+    return {
+        layout : state.layout
+    };
 }
 
 function mapDispatchToProps(dispatch) {
-  return bindActionCreators(LayoutActions,dispatch);
+    return bindActionCreators(LayoutActions,dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
