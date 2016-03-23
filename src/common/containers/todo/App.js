@@ -32,7 +32,8 @@ class App extends Component {
         //初始化todo 和 tags
         //this.props.dispatch(initTodo());
         //this.props.dispatch(initTags());
-        this.props.dispatch(initAll());
+        //this.props.dispatch(initAll());
+        this.props.actions.initAll()
     }
     _selectMode(){
         return this.props.mode ===   todoActions.todoMode.select
@@ -52,7 +53,7 @@ class App extends Component {
         // target options array,  the last ele id is empty '', that means add new value
         var opts = e.target.selectedOptions
         //if( ! opts || ! opts.length ){
-            //return 
+        //return 
         //} 
         var files = []
         for(let i=0; i<opts.length; i++) {
@@ -69,10 +70,23 @@ class App extends Component {
         //var ele = opts[0]
         //var text = ''
         //if ( ele.index !== 0) {
-            //text = ele.text 
+        //text = ele.text 
         //}
         //this.props.actions.selectFile(text)
     }
+
+    onFilterChange = ( filter ) => {
+        this.props.actions.setVisibilityFilter(filter)
+    };
+    onSortChange = ( sort ) => {
+        this.props.actions.setSort( sort )
+    };
+    onUndo = ( ) => {
+        dispatch(ActionCreators.undo() )
+    };
+    onRedo = ( ) => {
+        dispatch(ActionCreators.redo() )
+    };
 
     renderFooter(){
         if ( this._selectMode() ) {
@@ -83,11 +97,11 @@ class App extends Component {
             <Footer
                 filter={visibilityFilter}
                 sort={ sort } 
-                onFilterChange={nextFilter => dispatch(setVisibilityFilter(nextFilter))}
-                onSortChange={nextSort => actions.setSort(nextSort) }
+                onFilterChange={ this.onFilterChange }
+                onSortChange={ this.onSortChange }
 
-                onUndo={() => dispatch(ActionCreators.undo())}
-                onRedo={() => dispatch(ActionCreators.redo())}
+                onUndo={ this.onUndo }
+                onRedo={ this.onRedo }
 
                 fromfiles={this.props.fromfiles}
                 selectFiles={ this.props.selectFiles }
@@ -97,7 +111,8 @@ class App extends Component {
                 selectTags={ this.props.selectTags }
 
                 undoDisabled={this.props.undoDisabled}
-                redoDisabled={this.props.redoDisabled} />
+                redoDisabled={this.props.redoDisabled} 
+            />
         )
     }
 
@@ -107,6 +122,13 @@ class App extends Component {
 
     handleOpen = () => {
         this.setState({ showOpDlg: true, }) 
+    };
+
+    onExportClick = () => {
+        this.actions.exportTodo()        
+    };
+    onTodoClick = (id) => {
+        this.actions.completeTodo (id)        
     };
 
     render() {
@@ -133,66 +155,65 @@ class App extends Component {
                     mode={mode}
                     tags={tags}
                     fromfiles={this.props.fromfiles}
-
-                    onExportClick={() => dispatch(exportTodo()) }
-                    onTodoClick={id => dispatch(completeTodo(id))} 
+                    onExportClick={ this.onExportClick }
+                    onTodoClick={ this.onTodoClick } 
                 />
 
+            { this.renderFooter() }
+
+            <FloatingActionButton 
+                secondary 
+                style={ style.floatButton } 
+                onClick ={ this.handleOpen  }
+            >
+                <ContentAdd />
+            </FloatingActionButton>
+
+            <Dialog
+                title={ "操作"}
+                modal={false}
+                contentStyle={style.dialog }
+                open={this.state.showOpDlg }
+                onRequestClose={this.handleClose}
+            >
                 { this.renderFooter() }
+            </Dialog>
 
-                <FloatingActionButton 
-                    secondary={true} 
-                    style={ style.floatButton } 
-                    onClick ={ this.handleOpen  }
-                 >
-                    <ContentAdd />
-                </FloatingActionButton>
-
-                <Dialog
-                    title={ "操作"}
-                    modal={false}
-                    contentStyle={style.dialog }
-                    open={this.state.showOpDlg }
-                    onRequestClose={this.handleClose}
-                >
-                    { this.renderFooter() }
-                </Dialog>
-
-            </div>
+        </div>
         )
     }
 }
 
 App.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  visibleTodos: React.PropTypes.instanceOf(List),
-  fromfiles: React.PropTypes.instanceOf(List),
-  selectFiles: React.PropTypes.instanceOf(List),
+    dispatch: PropTypes.func.isRequired,
+    visibleTodos: React.PropTypes.instanceOf(List),
+    fromfiles: React.PropTypes.instanceOf(List),
+    selectFiles: React.PropTypes.instanceOf(List),
 
-  sort: React.PropTypes.instanceOf(List),
-  tags :  React.PropTypes.instanceOf(List),
-  selectTags:  React.PropTypes.instanceOf(List),
+    sort: React.PropTypes.instanceOf(List),
+    tags :  React.PropTypes.instanceOf(List),
+    selectTags:  React.PropTypes.instanceOf(List),
 
-  //sort : PropTypes.oneOf([
-                         //'SORT_ORIGIN',
-                         //'SORT_IMPORTANCE_UP',
-                         //'SORT_IMPORTANCE_DOWN',
-                         //'SORT_URGENCY_UP',
-                         //'SORT_URGENCY_DOWN',
-                         //'SORT_DIFFICULTY_UP',
-                         //'SORT_DIFFICULTY_DOWN'
-  //]).isRequired,
-  visibilityFilter: PropTypes.oneOf([
-                                    'SHOW_ALL',
-                                    'SHOW_COMPLETED',
-                                    'SHOW_ACTIVE'
-  ]).isRequired,
+    //sort : PropTypes.oneOf([
+    //'SORT_ORIGIN',
+    //'SORT_IMPORTANCE_UP',
+    //'SORT_IMPORTANCE_DOWN',
+    //'SORT_URGENCY_UP',
+    //'SORT_URGENCY_DOWN',
+    //'SORT_DIFFICULTY_UP',
+    //'SORT_DIFFICULTY_DOWN'
+    //]).isRequired,
+    visibilityFilter: PropTypes.oneOf([
+        'SHOW_ALL',
+        'SHOW_COMPLETED',
+        'SHOW_ACTIVE'
+    ]).isRequired,
 
-  actions: PropTypes.object.isRequired,
-  undoDisabled: PropTypes.bool.isRequired,
-  mode: PropTypes.number.isRequired,
+    actions: PropTypes.object.isRequired,
+    undoDisabled: PropTypes.bool.isRequired,
+    mode: PropTypes.number.isRequired,
 
-  redoDisabled: PropTypes.bool.isRequired
+    redoDisabled: PropTypes.bool.isRequired
 }
 
 
@@ -217,10 +238,10 @@ function select(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-  return {
-      dispatch,
-      actions: bindActionCreators(todoActions, dispatch)
-  }
+    return {
+        dispatch,
+        actions: bindActionCreators(todoActions, dispatch)
+    }
 }
 
 export default connect(select, mapDispatchToProps)(App)
