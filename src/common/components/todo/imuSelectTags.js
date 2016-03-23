@@ -24,9 +24,9 @@ export default class ImuSelectTags extends Component {
             return { text:tag.text, id:index } 
         })
         let options = {
-                placeholder: '选择标签',
-                tags: false,
-            }
+            placeholder: '选择标签',
+            tags: false,
+        }
         let _select, _tags, arr    
         _select  = []
         selects.forEach(item => {
@@ -37,17 +37,17 @@ export default class ImuSelectTags extends Component {
         })
 
         return (
-                <div className="imu-select-tag">
-                    <Select2
-                        style={style.selectTag}
-                        multiple =  {  true } 
-                        defaultValue={ _select }
-                        data={ allTags }
-                        onChange={ onChange }
-                        options={options}
-                   />
-                </div>
-)
+            <div className="imu-select-tag">
+                <Select2
+                    style={style.selectTag}
+                    multiple =  {  true } 
+                    defaultValue={ _select }
+                    data={ allTags }
+                    onChange={ onChange }
+                    options={options}
+                />
+            </div>
+        )
     }
 }
 
