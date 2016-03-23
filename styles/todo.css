@@ -164,6 +164,9 @@
     font-style: italic;
     color: gray;
 }
+.footer {
+    margin-top: 20px;
+}
 .footer-tags {
     display: inline-block;
     margin-top: 20px;
