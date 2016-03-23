@@ -68,9 +68,9 @@ class MindMap extends Component {
 
     create = () => {
         //var options = {
-            //container:'jsmind_container',
-            //theme:'default',
-            //editable:true
+        //container:'jsmind_container',
+        //theme:'default',
+        //editable:true
         //}
         var newMind = {
             "meta":{
@@ -170,10 +170,15 @@ class MindMap extends Component {
                         label=  { "导出"}
                         onClick={  this.export }
                     />
-
-                <input type="file" id="file_input"  style={{ display: 'none'}} />
-            </Paper>
-        </div>
+                    <Snackbar
+                        open={this.state.open}
+                        message="Event added to your calendar"
+                        autoHideDuration={4000}
+                        onRequestClose={this.handleRequestClose}
+                    />
+                    <input type="file" id="file_input"  style={{ display: 'none'}} />
+                </Paper>
+            </div>
 
         );
     }
@@ -184,15 +189,15 @@ MindMap.style =  {
         display: 'inline-block',
     },
     container : {
-        width: '1000px',
-        height: '600px',
-        marginLeft: '-200px',
+        width: '1300px',
+        height: '1600px',
+        marginLeft: '-300px',
         border: 'solid 1px #ccc',
         background:  '#f4f4f4',
         display: 'inline-block',
     },
     paper: {
-        right: '15%',
+        right: '50px',
         width:  '100px',
         margin: '10px',
         position: 'fixed',
