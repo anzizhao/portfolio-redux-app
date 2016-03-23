@@ -22,6 +22,45 @@ export default class TodoSubItem extends Component {
     state = {
         itemText: '',
     };
+    constructor(props){
+        super(props) 
+    }
+
+    componentDidMount () {
+        const props = this.props 
+        if( this.isEditStatus(props.status) ) {
+            const ele = ReactDOM.findDOMNode(this._input)
+            ele.getElementsByTagName('textarea')[1].focus()
+        }
+    }
+
+    componentDidUpdate() {
+        const props = this.props 
+        if( this.isEditStatus(props.status) ) {
+            const ele = ReactDOM.findDOMNode(this._input)
+            ele.getElementsByTagName('textarea')[1].focus()
+        }
+    }
+
+    shouldComponentUpdate (nProps, nState) {
+        //if (Immutable.is(nProps.todo, this.props.todo ) && nProps.index === this.props.index && nProps.status === this.props.status && nProps.keyPoint === this.props.keyPoint )  {
+        if (nProps.index === this.props.index && nProps.status === this.props.status && nProps.keyPoint === this.props.keyPoint )  {
+            //这个组件有自己的状态的 ,状态相同时候  不更新   应该将接受外面变量的跟自己有状态变化分开
+            if ( nState.itemText === this.state.itemText ) {
+                return false 
+            }
+        }
+        return true  
+    }
+
+    //这样些 就可以不bind this
+    handleKeyPoint = (e) => {
+        e.stopPropagation()
+        const {todoId, id, actions}  = this.props
+        const keyPoint = this.props.keyPoint || false 
+        actions.todoSubProcessKey(todoId, id, ! keyPoint)
+    };
+
     handleChangeItem(e) {
         let text = e.target.value
         this.setState({
@@ -88,6 +127,7 @@ export default class TodoSubItem extends Component {
     }
 
     getStyle (){
+        const { keyPoint } = this.props
         const style =  this.constructor.style
         const dStyle = {
             editTodo: {
@@ -96,47 +136,17 @@ export default class TodoSubItem extends Component {
             listItem: {
                 display: this.isShowStatus() ?  'block' : 'none',
             },
+            iconReply: {
+                color:  keyPoint ? 'rgba(239, 165, 60, 0.87)' : 'rgba(128, 128, 128, 0.24)',
+            },
+
         }
         return Object.assign({}, style, dStyle) 
     } 
-    componentDidMount () {
-        const props = this.props 
-        if( this.isEditStatus(props.status) ) {
-            const ele = ReactDOM.findDOMNode(this._input)
-            ele.getElementsByTagName('textarea')[1].focus()
-        }
-    }
-
-    componentDidUpdate() {
-        const props = this.props 
-        if( this.isEditStatus(props.status) ) {
-            const ele = ReactDOM.findDOMNode(this._input)
-            ele.getElementsByTagName('textarea')[1].focus()
-        }
-    }
-    //componentWillReceiveProps() {
-    //const props = this.props 
-    //if( this.isEditStatus(props.status) ) {
-    //const ele = ReactDOM.findDOMNode(this._input)
-    //ele.getElementsByTagName('textarea')[1].focus()
-    //}
-    //}
-    //
-    //
-    shouldComponentUpdate (nProps, nState) {
-        if (Immutable.is(nProps.todo, this.props.todo ) && nProps.index === this.props.index && nProps.status === this.props.status )  {
-            //这个组件有自己的状态的 ,状态相同时候  不更新   应该将接受外面变量的跟自己有状态变化分开
-            if ( nState.itemText === this.state.itemText ) {
-                return false 
-            }
-        }
-        return true  
-    }
 
     renderText(subIndex,  style){
         let indexView, atView, beforeATagView ,
             ATagView, afterATagView 
-
         let atSubProcess = /@[0-9\\.]*/ 
         let match , at  
 
@@ -196,7 +206,12 @@ export default class TodoSubItem extends Component {
                            /> )
        let leftIcon 
        if ( this.props.type === todoSubItemType.process ) {
-           leftIcon  = <Icon size="lg" name="reply" style={style.iconReply} />
+           leftIcon  = <Icon 
+                           size="lg" 
+                           name="key" 
+                           onClick={ this.handleKeyPoint }
+                           style={style.iconReply} 
+                       />
        } else {
            leftIcon  = <Icon size="lg" name="tag" style={style.iconTag} />
        }
@@ -221,9 +236,10 @@ export default class TodoSubItem extends Component {
                    <ListItem 
                        primaryText={ listText } 
                        style={ style.listItem } 
-                       rightIconButton={ rightIcon }
-                       leftIcon={ leftIcon }
+                       rightIconButton ={ rightIcon }
+                       leftIcon ={ leftIcon }
                        onDoubleClick={ this.handleClickTextItem.bind(this) }
+                       disabled={true}
                    />
                    <div style={style.editTodo } >
                        <label

@@ -6,7 +6,8 @@ import * as todoActions  from '../../actions/todo/actions'
 import  Immutable from 'immutable'
 
 import ListItem from 'material-ui/lib/lists/list-item';
-import TodoItemList from './todoItemList';
+//import TodoItemList from './todoItemList';
+//
 import ItemEdit from './itemEdit';
 import SelectFromfile from './selectFromfile';
 
@@ -14,7 +15,7 @@ import TodoText from './todoText';
 import TodoMenu from './TodoMenu';
 import SubSecondaryText from './subSecondaryText';
 import TodoSubBut from './todoSubBut';
-import TodoSubItem from './todoSub';
+import TodoSubItem from './todoSubItem';
 
 
 import Checkbox from 'material-ui/lib/checkbox';
@@ -125,7 +126,7 @@ export default class Todo extends Component {
                               todoId = { id }
                               key="conclusion" 
                               index={index} 
-                              parentIndex={index+1}
+                              parentIndex={this.props.index+1}
                               {...conclusion } 
                               actions={this.props.actions} /> )
         }

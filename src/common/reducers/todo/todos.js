@@ -243,6 +243,7 @@ export function todos(state = List(), action) {
                     lastTime: Date.now(),
                     type: todoActions.todoSubItemType.process,  // 0 progress 1 conclusion  
                     status: todoActions.todoSubItemStatus.edit, // 0 show  1 edit 
+                    keyPoint: false,    //false not key process, true key
                     aTag: null,
             }
             // find the max id  
@@ -301,6 +302,19 @@ export function todos(state = List(), action) {
                 })
                 let selItem = process[index]
                 selItem.status = todoActions.todoSubItemStatus.edit
+
+                return  [ ...process ] 
+        })
+
+        case todoActions.TODO_SUB_PROCESS_KEY:
+            return _setTodo(state, action, "process", (todo)=> {
+                let process = todo.get("process")
+                let index = process.findIndex((ele ) => {
+
+                    return  ele.id === action.processId   
+                })
+                let selItem = process[index]
+                selItem.keyPoint =  action.keyPoint 
 
                 return  [ ...process ] 
         })
