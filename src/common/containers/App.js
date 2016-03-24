@@ -18,20 +18,39 @@ import ThemeDecorator from 'material-ui/lib/styles/theme-decorator';
 //@ThemeDecorator(ThemeManager.getMuiTheme(DarkRawTheme))
 
 class App extends Component {
+    static childContextTypes = {
+        muiTheme: React.PropTypes.object
+    };
+
     constructor(props){
         super(props)
         this.eventToggleSidebar = this.eventToggleSidebar.bind(this)
     }
-
-    static childContextTypes = {
-        muiTheme: React.PropTypes.object
-    };
 
     getChildContext() {
         return {
             muiTheme: ThemeManager.getMuiTheme(LightRawTheme)
         };
     }
+
+    componentWillMount () {
+        let doc = document
+        let win = window 
+        let resizeEvt = 'orientationchange' in window ? 'orientationchange' : 'resize'
+        let recalc = function () {
+            let docEl = doc.documentElement
+            let clientWidth = docEl.clientWidth;
+            if ( ! clientWidth ){
+                return  
+            } 
+            let htmlRootSize = 25
+            let referenceWidth = 1660 
+            docEl.style.fontSize = htmlRootSize  * (clientWidth / referenceWidth ) + 'px';
+        }
+
+        recalc()
+    }
+
 
     eventToggleSidebar(e) {
         e.preventDefault();

@@ -1968,20 +1968,21 @@
             this.e_panel = $c('div');
             this.e_canvas = $c('canvas');
             this.e_nodes = $c('jmnodes');
-            this.e_editor = $c('input');
+            //this.e_editor = $c('input');
+            this.e_editor = $c('textarea');
 
             this.e_panel.className = 'jsmind-inner';
             this.e_panel.appendChild(this.e_canvas);
             this.e_panel.appendChild(this.e_nodes);
 
             this.e_editor.className = 'jsmind-editor';
-            this.e_editor.type = 'text';
+            //this.e_editor.type = 'text';
 
             var v = this;
-            jm.util.dom.add_event(this.e_editor,'keydown',function(e){
-                var evt = e || event;
-                if(evt.keyCode == 13){v.edit_node_end();evt.stopPropagation();}
-            });
+            //jm.util.dom.add_event(this.e_editor,'keydown',function(e){
+                //var evt = e || event;
+                //if(evt.keyCode == 13){v.edit_node_end();evt.stopPropagation();}
+            //});
             jm.util.dom.add_event(this.e_editor,'blur',function(e){
                 v.edit_node_end();
             });
@@ -2169,12 +2170,18 @@
             var view_data = node._data.view;
             var element = view_data.element;
             var topic = node.topic;
-            this.e_editor.value = topic;
+            var mv = this
+            mv.e_editor.style.height = element.clientHeight  - 10 + 'px';
+            mv.e_editor.value = topic;
+            mv.e_editor.innerHTML= topic;
+
             element.innerHTML = '';
-            element.appendChild(this.e_editor);
+            element.appendChild(mv.e_editor);
             element.style.zIndex = 5;
-            this.e_editor.focus();
-            this.e_editor.select();
+            setTimeout(function(){
+                mv.e_editor.focus();
+                //mv.e_editor.select();
+            }, 100)
         },
 
         edit_node_end:function(){
@@ -2184,6 +2191,7 @@
                 var view_data = node._data.view;
                 var element = view_data.element;
                 var topic = this.e_editor.value;
+                element.style.height = this.e_editor.scrollHeight + 10  +  'px';
                 element.style.zIndex = 'auto';
                 element.removeChild(this.e_editor);
                 if(jm.util.text.is_empty(topic) || node.topic === topic){

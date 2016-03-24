@@ -19,11 +19,11 @@ var {parseInput} = require('../../util');
 
 export default class TodoSubItem extends Component {
 
-    state = {
-        itemText: '',
-    };
     constructor(props){
         super(props) 
+        this.state = {
+            itemText: '',
+        }
     }
 
     componentDidMount () {
@@ -32,6 +32,15 @@ export default class TodoSubItem extends Component {
             const ele = ReactDOM.findDOMNode(this._input)
             ele.getElementsByTagName('textarea')[1].focus()
         }
+    }
+    shouldComponentUpdate (nProps, nState) {
+        if (nProps.index === this.props.index && nProps.status === this.props.status && nProps.keyPoint === this.props.keyPoint )  {
+            //这个组件有自己的状态的 ,状态相同时候  不更新   应该将接受外面变量的跟自己有状态变化分开
+            if ( nState.itemText === this.state.itemText ) {
+                return false 
+            }
+        }
+        return true  
     }
 
     componentDidUpdate() {
@@ -42,16 +51,6 @@ export default class TodoSubItem extends Component {
         }
     }
 
-    shouldComponentUpdate (nProps, nState) {
-        //if (Immutable.is(nProps.todo, this.props.todo ) && nProps.index === this.props.index && nProps.status === this.props.status && nProps.keyPoint === this.props.keyPoint )  {
-        if (nProps.index === this.props.index && nProps.status === this.props.status && nProps.keyPoint === this.props.keyPoint )  {
-            //这个组件有自己的状态的 ,状态相同时候  不更新   应该将接受外面变量的跟自己有状态变化分开
-            if ( nState.itemText === this.state.itemText ) {
-                return false 
-            }
-        }
-        return true  
-    }
 
     //这样些 就可以不bind this
     handleKeyPoint = (e) => {
@@ -109,14 +108,14 @@ export default class TodoSubItem extends Component {
             itemText: text,
         })
     }
-    handleDelItem (e) {
+    handleDelItem =  (e) => {
         e.stopPropagation()
         let todoId = this.props.todoId
         let processId = this.props.id
         let type = this.props.type
-
         this.props.actions.todelTodoSub (todoId, processId, type)
-    }
+    };
+
     isEditStatus( _status ){
         const status = _status || this.props.status
         return  status === todoSubItemStatus.edit 
@@ -202,16 +201,17 @@ export default class TodoSubItem extends Component {
         const rightIcon = (<Icon size="lg" 
                                name="times-circle-o"
                                style={style.delIcon}
-                               onClick={ this.handleDelItem.bind(this) }
+                               onClick={ this.handleDelItem }
                            /> )
        let leftIcon 
        if ( this.props.type === todoSubItemType.process ) {
-           leftIcon  = <Icon 
+           leftIcon  =(  <Icon 
                            size="lg" 
                            name="key" 
                            onClick={ this.handleKeyPoint }
                            style={style.iconReply} 
-                       />
+                         />
+                      )
        } else {
            leftIcon  = <Icon size="lg" name="tag" style={style.iconTag} />
        }
@@ -284,6 +284,7 @@ TodoSubItem.propTypes = {
 
     lastTime: PropTypes.number.isRequired,
     status: PropTypes.number.isRequired,
+    keyPoint: PropTypes.bool.isRequired,
 }
 
 

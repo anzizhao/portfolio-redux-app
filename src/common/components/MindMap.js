@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import Paper from 'material-ui/lib/paper';
 import FlatButton from 'material-ui/lib/flat-button';
 import Snackbar from 'material-ui/lib/snackbar';
+import Dialog from 'material-ui/lib/dialog';
 
 var jsMind = require("exports?jsMind!../../plugin/jsmind/jsmind.js")
 require("../../plugin/jsmind/jsmind.screenshot.js")
@@ -16,7 +17,10 @@ class MindMap extends Component {
         this._jm = null
         this.state = {
             open: false, 
-            msg: ''
+            msg: '',
+            showConfirmDlg: false, 
+            confirmMsg: '', 
+            confirmDlgOp: null, // func 
         }
     }
     componentDidMount () {
@@ -81,11 +85,6 @@ class MindMap extends Component {
     }
 
     create = () => {
-        //var options = {
-        //container:'jsmind_container',
-        //theme:'default',
-        //editable:true
-        //}
         var newMind = {
             "meta":{
                 "name":"new mind",
@@ -95,10 +94,21 @@ class MindMap extends Component {
             "format":"node_array",
             "data":[{"id":"root","topic":"new mind map","expanded":true,"isroot":true}]
         }
+        
         if ( ! this._jm ) {
             this._jm = jsMind.show(options, newMind)
         } else {
-            this._jm.show(newMind)
+            const funOp = ()=>{ 
+                this._jm.show(newMind) 
+            }
+            this.setState(
+                {
+                    showConfirmDlg: true, 
+                    confirmMsg: "创建新图会覆盖之前的,请先保存", 
+                    confirmDlgOp: funOp ,
+                } 
+            )    
+            //this._jm.show(newMind)
         }
     };
 
@@ -158,15 +168,59 @@ class MindMap extends Component {
      
     import = (e) => {
         e.preventDefault();  
-        document.getElementById('file_input').click()
+        if( this._jm ) {
+            const opFunc = ()=>{ 
+                document.getElementById('file_input').click()
+            }
+            this.setState(
+                {
+                    showConfirmDlg: true, 
+                    confirmDlgOp: opFunc ,
+                } 
+            )    
+        }
+
     };
     handleRequestClose = () => {
         this.setState({
             open: false,
         });
     };
+
+    handleConfirmDlgClose = () => {
+        this.setState({
+            showConfirmDlg: false,
+        });
+    };
+
+    handleConfirm = () => {
+        if( this.state.confirmDlgOp instanceof Function ) {
+            this.state.confirmDlgOp() 
+        }
+        this.setState({
+            showConfirmDlg: false,
+        });
+    };
+
+    
+
     render() {
         const style = this.constructor.style
+
+        const actions = [
+            <FlatButton
+                label="取消"
+                secondary
+                onTouchTap={this.handleConfirmDlgClose }
+            />,
+            <FlatButton
+                label="确认"
+                primary
+                keyboardFocused
+                onTouchTap={ this.handleConfirm }
+            />,
+        ];
+
         return (
             <div style={style.root }>
                 <div 
@@ -204,7 +258,16 @@ class MindMap extends Component {
                         autoHideDuration={4000}
                         onRequestClose={this.handleRequestClose}
                     />
-                    <input type="file" id="file_input" ref='fileInput'  style={{ display: 'none'}} />
+                    <input type="file" id="file_input" ref="fileInput"  style={{ display: 'none'}} />
+                    <Dialog
+                        title={ "Warning"}
+                        actions={actions}
+                        modal={ false }
+                        open={this.state.showConfirmDlg }
+                        onRequestClose={this.handleConfirmDlgClose }
+                    >
+                        {this.state.confirmMsg }
+                    </Dialog>
                 </Paper>
             </div>
 
@@ -218,7 +281,7 @@ MindMap.style =  {
     },
     container : {
         width: '55rem',
-        height: '30rem',
+        height: '35rem',
         marginLeft: '-10rem',
         border: 'solid 1px #ccc',
         background:  '#f4f4f4',
