@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Link } from 'react-router';
 import Paper from 'material-ui/lib/paper';
 import FlatButton from 'material-ui/lib/flat-button';
+import Snackbar from 'material-ui/lib/snackbar';
 
 var jsMind = require("exports?jsMind!../../plugin/jsmind/jsmind.js")
 require("../../plugin/jsmind/jsmind.screenshot.js")
@@ -13,8 +14,14 @@ class MindMap extends Component {
     constructor(props) {
         super(props) 
         this._jm = null
+        this.state = {
+            open: false, 
+            msg: ''
+        }
     }
     componentDidMount () {
+        this.refs.fileInput.addEventListener('change', this.handleChangeFile, false)
+
         var mind = {
             "meta":{
                 "name":"jsMind remote",
@@ -53,6 +60,13 @@ class MindMap extends Component {
         this._jm.show(mind)
     }
 
+    prompt_info(msg){
+        this.setState({
+            open: true,
+            msg: msg,
+        }) 
+    }
+
     get_selected_node() {
         if( ! this._jm ){
             return  
@@ -61,7 +75,7 @@ class MindMap extends Component {
         if(!! selected_node){
             return selected_node;
         }else{
-            prompt_info('please select a node first.')
+            this.prompt_info('please select a node first.')
             return null;
         }
     }
@@ -105,7 +119,9 @@ class MindMap extends Component {
             return  
         }
         var selected_id = selected_node.id;
-        if(!selected_id){prompt_info('please select a node first.');}
+        if(!selected_id){
+            this.prompt_info('please select a node first.')
+        }
 
         this._jm.remove_node(selected_id);
     };
@@ -120,22 +136,34 @@ class MindMap extends Component {
         jsMind.util.file.save(mind_str,'text/jsmind',mind_name+'.jm');
     };
 
-    import = () => {
+    handleChangeFile = () => {
         var file_input = document.getElementById('file_input');
         var files = file_input.files;
         if(files.length > 0){
             var file_data = files[0];
+            let mv = this 
             jsMind.util.file.read(file_data,function(jsmind_data, jsmind_name){
                 var mind = jsMind.util.json.string2json(jsmind_data);
                 if(!!mind){
-                    this._jm.show(mind);
+                    mv._jm.show(mind);
                 }else{
-                    prompt_info('can not open this file as mindmap');
+                    mv.prompt_info('can not open this file as mindmap')
                 }
             });
         }else{
-            prompt_info('please choose a file first')
+
+            this.prompt_info('please choose a file first')
         }
+    };
+     
+    import = (e) => {
+        e.preventDefault();  
+        document.getElementById('file_input').click()
+    };
+    handleRequestClose = () => {
+        this.setState({
+            open: false,
+        });
     };
     render() {
         const style = this.constructor.style
@@ -172,11 +200,11 @@ class MindMap extends Component {
                     />
                     <Snackbar
                         open={this.state.open}
-                        message="Event added to your calendar"
+                        message={this.state.msg}
                         autoHideDuration={4000}
                         onRequestClose={this.handleRequestClose}
                     />
-                    <input type="file" id="file_input"  style={{ display: 'none'}} />
+                    <input type="file" id="file_input" ref='fileInput'  style={{ display: 'none'}} />
                 </Paper>
             </div>
 
@@ -189,17 +217,17 @@ MindMap.style =  {
         display: 'inline-block',
     },
     container : {
-        width: '1300px',
-        height: '1600px',
-        marginLeft: '-300px',
+        width: '55rem',
+        height: '30rem',
+        marginLeft: '-10rem',
         border: 'solid 1px #ccc',
         background:  '#f4f4f4',
         display: 'inline-block',
     },
     paper: {
-        right: '50px',
-        width:  '100px',
-        margin: '10px',
+        right: '1.25rem',
+        width:  '5rem',
+        margin: '.5rem',
         position: 'fixed',
         display: 'inline-block',
     }
