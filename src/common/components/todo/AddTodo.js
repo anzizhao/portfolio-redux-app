@@ -6,10 +6,16 @@ import TextField from 'material-ui/lib/text-field';
 var {parseInput} = require('../../util');
 
 export default class AddTodo extends Component {
-    state = {
-        toEditItem : false,
-        addTodoText: ''
-    };
+    constructor(props){
+        super(props) 
+        this.handleSubmit = this.handleSubmit.bind(this)
+        this.handleEnterKeyDown = this.handleEnterKeyDown.bind(this)
+        this.state = {
+            toEditItem : false,
+            addTodoText: ''
+        }
+    }
+
     handleSubmit(e) {
         e.preventDefault()
         const value =  e.target.value 
@@ -41,18 +47,22 @@ export default class AddTodo extends Component {
         };
         return (
             <div>
-                <form onSubmit={(e) => this.handleSubmit(e)} style={style.form} >
-                        <TextField
-                            floatingLabelText="添加todo项 按Enter确认"
-                            fullWidth
-                            onEnterKeyDown = {(e) => this.handleEnterKeyDown (e) }
-                            ref="iAddTodo" 
-                        />
+                <form 
+                    onSubmit={ this.handleSubmit } 
+                    style={style.form} 
+                >
+                    <TextField
+                        floatingLabelText="添加todo项 按Enter确认"
+                        fullWidth
+                        onEnterKeyDown = { this.handleEnterKeyDown }
+                        ref="iAddTodo" 
+                    />
                 </form>
             </div>
         )
     }
 }
+
 
 AddTodo.propTypes = {
     actions: PropTypes.object.isRequired,

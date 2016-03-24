@@ -5,7 +5,7 @@ import ListItem from 'material-ui/lib/lists/list-item';
 import Checkbox from 'material-ui/lib/checkbox';
 
 import TodoSubBut from './todoSubBut';
-import TodoSubItem from './todoSub';
+import TodoSubItem from './todoSubItem';
 import Tags from './tags';
 import TodoMenu from './TodoMenu';
 import Mertic from './metric';

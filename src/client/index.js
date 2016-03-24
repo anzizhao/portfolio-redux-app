@@ -27,21 +27,16 @@ const store = configureStore(initialState);
 const rootElement = document.getElementById('root');
 
 //if (process.env.NODE_ENV !== 'production') {
-  //require('../server/devtools')(store);
+    //require('../server/devtools')(store);
 //}
 
 render(
-  <Provider store={store}>
-    <ReduxRouter>
-      <Router children={routes} history={history} />
-    </ReduxRouter>
-  </Provider>,
-  document.getElementById('root')
+    <Provider store={store}>
+        <ReduxRouter>
+            <Router children={routes} history={history} />
+        </ReduxRouter>
+    </Provider>
+        ,
+    document.getElementById('root')
 );
 
-//render(
-  //<Provider store={store}>
-      //<Router children={routes} history={history} />
-  //</Provider>,
-  //document.getElementById('root')
-//);

@@ -54,6 +54,7 @@ export const TOEDIT_TODO_SUB_PROCESS = 'TOEDIT_TODO_SUB_PROCESS'
 export const TOEDIT_TODO_SUB_CONCLUSION = 'TOEDIT_TODO_SUB_CONCLUSION' 
 export const TODEL_TODO_SUB_PROCESS = 'TODEL_TODO_SUB_PROCESS' 
 export const TODEL_TODO_SUB_CONCLUSION = 'TODEL_TODO_SUB_CONCLUSION' 
+export const TODO_SUB_PROCESS_KEY = 'TODO_SUB_PROCESS_KEY' 
 
 //tags
 export const ADD_TAGS ='ADD_TAGS' 
@@ -256,6 +257,7 @@ export function exportSelect () {
     return { type:  EXPORT_SELECT } 
 }
 
+
 export function exportPage() {
     return { type:  EXPORT_PAGE} 
 }
@@ -303,5 +305,9 @@ export function changeFilterTags ( tags ){
 
 export function filterText ( text ){
     return { type: FILTER_ITEM_TEXT, text }  
+}
+// todo id 为固定的字符串"id"
+export function todoSubProcessKey ( id, processId,  keyPoint ){
+    return { type: TODO_SUB_PROCESS_KEY, id, processId, keyPoint }  
 }
 

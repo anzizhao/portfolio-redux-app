@@ -19,6 +19,7 @@
   "dependencies": {
     "axios": "^0.7.0",
     "classnames": "^2.1.5",
+    "exports-loader": "^0.6.3",
     "express": "^4.13.3",
     "extract-text-webpack-plugin": "~1.0.1",
     "history": "1.13.0",
