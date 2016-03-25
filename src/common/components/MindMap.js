@@ -233,16 +233,16 @@ class MindMap extends Component {
                     zDepth={5}
                 >
                     <FlatButton 
-                        label=  { "创建"}
-                        onClick={  this.create }
-                    />
-                    <FlatButton 
                         label=  { "增加"}
                         onClick={  this.add }
                     />
                     <FlatButton 
                         label=  { "删除"}
                         onClick={  this.del }
+                    />
+                    <FlatButton 
+                        label=  { "新建"}
+                        onClick={  this.create }
                     />
                     <FlatButton 
                         label=  { "导入"}
