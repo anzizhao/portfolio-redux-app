@@ -95,7 +95,7 @@
     jm.direction = {left:-1,center:0,right:1};
     jm.event_type = {show:1,resize:2,edit:3,select:4};
 
-    jm.node = function(sId,iIndex,sTopic,oData,bIsRoot,oParent,eDirection,bExpanded){
+    jm.node = function(sId,iIndex,sTopic,oData,bIsRoot,oParent,eDirection,bExpanded ){
         if(!sId){logger.error('invalid nodeid');return;}
         if(typeof iIndex != 'number'){logger.error('invalid node index');return;}
         if(typeof bExpanded === 'undefined'){bExpanded = true;}
@@ -107,8 +107,10 @@
         this.parent = oParent;
         this.direction = eDirection;
         this.expanded = !!bExpanded;
+
         this.children = [];
         this._data = {};
+        this.layer = bIsRoot? 0: oParent.layer + 1
     };
 
     jm.node.compare=function(node1,node2){
@@ -2085,9 +2087,23 @@
             }
 
             var d = $c('jmnode');
+            d.style.border =  '2px solid' ;
+            var nodeColorArr = [
+                'rgb(0, 171, 107)',
+                'rgba(136, 255, 66, 0.84)',
+                'rgba(255, 197, 66, 0.84)',
+                'rgba(153, 51, 51, 0.84)' ,
+                'rgba(170, 59, 84, 0.69)' ,
+                'rgba(48, 37, 5, 0.84)',
+            ];
             if(node.isroot){
                 d.className = 'root';
+                d.style["border-color"] =  'rgba(48, 37, 5, 0.84)';
             }else{
+
+                var i = node.layer > nodeColorArr.length ? nodeColorArr.length : node.layer
+                d.style["border-color"] = nodeColorArr[i-1];
+
                 var d_e = $c('jmexpander');
                 $t(d_e,'-');
                 d_e.setAttribute('nodeid',node.id);

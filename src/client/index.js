@@ -14,6 +14,11 @@ import {render} from 'react-dom';
 
 import "../../styles/index.css";
 
+//let NProgress = require('nprogress/nprogress')
+//index.html  文件已经加载完车 
+//加载完成
+NProgress.done();
+
 
 //Needed for onTouchTap
 // Can go away when react 1.0 release
