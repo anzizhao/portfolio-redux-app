@@ -1,4 +1,4 @@
-import { Route, NotFoundRoute, DefaultRoute } from "react-router";
+import { Route, NotFoundRoute, DefaultRoute, IndexRoute} from "react-router";
 import React from "react";
 
 import App from "./containers/App";
@@ -31,17 +31,65 @@ const loadTodoAsync = () => (location, cb) => {
           cb(null, require('./containers/todo/App'))
         })
 };
+const loadComponent = (com) => (location, cb) => {
+    require.ensure([], (require) => {
+          cb(null, require( com ))
+        })
+};
 
-            //getComponent={loadContainerAsync(require('bundle?lazy!./containers/todo/App'))}
-            //getComponent={loadContainerAsync(require('bundle?lazy!./containers/todo/App'))}
-          //component={HomePage} 
-            //getComponent={loadTodoAsync()}
+function getPlay (location, cb) {
+    require.ensure([], (require) => {
+        cb(null, require('./mastermind/pages/play-game'))
+    })
+}
+function getHome(location, cb) {
+    require.ensure([], (require) => {
+        cb(null, require('./mastermind/pages/home'))
+    })
+}
+function getReplayGames(location, cb) {
+    require.ensure([], (require) => {
+        cb(null, require('./mastermind/pages/replay-games'))
+    })
+}
+function getReplay(location, cb) {
+    require.ensure([], (require) => {
+        cb(null, require('./mastermind/pages/replay'))
+    })
+}
+function getRules (location, cb) {
+    require.ensure([], (require) => {
+        cb(null, require('./mastermind/pages/rules'))
+    })
+}
+
+//component={require('./mastermind/pages/play-game')}
+                    //<IndexRoute component={require('./mastermind/pages/home')} />,
+// second dynamic load 
+const loadMastermindAsync = () => (location, cb) => {
+    require.ensure([], (require) => {
+         cb(null, [ 
+                 <Route path="home" getComponent = { getHome } />,
+                 <Route path="play" getComponent = { getPlay } />,
+                 <Route path="replay" getComponent={getReplayGames} />,
+                 <Route path="replay/:gameId" getComponent={getReplay} />,
+                 <Route path="rules" getComponent={getRules} />,
+         ])
+    })
+};
+
+const loadMastermindIndex = () => (location, cb) => {
+    require.ensure([], (require) => {
+        let HomePage = require('./mastermind/pages/home')
+        cb(null, HomePage)
+    })
+};
+
 export default (
   <Route name="app" path="/" component={App}>
       <Route 
           path="home" 
           component={HomePage} 
-          //getComponent={loadContainerAsync(require('bundle?lazy!./containers/HomePage'))}
       />
       <Route 
             path="todo" 
@@ -50,6 +98,11 @@ export default (
       <Route 
           path="mindmap" 
           getComponent={loadContainerAsync(require('bundle?lazy!./components/MindMap'))}
+      />
+      <Route 
+          path="mastermind" 
+          getChildRoutes={ loadMastermindAsync() }
+          getComponent={loadContainerAsync(require('bundle?lazy!./mastermind/pages/master'))}
       />
 
       <Route 
@@ -68,6 +121,7 @@ export default (
       <Route path="*" component={error404}/>
   </Route>
 );
+          //getIndexRoute={loadMastermindIndex}
           //component={PortfolioPage} 
           //component={AboutPage} 
           //component={ServicesPage} 

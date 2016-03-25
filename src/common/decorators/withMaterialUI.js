@@ -12,7 +12,7 @@ export default function withMaterialUI(ComposedComponent) {
      */
     static childContextTypes = {
       muiTheme: React.PropTypes.object
-    }
+    };
 
     getChildContext() {
       return {

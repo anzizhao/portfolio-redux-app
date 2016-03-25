@@ -16,6 +16,9 @@ var webpackConfig = {
       // may be the materialize
       //"jquery": "jQuery"
   },
+  resolve: {
+    extensions: ['', '.js', '.jsx']
+  },
 };
 
 if (process.env.NODE_ENV === 'production') {
@@ -26,7 +29,7 @@ if (process.env.NODE_ENV === 'production') {
     },
     module: {
       loaders: [
-      {test: /\.js$/, loaders: ['react-hot', 'babel'], include: path.join(__dirname, 'src')},
+      {test: /\.jsx?$/, loaders: ['react-hot', 'babel'], include: path.join(__dirname, 'src')},
       { test: /\.(png|jpg|gif|jpeg)$/, loader: 'url?limit=8192'},
       {
           test: /\.(otf|eot|svg|ttf|woff|woff2)(\?.+)?$/,
@@ -54,7 +57,7 @@ if (process.env.NODE_ENV === 'production') {
     devtool: 'eval',
     module: {
       loaders: [
-      {test: /\.js$/, loaders: ['react-hot', 'babel'], include: path.join(__dirname, 'src')},
+      {test: /\.jsx?$/, loaders: ['react-hot', 'babel'], include: path.join(__dirname, 'src')},
       { test: /\.(png|jpg|gif|jpeg)$/, loader: 'url?limit=8192'},
       {
           test: /\.(otf|eot|svg|ttf|woff|woff2)(\?.+)?$/,

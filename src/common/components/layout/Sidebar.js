@@ -34,6 +34,7 @@ class Sidebar extends Component {
                     <Link to="/home" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">首页</Link>
                     <Link to="/todo" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">代办事项</Link>
                     <Link to="/mindmap" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">思维导图</Link>
+                    <Link to="/mastermind" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">游戏</Link>
                     <Link to="/portfolio" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">简历</Link>
                     <Link to="/about" className="sidebar-nav-item" onClick={this.eventCloseSidebar} activeClassName="active">关于</Link>
                 </div >
