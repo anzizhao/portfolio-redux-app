@@ -9,15 +9,15 @@ module.exports  = function(grunt) {
             },
             build: {
                 files: {
-                    'node_modules/nprogress/nprogress.min.js':'node_modules/nprogress/nprogress.js',
+                    'modules/nprogress/nprogress.min.js':'modules/nprogress/nprogress.js',
                 }
             }
         },
         cssmin: {  
             compress: {  
                 files: {  
-                    'node_modules/nprogress/nprogress.min.css': [  
-                        "node_modules/nprogress/nprogress.css",  
+                    'modules/nprogress/nprogress.min.css': [  
+                        "modules/nprogress/nprogress.css",  
                     ]  
                 }  
             }  
