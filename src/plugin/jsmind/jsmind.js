@@ -1667,11 +1667,13 @@
                     pd = node.parent._data;
                 }
 
-                node_outer_height = this._layout_offset_subnodes(node.children);
                 if(!node.expanded){
                     node_outer_height=0;
                     this.set_visible(node.children,false);
+                } else {
+                    node_outer_height = this._layout_offset_subnodes(node.children);
                 }
+
                 node_outer_height = Math.max(node._data.view.height,node_outer_height);
 
                 layout_data.outer_height = node_outer_height;

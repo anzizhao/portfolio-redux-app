@@ -34,7 +34,11 @@ class MindMap extends Component {
             editable:true
         }
         this._jm = new jsMind(options);
+        // 不知道为何第一次show会有问题 高度计算不对 暂时先放一放
+        // 暂时show默认的, 然后才是初始化的内容
+        this._jm.show()
         this._jm.show(mind)
+        //this._jm = jsMind.show(options, mind)
     }
 
     prompt_info(msg){
@@ -111,6 +115,12 @@ class MindMap extends Component {
 
     export = () => {
         if( ! this._jm ){
+            this.setState(
+                {
+                    showConfirmDlg: true, 
+                    confirmMsg: "没有图导出", 
+                } 
+            )    
             return  
         }
         var mind_data = this._jm.get_data('node_array');
@@ -148,6 +158,7 @@ class MindMap extends Component {
             this.setState(
                 {
                     showConfirmDlg: true, 
+                    confirmMsg: "导入操作会覆盖原图,请先导出保存", 
                     confirmDlgOp: opFunc ,
                 } 
             )    
