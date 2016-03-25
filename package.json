@@ -37,6 +37,7 @@
     "redux-router": "^1.0.0-beta3",
     "redux-thunk": "^0.1.0",
     "redux-undo": "^0.6.0",
+    "theaterjs": "^3.0.0",
     "uuid": "^2.0.1",
     "webpack-dev-server": "~1.14.1"
   },

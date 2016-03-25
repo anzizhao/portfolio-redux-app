@@ -8,7 +8,7 @@ import App from "./containers/App";
 
 
 //Redux Smart
-//import HomePage from "./containers/HomePage";
+import HomePage from "./containers/HomePage";
 //import AboutPage from "./containers/AboutPage";
 
 //Redux Dumb
@@ -40,7 +40,8 @@ export default (
   <Route name="app" path="/" component={App}>
       <Route 
           path="home" 
-          getComponent={loadContainerAsync(require('bundle?lazy!./containers/HomePage'))}
+          component={HomePage} 
+          //getComponent={loadContainerAsync(require('bundle?lazy!./containers/HomePage'))}
       />
       <Route 
             path="todo" 
