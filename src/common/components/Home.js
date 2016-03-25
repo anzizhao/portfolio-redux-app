@@ -17,14 +17,14 @@ class Home extends Component {
         //.addActor('current-status')
         //.addActor('concern-hope')
 
-        let ffSentence = '本人男，单着'
-        let fsSentence = ',喜欢妮可罗宾。'
-        let sSentence = '属于小黑屋的程序员，有志于利用技术改变一些事情。'
-        let 
+        let ffSentence = '本人男，单着，'
+        let fsSentence = ' 喜欢妮可罗宾。'
+        let sSentence = '属于小黑屋型程序员，有志于利用技术改变一些事情。'
+
         theater
-        .addScene('single-dog:' +  ffSentence ,100, fsSentence,  1500)
-        .addScene( - (ffSentence.length + fsSentence.length) )
-        .addScene('programmer:' + sSentence , 2000)
+        .addScene('single-dog:' +  ffSentence ,500, fsSentence,  1000)
+        //.addScene( - (ffSentence.length + fsSentence.length) )
+        .addScene('programmer:' + sSentence , 1500)
         .addScene( - sSentence.length )
 
         //.addScene('current-status:现从事前端开发, ，关注<em>可复用</em>, <em>可维护</em>,<em>高性能</em>,<em>前沿的</em> 技术。', 1000)
@@ -55,7 +55,7 @@ class Home extends Component {
                         现从事前端开发, ，关注<em>可复用</em>, <em>可维护</em>,<em>高性能</em>,<em>前沿的</em> 技术。
                     </p>
                     <p>         
-                        对js近几年的发展充满惊讶 
+                        对js近几年的发展充满惊讶。
                     </p>
                 </h4>
             </div>
