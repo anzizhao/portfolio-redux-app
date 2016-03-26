@@ -242,8 +242,8 @@ const ReplayPage = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    games: state.get('replayableGames'),
-    replay: state.get('replay')
+    games: state.mastermind.game.get('replayableGames'),
+    replay: state.mastermind.replay
   }
 }
 

@@ -18,9 +18,11 @@ const MainButton = React.createClass({
       fontSize: 18
     }
 
-    return (<div style={style}>
-      <button style={buttonStyle} onClick={this.props.goTo}>{this.props.text}</button>
-    </div>)
+    return (
+        <div style={style}>
+        <button style={buttonStyle} onClick={this.props.goTo}>{this.props.text}</button>
+        </div>
+    )
   }
 })
 

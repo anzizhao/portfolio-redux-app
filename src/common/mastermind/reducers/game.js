@@ -15,7 +15,7 @@ export default function reducer(state = Map(), action) {
   switch (action.type) {
 
   case NEW_GAME:
-    return state.merge({
+      return state.merge({
       state: STATES.IN_PROGRESS,
       rows: times(ROWS_IN_GAME, n => makeEmptyRow()),
       secretCode: action.secretCode

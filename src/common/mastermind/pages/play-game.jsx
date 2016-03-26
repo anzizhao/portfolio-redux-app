@@ -8,8 +8,8 @@ import {isGameOver} from '../game'
 
 const PlayGamePage = React.createClass({
     componentWillMount: function () {
-        const { dispatch } = this.props
-        dispatch( newGame())
+        //const { dispatch } = this.props
+        //dispatch( newGame())
     },
     render: function() {
         const {dispatch, game} = this.props

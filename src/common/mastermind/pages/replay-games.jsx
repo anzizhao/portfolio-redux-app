@@ -27,7 +27,7 @@ const ReplayGamesPage = React.createClass({
 
   replayGame: function(id) {
     const history = this.context.history
-    history.pushState(null, `/replay/${id}`)
+    history.pushState(null, `/mastermind/replay/${id}`)
   },
 
   render: function() {
@@ -53,10 +53,11 @@ const ReplayGamesPage = React.createClass({
 
 function mapStateToProps(state) {
   return {
-    games: state.getIn(['replay', 'replayableGames'])
+    games: state.mastermind.replay.get('replayableGames')
   }
 }
 
 const ReplayGamesPageContainer = connect(mapStateToProps)(ReplayGamesPage)
 
 export default ReplayGamesPageContainer
+module.exports = ReplayGamesPageContainer

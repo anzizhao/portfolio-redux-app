@@ -31,11 +31,6 @@ const loadTodoAsync = () => (location, cb) => {
           cb(null, require('./containers/todo/App'))
         })
 };
-const loadComponent = (com) => (location, cb) => {
-    require.ensure([], (require) => {
-          cb(null, require( com ))
-        })
-};
 
 function getPlay (location, cb) {
     require.ensure([], (require) => {
@@ -78,12 +73,12 @@ const loadMastermindAsync = () => (location, cb) => {
     })
 };
 
-const loadMastermindIndex = () => (location, cb) => {
-    require.ensure([], (require) => {
-        let HomePage = require('./mastermind/pages/home')
-        cb(null, HomePage)
-    })
-};
+//const loadMastermindIndex = () => (location, cb) => {
+    //require.ensure([], (require) => {
+        //let HomePage = require('./mastermind/pages/home')
+        //cb(null, HomePage)
+    //})
+//};
 
 export default (
   <Route name="app" path="/" component={App}>
