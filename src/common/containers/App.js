@@ -15,6 +15,9 @@ import LightRawTheme from 'material-ui/lib/styles/raw-themes/light-raw-theme';
 import DarkRawTheme from 'material-ui/lib/styles/raw-themes/dark-raw-theme';
 import ThemeDecorator from 'material-ui/lib/styles/theme-decorator';
 
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group'
+
+
 //@ThemeDecorator(ThemeManager.getMuiTheme(DarkRawTheme))
 
 class App extends Component {
@@ -44,7 +47,7 @@ class App extends Component {
                 return  
             } 
             let htmlRootSize = 20
-            let referenceWidth = 1660 
+            let referenceWidth = (clientWidth > 1200 && clientWidth < 1660 )? clientWidth: 1200 
             docEl.style.fontSize = htmlRootSize  * (clientWidth / referenceWidth ) + 'px';
         }
 
@@ -69,8 +72,23 @@ class App extends Component {
                 <div className="wrap">
                     <Header />
                     <div className="container content">
-                        {!this.props.children && <Home layout={layout} toggleSidebar={toggleSidebar} />}
-                        {this.props.children}
+
+
+                    <ReactCSSTransitionGroup
+                        component="div"
+                        transitionName="mainrouter"
+                        transitionEnterTimeout={500}
+                        transitionLeaveTimeout={500}
+                    >
+                        {React.cloneElement(this.props.children, {
+                            key: this.props.location.pathname
+                        })}
+                    </ReactCSSTransitionGroup>
+
+
+
+
+
                     </div>
                 </div>
                 <label className="sidebar-toggle" onClick={this.eventToggleSidebar}></label>
@@ -79,6 +97,9 @@ class App extends Component {
     }
 }
 
+                        //{!this.props.children && <Home layout={layout} toggleSidebar={toggleSidebar} />}
+                        //{this.props.children}
+//
 function mapStateToProps(state) {
     return {
         layout : state.layout

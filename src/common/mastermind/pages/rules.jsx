@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react'
-import {Router} from 'react-router'
+import {Router, Link} from 'react-router'
 
 class RulesPage extends Component {
     render() {
@@ -12,27 +12,36 @@ class RulesPage extends Component {
 
         return (
             <div style={style}>
-            <p>
-            At the beginning of each game the computer generates a secret code of four colors. The colors are always chosen from the same six colors.
-                Duplicates are allowed, so the computer could even choose the same color four times.
-                </p>
-            <p>
-            Your objective is to guess the secret code. You will have to guess the colors and put them in the same order as they are in the secret code.
-                </p>
-            <p>
-            Choose four colors in the next available row and then click on the Check button. The computer will score your guess in the following way:
-                </p>
-            <ul>
-            <li>For each guess that is right in both color and position you get a black point</li>
-                <li>For each guess that is right in color but not in position you get a red point</li>
-                    </ul>
-            <p>
-            You have twelve rows to make your guesses, if you exhaust all of them without guessing the code, you lost the game.
-                    </p>
+                <header>
+                    <div>
+                    <Link to="/mastermind/play">to play</Link>
+                    </div>
+                </header>
+                <h2>猜颜色</h2>
+                <ol>
+                    <li>
+                    从6种颜色中选择,允许颜色重复
+                    </li>
+                    <li>
+                        点击检测按钮，查看结果。 红色代表
+                        <ol>
+                            <li>
+                                黑色代表，位置和颜色都准确
+                            </li>
+                            <li>
+                                红色代表，颜色准确,但位置不对
+                            </li>
+                        </ol>
+                    </li>
+                    <li>
+                        共12次机会。
+                    </li>
+                </ol>
                 <p>
-            Good Luck!
-            </p>
-            </div>)
+                    have a good time. 
+                </p>
+            </div>
+        )
     }
 }
 

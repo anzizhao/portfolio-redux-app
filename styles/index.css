@@ -6,3 +6,22 @@
 @import 'layout.css';
 @import 'custom.css';
 @import 'todo.css';
+
+.mainrouter-enter {
+    opacity: 0.01;
+    transition: opacity .5s ease-in;
+}
+
+.mainrouter-enter.mainrouter-enter-active {
+    opacity: 1;
+}
+
+.mainrouter-leave {
+    opacity: 1;
+    transition: opacity .5s ease-in;
+}
+
+.mainrouter-leave.mainrouter-leave-active {
+    opacity: 0;
+}
+

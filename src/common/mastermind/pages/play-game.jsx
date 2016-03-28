@@ -1,4 +1,5 @@
 import React from 'react'
+import {Link} from 'react-router'
 import {connect} from 'react-redux'
 
 import Board from '../components/board'
@@ -16,13 +17,21 @@ const PlayGamePage = React.createClass({
         const gameState = game.get('state')
         return (
             <div>
-                <Board game={game} dispatch={dispatch} />
-                {isGameOver(gameState) ?
-                    <GameOverDialog
-                        gameState={gameState}
-                        newGame={() => dispatch(newGame())}/>
-                    : null}
-                </div>
+            <header>
+            <div>
+            <Link to="/mastermind/rules">Game Rules</Link>
+            </div>
+            </header>
+
+            <div>
+            <Board game={game} dispatch={dispatch} />
+            {isGameOver(gameState) ?
+                <GameOverDialog
+            gameState={gameState}
+            newGame={() => dispatch(newGame())}/>
+            : null}
+            </div>
+            </div>
         )
     }
 })

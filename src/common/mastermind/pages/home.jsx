@@ -53,12 +53,13 @@ const HomePage = React.createClass({
     return (
         <div className="mainPanel" style={style}>
             <MainButton text="Play a Game" goTo={this.goToPlayAGame} />
-            <MainButton text="Replay Games" goTo={this.goToReplay} />
             <MainButton text="Game Rules" goTo={this.goToGameRules} />
         </div>
     )
   }
 })
+
+            //<MainButton text="Replay Games" goTo={this.goToReplay} />
 
 const HomePageContainer = connect()(HomePage)
 export default HomePageContainer
