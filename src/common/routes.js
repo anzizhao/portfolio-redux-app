@@ -18,6 +18,8 @@ import error404 from "./components/404";
 
 //import withMaterialUI from './decorators/withMaterialUI';
 
+
+
 //@withMaterialUI
 //first dynamic load 
 const loadContainerAsync = bundle => (location, cb) => {
@@ -73,15 +75,17 @@ const loadMastermindAsync = () => (location, cb) => {
     })
 };
 
-//const loadMastermindIndex = () => (location, cb) => {
-    //require.ensure([], (require) => {
-        //let HomePage = require('./mastermind/pages/home')
-        //cb(null, HomePage)
-    //})
-//};
+const loadMastermindIndex = () => (location, cb) => {
+    require.ensure([], (require) => {
+        cb(null, require('./mastermind/pages/home'))
+    })
+};
 
 export default (
   <Route name="app" path="/" component={App}>
+      <IndexRoute  
+          component={HomePage} 
+      />
       <Route 
           path="home" 
           component={HomePage} 
@@ -97,6 +101,7 @@ export default (
       <Route 
           path="mastermind" 
           getChildRoutes={ loadMastermindAsync() }
+          getIndexRoute={ loadMastermindIndex() }
           getComponent={loadContainerAsync(require('bundle?lazy!./mastermind/pages/master'))}
       />
 

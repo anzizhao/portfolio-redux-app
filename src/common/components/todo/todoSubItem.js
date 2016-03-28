@@ -284,7 +284,7 @@ TodoSubItem.propTypes = {
 
     lastTime: PropTypes.number.isRequired,
     status: PropTypes.number.isRequired,
-    keyPoint: PropTypes.bool.isRequired,
+    keyPoint: PropTypes.bool,
 }
 
 
