@@ -347,6 +347,11 @@ function afterReducers ( state={} ,  action ) {
                 state.fromfiles = state.fromfiles.push({ id,    text: action.fromfile})
                 storeTodoFromfiles( state.fromfiles.toArray() )
             } 
+
+            result =  state.selectFiles.find( file => file.text === action.fromfile )
+            if ( ! result ) {
+                state.selectFiles = state.selectFiles.push({id: state.selectFiles.size, text: action.fromfile } )
+            }
             return state
 
         case todoActions.EXPORT_SELECT:

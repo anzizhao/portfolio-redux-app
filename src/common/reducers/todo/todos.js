@@ -100,7 +100,7 @@ export function todos(state = List(), action) {
                 })
             }
             return state 
-        case todoActions.IMPORT_TODO:
+        case todoActions.IMPORT_TODO: 
             // 新加的  跟原来的比较  uuid是否相同  日期更新
             // uuid 相同的在原来位置  新的在后面加上
             // 1. 对actions的todo项根据id进行排序
