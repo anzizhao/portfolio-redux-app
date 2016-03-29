@@ -104,6 +104,10 @@ export default (
           getIndexRoute={ loadMastermindIndex() }
           getComponent={loadContainerAsync(require('bundle?lazy!./mastermind/pages/master'))}
       />
+      <Route 
+          path="2048" 
+          getComponent={loadContainerAsync(require('bundle?lazy!./2048/js/index'))}
+      />
 
       <Route 
           path="portfolio" 
