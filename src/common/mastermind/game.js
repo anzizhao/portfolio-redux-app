@@ -1,6 +1,8 @@
 import {times, range, uniq, sample, identity, random} from 'lodash'
 
 export const ROWS_IN_GAME = 12
+export const PEG_IN_ROW= 6 
+export const COLOR_TO_CHOOSE = 10 
 
 // Game states
 export const STATES = {
@@ -18,11 +20,11 @@ export function wasLastGuess(game) {
 }
 
 export function allCorrect(score) {
-  return score.correct === 4
+  return score.correct === PEG_IN_ROW 
 }
 
 export function generateSecretCode() {
-  return times(4, () => random(5))
+  return times(PEG_IN_ROW, () => random(COLOR_TO_CHOOSE))
 }
 
 export function calculateScore(secretCode, guess) {

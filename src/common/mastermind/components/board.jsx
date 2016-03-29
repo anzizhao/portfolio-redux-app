@@ -2,15 +2,19 @@ import React from 'react'
 import {take, times, constant} from 'lodash'
 
 import {changeColor, scoreGuess} from '../actions'
-import {isGameOver} from '../game'
+import {isGameOver, PEG_IN_ROW} from '../game'
 
 const colorScheme = {
     0: 'red',
-    1: 'cyan',
-    2: 'green',
-    3: 'orange',
-    4: 'magenta',
+    1: 'orange',
+    2: 'yellow',
+    3: 'green',
+    4: 'cyan',
     5: 'blue',
+    6: 'magenta',
+    7: 'gray',
+    8: 'brown',
+    9: 'salmon',
     'correct': 'black',
     'correctColor': 'red'
 }
@@ -74,26 +78,28 @@ const ScorePeg = React.createClass({
 const Scores = React.createClass({
     convertScore: function(scoresObj) {
         if (!scoresObj) {
-            return [null, null, null, null]
+            return [null, null, null, null, null, null]
         }
         const correct = scoresObj.get('correct', 0)
         const correctColor = scoresObj.get('correctColor', 0)
         return ensureLength(
             times(correct, constant('correct')).concat(times(correctColor, constant('correctColor'))),
-            4)
+            PEG_IN_ROW)
     },
 
     render: function() {
-        const [score1, score2, score3, score4] = this.convertScore(this.props.score)
+        const [score1, score2, score3, score4, score5, score6 ] = this.convertScore(this.props.score)
 
         return (<div className="score">
                 <div>
                 <ScorePeg value={score1} />
                 <ScorePeg value={score2} />
+                <ScorePeg value={score3} />
                 </div>
                 <div>
-                <ScorePeg value={score3} />
                 <ScorePeg value={score4} />
+                <ScorePeg value={score5} />
+                <ScorePeg value={score6} />
                 </div>
                 </div>)
     }
@@ -183,14 +189,18 @@ const ColorChooser = React.createClass({
 
         return (<div id="colorChooser" style={this.state.style}>
                 <div>
-                {colorBlock(0)}
-                {colorBlock(1)}
-                {colorBlock(2)}
+                    {colorBlock(0)}
+                    {colorBlock(1)}
+                    {colorBlock(2)}
+                    {colorBlock(3)}
+                    {colorBlock(4)}
                 </div>
                 <div>
-                {colorBlock(3)}
-                {colorBlock(4)}
-                {colorBlock(5)}
+                    {colorBlock(5)}
+                    {colorBlock(6)}
+                    {colorBlock(7)}
+                    {colorBlock(8)}
+                    {colorBlock(9)}
                 </div>
                 </div>)
     }
