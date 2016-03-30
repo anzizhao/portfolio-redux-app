@@ -7,6 +7,7 @@ import { Provider } from 'react-redux';
 import { ReduxRouter } from 'redux-router';
 
 import createBrowserHistory from 'history/lib/createBrowserHistory'
+import createHashHistory from 'history/lib/createHashHistory'
 
 import configureStore from '../common/store/configureStore';
 import routes from '../common/routes';
@@ -25,7 +26,8 @@ NProgress.done();
 // Check this repo:
 // https://github.com/zilverline/react-tap-event-plugin
 injectTapEventPlugin();
-
+//threee url strategy
+//const history = createHashHistory();
 const history = createBrowserHistory();
 const initialState = window.__INITIAL_STATE__;
 const store = configureStore(initialState);
