@@ -68,6 +68,10 @@ function storeTodoSelectTags(data) {
     return store('selectTags', data );
 }
 
+function storeJsMind (data) {
+    return store('jsMind', data );
+}
+
 function readFile(file, afterRead){
     let reader = new FileReader();
 
@@ -114,5 +118,5 @@ module.exports = {
     loadState,  
     parseInput ,
     exportFile, readFile,  
-    storeTodoFromfiles, storeTodoState, storeTodoTags, storeTodoSelectFiles, storeTodoSelectTags,
+    storeTodoFromfiles, storeTodoState, storeTodoTags, storeTodoSelectFiles, storeTodoSelectTags, storeJsMind,
 }

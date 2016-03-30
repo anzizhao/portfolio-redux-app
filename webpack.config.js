@@ -29,13 +29,33 @@ if (process.env.NODE_ENV === 'production') {
     },
     module: {
       loaders: [
-      {test: /\.jsx?$/, loaders: ['react-hot', 'babel'], include: path.join(__dirname, 'src')},
-      { test: /\.(png|jpg|gif|jpeg)$/, loader: 'url?limit=8192'},
-      {
-          test: /\.(otf|eot|svg|ttf|woff|woff2)(\?.+)?$/,
-          loader: 'url-loader?limit=8192'
-      },
-      { test: /\.css$/, loader: 'style-loader!css-loader' }
+          {
+              test: /\.jsx?$/, 
+              loaders: ['react-hot', 'babel'], 
+              include: path.join(__dirname, 'src')
+          },
+          { 
+              test: /\.(png|jpg|gif|jpeg)$/, 
+              loader: 'url?limit=8192'
+          },
+          {
+              test: /\.(otf|eot|svg|ttf|woff|woff2)(\?.+)?$/,
+              loader: 'url-loader?limit=8192'
+          },
+          {
+              test: /\.css/,
+              exclude: path.resolve(__dirname, 'styles/'),
+              loader: 'style!css?modules&localIdentName=[name]__[local]?sourceMap=true'
+          }, 
+          {
+              test: /\.css$/,
+              include: path.resolve(__dirname, 'styles/'),
+              loader: 'style!css?sourceMap=true'
+          },
+          //{ 
+              //test: /\.css$/, 
+              //loader: 'style-loader!css-loader' 
+          //}
     ]},
     plugins : [
       new webpack.DefinePlugin({

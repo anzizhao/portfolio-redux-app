@@ -142,14 +142,31 @@ export default class TodoSubItem extends Component {
         }
         return Object.assign({}, style, dStyle) 
     } 
-
+    withoutAtString(str){
+        let result = {
+            match: false, 
+            atStr: '',
+            str: str
+        }
+        let atReg = /@[0-9\\.]*/ 
+        let match = atReg.exec ( str ) 
+        if(  match ) {
+            let si = str.indexOf(atReg)
+            result.match = true
+            result.atStr = match[0]
+            result.str = str.substring(0,si) + str.substring( si + match[0].length + 1)
+        }
+        return result
+    }
     renderText(subIndex,  style){
-        let indexView, atView, beforeATagView ,
+        let indexView, beforeATagView ,
             ATagView, afterATagView 
         let atSubProcess = /@[0-9\\.]*/ 
         let match , at  
+        let atView     
 
-        indexView = `${subIndex}.    `
+
+        indexView = `${ this.props.index }.    `
         if ( ! this.props.aTag ) {
             // 默认beforeATagView  
             beforeATagView = this.props.text 
@@ -165,26 +182,31 @@ export default class TodoSubItem extends Component {
             ) 
         }
 
-        //@1.2  sub process
-        match = atSubProcess.exec( beforeATagView ) 
-        if( match ) {
-            at = match[0] 
-        } else {
-            if ( afterATagView ) {
-                match = atSubProcess.exec(afterATagView) 
-                if ( match ) {
-                    at = match[0] 
-                }
-            }
+        //@1.2  sub process   只匹配一个@
+        let result = this.withoutAtString( beforeATagView ) 
+        //match = atSubProcess.exec( beforeATagView ) 
+        if( result.match ) {
+            at = result.atStr  
+            // 去掉@内容
+            beforeATagView = result.str 
+        } 
+        else if(afterATagView && (result = this.withoutAtString( beforeATagView) ) ) {
+            at = result.atStr  
+            afterATagView = result.str 
         }
-        atView = (
-            at &&
-                <a href={'#' + at.substring(1) } className="at-view">
-                { at }
+        if ( at ) {
+            // 可能parentIndex修改掉 需要重新组合
+            const  newAt = `${at.substring(1)}` 
+            const  atAchor = `${this.props.parentIndex}.${newAt}` 
+            atView = (
+                <a href={'#' + atAchor } className="at-view">
+                    { '@' +  newAt }
                 </a>
-        )
+            )
+        }
+
         return   (
-            <span  style={style.listTextSpan} id={subIndex}>
+            <span  style={style.listTextSpan} id={ subIndex }>
                 { indexView }
                 { atView }
                 { beforeATagView }
@@ -219,12 +241,12 @@ export default class TodoSubItem extends Component {
        //const textPart = `${subIndex}.    ${this.props.text} `
        //const textPart =  this.renderText() 
 
-       let subIndex = String(this.props.parentIndex) + '.'  + String(this.props.index)
+       const  completeIndex = `${this.props.parentIndex}.${ this.props.index }` 
 
        //const lastDate = this.props.lastTime 
        const listText = (
            <span >
-               { this.renderText( subIndex, style ) }
+               { this.renderText( completeIndex , style ) }
                <Tags tags={this.props.tags } subTag={true} /> 
                <div style={style.lastDate } >最后编辑
                    <span> { lastDate }</span>  
@@ -244,10 +266,10 @@ export default class TodoSubItem extends Component {
                    <div style={style.editTodo } >
                        <label
                            onDoubleClick ={(e)=>this.handleClickLable(e) }
-                           data-tip data-for={'subItemLable' + subIndex } data-place='left'  
+                           data-tip data-for={'subItemLable' + completeIndex } data-place='left'  
                            style={style.editLabel}
 
-                       >{ subIndex } </label>
+                       >{ this.props.index } </label>
                        <TextField
                            className='item-input'
                            fullWidth
@@ -259,7 +281,7 @@ export default class TodoSubItem extends Component {
                        />
                    </div>
 
-                   <ReactTooltip id={'subItemLable' + subIndex }  type='warning' delayShow={1000}>
+                   <ReactTooltip id={'subItemLable' + completeIndex }  type='warning' delayShow={1000}>
                        <span>双击退出编辑</span>
                    </ReactTooltip>
             </div>
