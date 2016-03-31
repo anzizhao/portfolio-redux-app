@@ -10,6 +10,9 @@
     'use strict';       
     // set 'jsMind' as the library name.
     // __name__ should be a const value, Never try to change it easily.
+    
+    var autosize = require("autosize")
+
     var __name__ = 'jsMind';
     // library version
     var __version__ = '0.2e';
@@ -33,7 +36,12 @@
     var $g = function(id){return $d.getElementById(id);};
     var $c = function(tag){return $d.createElement(tag);};
     var $t = function(n,t){if(n.hasChildNodes()){n.firstChild.nodeValue = t;}else{n.appendChild($d.createTextNode(t));}};
-    var $h = function(n,t){n.innerHTML = t;};
+    var $h = function(n,t){
+        // '' -> &nbsp;    \n -> <br/>
+        t = t.replace(/ /g, "&nbsp;");
+        t = t.replace(/\n/g, "<br/>");
+        n.innerHTML = t;
+    };
 
     var DEFAULT_OPTIONS = {
         container : '',   // id of the container
@@ -1958,6 +1966,8 @@
 
         this.selected_node = null;
         this.editing_node = null;
+
+        this.origin_element_style = {};
     };
 
     jm.view_provider.prototype={
@@ -1987,6 +1997,7 @@
                 //var evt = e || event;
                 //if(evt.keyCode == 13){v.edit_node_end();evt.stopPropagation();}
             //});
+            //失去焦点后   编辑完成
             jm.util.dom.add_event(this.e_editor,'blur',function(e){
                 v.edit_node_end();
             });
@@ -2087,7 +2098,10 @@
             }
 
             var d = $c('jmnode');
-            d.style.border =  '2px solid' ;
+            d.style.border =  '1px solid' ;
+            d.style["font-size"]=  '.7rem' ;
+            d.style.padding =  '10px' ;
+
             var nodeColorArr = [
                 'rgb(0, 171, 107)',
                 'rgba(136, 255, 66, 0.84)',
@@ -2097,6 +2111,8 @@
                 'rgba(48, 37, 5, 0.84)',
             ];
             if(node.isroot){
+                d.style.border =  '2px solid' ;
+                d.style["font-size"]=  '.9rem' ;
                 d.className = 'root';
                 d.style["border-color"] =  'rgba(48, 37, 5, 0.84)';
             }else{
@@ -2189,13 +2205,28 @@
             var element = view_data.element;
             var topic = node.topic;
             var mv = this
-            mv.e_editor.style.height = element.clientHeight  - 10 + 'px';
+            //mv.e_editor.style.height = element.clientHeight  - 10 + 'px';
             mv.e_editor.value = topic;
             mv.e_editor.innerHTML= topic;
 
+
+            var newStyle = {
+                "zIndex" : 5,
+                "border" : 'none',
+                "box-shadow": 'none',
+                'background-color': 'inherit'
+            }
+            var itemKey 
+            var tmp 
+            for(itemKey in newStyle ) {
+                this.origin_element_style[itemKey] = element.style[itemKey] 
+                element.style[itemKey]  = newStyle[itemKey]
+            }
+
             element.innerHTML = '';
             element.appendChild(mv.e_editor);
-            element.style.zIndex = 5;
+            autosize(document.querySelector('textarea'))
+
             setTimeout(function(){
                 mv.e_editor.focus();
                 //mv.e_editor.select();
@@ -2209,8 +2240,11 @@
                 var view_data = node._data.view;
                 var element = view_data.element;
                 var topic = this.e_editor.value;
-                element.style.height = this.e_editor.scrollHeight + 10  +  'px';
-                element.style.zIndex = 'auto';
+                var itemKey 
+                for(itemKey in this.origin_element_style ) {
+                    element.style[itemKey]  = this.origin_element_style[itemKey] 
+                }
+
                 element.removeChild(this.e_editor);
                 if(jm.util.text.is_empty(topic) || node.topic === topic){
                     if(this.opts.support_html){

@@ -273,9 +273,9 @@ MindMap.style =  {
         display: 'inline-block',
     },
     container : {
-        width: '55rem',
-        height: '35rem',
-        marginLeft: '-10rem',
+        width:   window.screen.width * 0.95,
+        height: window.screen.height,
+        marginLeft: '-22rem',
         border: 'solid 1px #ccc',
         background:  '#f4f4f4',
         display: 'inline-block',
@@ -286,6 +286,7 @@ MindMap.style =  {
         margin: '.5rem',
         position: 'fixed',
         display: 'inline-block',
+        zIndex: '1000',
     }
 }
 export default MindMap;
