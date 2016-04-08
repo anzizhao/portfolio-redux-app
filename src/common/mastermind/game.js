@@ -24,7 +24,7 @@ export function allCorrect(score) {
 }
 
 export function generateSecretCode() {
-  return times(PEG_IN_ROW, () => random(COLOR_TO_CHOOSE))
+  return times(PEG_IN_ROW, () => random(COLOR_TO_CHOOSE-1))
 }
 
 export function calculateScore(secretCode, guess) {

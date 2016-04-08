@@ -181,3 +181,29 @@
 .footer{
     margin-top: 20px;
 }
+
+.circular {
+    width: 10rem;
+    height: 10rem;
+    margin: .3rem auto 3rem;
+    font-size: .43rem ;
+    /*position: absolute;*/
+    /*top: 10rem;*/
+    /*right: 3rem;*/
+}
+
+.circular svg {
+    display: block;
+    overflow: visible;
+    xtransition: 10s linear transform;
+}
+
+.circular svg:hover { transform: rotate(-2turn); }
+
+.circular text { fill: currentColor }
+.circular path { 
+    background-image: url('./assets/艾斯之死_320.jpg') 
+    /*fill: none; */
+}
+
+

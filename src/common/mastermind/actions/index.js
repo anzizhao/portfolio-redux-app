@@ -12,6 +12,8 @@ export const REPLAY_MOVE_TO_END = "REPLAY_MOVE_TO_END"
 export const REPLAY_HIDE_GAME_OVER_DIALOG = "REPLAY_HIDE_GAME_OVER_DIALOG"
 
 export function newGame(secretCode = generateSecretCode()) {
+  console.log('the right answer: ')
+  console.dir(secretCode)
   return {type: NEW_GAME, secretCode}
 }
 

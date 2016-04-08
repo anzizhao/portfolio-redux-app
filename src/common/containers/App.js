@@ -92,6 +92,11 @@ class App extends Component {
                     </div>
                 </div>
                 <label className="sidebar-toggle" onClick={this.eventToggleSidebar}></label>
+
+                <footer id="ICP-footer" >
+                    © 2016&nbsp;-&nbsp;Why not?&nbsp;-&nbsp;
+                    <a target="_blank" rel="nofollow designer" class="external beian" href="http://www.miitbeian.gov.cn/">粤ICP备16028048号 </a>
+                </footer>
             </div>
         );
     }

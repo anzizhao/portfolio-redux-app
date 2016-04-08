@@ -63,7 +63,6 @@
     "babel-preset-stage-3": "~6.3.13",
     "bundle-loader": "^0.5.4",
     "css-loader": "^0.9.0",
-    "extract-text-webpack-plugin": "^0.8.2",
     "file-loader": "0.8.5",
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "~0.6.0",
