@@ -91,6 +91,10 @@ export default (
           component={HomePage} 
       />
       <Route 
+          path="login" 
+          getComponent={loadContainerAsync(require('bundle?lazy!./login/login'))}
+      />
+      <Route 
             path="todo" 
             getComponent={loadContainerAsync(require('bundle?lazy!./containers/todo/App'))}
       />

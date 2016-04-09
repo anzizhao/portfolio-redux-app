@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 
+import Paper from 'material-ui/lib/paper';
 import TextField from 'material-ui/lib/text-field';
 
 import Card from 'material-ui/lib/card/card';
@@ -11,155 +12,147 @@ import CardTitle from 'material-ui/lib/card/card-title';
 import CardText from 'material-ui/lib/card/card-text';
 import FlatButton from 'material-ui/lib/flat-button';
 
+import "../../../styles/sea.scss"
+
 class Login extends Component {
     constructor(props) {
         super(props);
+        this.handleLogin = this.handleLogin.bind(this)
     }
 
     componentDidMount() {
+
+    }
+
+    handleLogin(){
+    
+    
     }
 
     render () {
-        const { results, isFetching, lastUpdated, error } = this.props;
+        const style ={
+            paper: {
+                textAlign: 'center',
+                display: 'inline-block',
+                marginLeft: "20%",
+                borderRadius: "30px",
+                widht: "60%",
+            },
+            card: {
+                width:"30rem",
+                padding:".8rem 3rem 2rem",
+            },
+            cardHeader: {
+                fontSize: "1.5rem", 
+                background: 'url("../../../styles/login/hzwhangxing.gif")',
+                backgroundRepeat: 'no-repeat',
+                backgroundPositionX: '-70px',
+                backgroundPositionY: '-100px',
+                height: '13rem',
+            },
+            cardText: {
+                margin: "0 2rem",
+                padding:"0 2rem",
+
+            },
+            cardActions: {
+                margin: "1rem",
+
+            },
+            flatBut: {
+                border: '1px solid',
+                borderColor: 'rgb(0, 188, 212)',
+                padding: '0',
+                width: '12rem',
+            },
+            cardMediaImg: {
+                width: '20rem',
+            }
+            //flatButLabel: {
+            //border: '1px solid',
+            //borderColor: 'irgba(244, 67, 54, 0.98)' ,
+            //}
+        }
+
+
         return (
-            <Card>
-                <CardHeader
-                    title="Login"
-                    subtitle="Subtitle"
-                />
-                <CardText>
-                    <form class="form" action="/api/v1.0/login">
-                        <TextField
-                            floatingLabelText="用户名"
-                            fullWidth
-                            onEnterKeyDown = { this.handleEnterKeyDown }
-                            ref="iAddTodo" 
-                        />
-
-
-                        <div class="form-group form-group-label">
-                            <div class="row">
-                                <div class="col-lg-8 col-lg-push-2">
-                                    <label class="floating-label" for="login-username">Username</label>
-                                    <input class="form-control" id="login-username" type="text">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group form-group-label">
-                                <div class="row">
-                                    <div class="col-lg-8 col-lg-push-2">
-                                        <label class="floating-label" for="login-password">Password</label>
-                                        <input class="form-control" id="login-password" type="password">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-lg-8 col-lg-push-2">
-                                            <button class="btn btn-block btn-blue">Sign In</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="row">
-                                        <div class="col-lg-8 col-lg-push-2">
-                                            <div class="checkbox checkbox-adv">
-                                                <label for="login-remember">
-                                                    <input class="access-hide" id="login-remember" name="login-remember" type="checkbox">Stay signed in
-                                                    </label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </form>
-
-
-
-                </CardText>
-
-									<div class="card-inner">
-										<p class="text-center">
-											<span class="avatar avatar-inline avatar-lg">
-												<img alt="Login" src="images/users/avatar-001.jpg">
-											</span>
-										</p>
-									</div>
-
-
-            </Card>
-
-
-
-            <div class="materialContainer">
-                <div class="box">
-                    <div class="title">登录</div>
-
-                    <div class="input">
-                        <label for="name">用户名</label>
-                        <input type="text" name="name" id="name">
-                            <span class="spin"></span>
-                        </div>
-
-                        <form class="input">
-                            <label for="pass">密码</label>
-                            <input type="password" name="pass" id="pass">
-                                <span class="spin"></span>
-                            </div>
-
-                            <div class="button login">
-                                <button><span>登录</span> <i class="fa fa-check"></i></button>
-                            </div>
-
-                            <a href="" class="pass-forgot">忘记密码?</a>
-
+            <Paper style={style.paper} zDepth={5}>
+                <Card>
+                    <CardHeader
+                        style={ style.cardHeader } 
+                    >
+                    </CardHeader>
+                    <CardText
+                        style={ style.cardText } 
+                    >
+                        <form  action="/api/v1.0/login">
+                            <TextField
+                                floatingLabelText="用户名"
+                                name="username"
+                                type="text"
+                            />
+                            <br/>
+                            <TextField
+                                floatingLabelText="密码"
+                                name="password"
+                                type="password"
+                            />
+                            <br/>
                         </form>
+                    </CardText>
 
-                        <div class="overbox">
-                            <div class="material-button alt-2"><span class="shape"></span></div>
 
-                            <div class="title">注册</div>
+                    <CardActions
+                        style={ style.cardActions } 
+                    >
+                        <FlatButton 
+                            label="登  录" 
+                            style ={style.flatBut}
+                            onClick={this.handleLogin}
+                        />
+                    </CardActions>
 
-                            <form class="input">
-                                <label for="regname">用户名</label>
-                                <input type="text" name="username" id="username">
-                                    <span class="spin"></span>
+                    <div className="sea">
+                        <div className="circle-wrapper">
+                            <div className="bubble"></div>
+                            <div className="submarine-wrapper">
+                                <div className="submarine-body">
+                                    <div className="window"></div>
+                                    <div className="engine"></div>
+                                    <div className="light"></div>
                                 </div>
-
-                                <label for="regname">邮件</label>
-                                <input type="text" name="email" id="email">
-                                    <span class="spin"></span>
-                                </div>
-
-                                <div class="input">
-                                    <label for="regpass">密码</label>
-                                    <input type="password" name="password" id="password">
-                                        <span class="spin"></span>
+                                <div className="helix"></div>
+                                <div className="hat">
+                                    <div className="leds-wrapper">
+                                        <div className="periscope"></div>
+                                        <div className="leds"></div>
                                     </div>
-
-                                    <div class="input">
-                                        <label for="reregpass">重复密码</label>
-                                        <input type="password" name="repassword" id="repassword">
-                                            <span class="spin"></span>
-                                        </div>
-                                        <div class="button">
-                                            <button><span>注册</span></button>
-                                        </div>
-                                    </div>
-
                                 </div>
-                            </form>
-
+                            </div>
                         </div>
-
-
                     </div>
-                </div>
-            </div>
+
+                </Card>
+
+
+            </Paper>
         )
     }
 }
 
-Login.propTypes = {
-};
+                    //<CardMedia >
+
+                        //<img 
+                            //src="../../../styles/assets/elsewherecut.jpg" 
+                            //style = { style.cardMediaImg } 
+                        ///>
+                    //</CardMedia>
+//<CardMedia>
+//<img 
+//src="../../../styles/login/hzwhangxing.gif" 
+//style={style.cardMediaImg} 
+///>
+//</CardMedia>
 
 export default Login;
+module.exports = Login;

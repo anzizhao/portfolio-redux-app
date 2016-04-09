@@ -4,38 +4,38 @@ import classNames from 'classnames';
 
 class Portfolio extends Component {
 
-  render() {
+    render() {
 
-  	const portfolio = getPortfolio();
-	const RoleRows = (roles) => {
-		return roles.map((role) => {
-			return (
-				<div key={role.title} className="role_wrapper clearfix">
-					<p className="role">{role.name}</p>
-					<p className="role_title">{role.job}<br />
-					<span className="role_skills">{role.skills}</span></p>
-				</div>
-			)
-		});
-	}
+        const portfolio = getPortfolio();
+        const RoleRows = (roles) => {
+            return roles.map((role) => {
+                return (
+                    <div key={role.title} className="role_wrapper clearfix">
+                        <p className="role">{role.name}</p>
+                        <p className="role_title">{role.job}<br />
+                            <span className="role_skills">{role.skills}</span></p>
+                    </div>
+                )
+            });
+        }
 
-    const PortfolioRows = portfolio.map((row) => {
-    	const classname = classNames('portfolio_item','clearfix',row.classname);
+        const PortfolioRows = portfolio.map((row) => {
+            const classname = classNames('portfolio_item','clearfix',row.classname);
+            return (
+                <div key={row.title} className={classname}>
+                    <h2><a href={row.link} target="_blank">(visit site)</a> {row.title}</h2>
+                    {RoleRows(row.roles)}
+                </div>
+            )
+        });
+
         return (
-            <div key={row.title} className={classname}>
-				<h2><a href={row.link} target="_blank">(visit site)</a> {row.title}</h2>
-				{RoleRows(row.roles)}
-			</div>
-        )
-    });
+            <div className="posts">
+                {PortfolioRows}
+            </div>
+        );
 
-    return (
-        <div className="posts">
-        	{PortfolioRows}
-        </div>
-    );
-
-  }
+    }
 }
 
 export default Portfolio;

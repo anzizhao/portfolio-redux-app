@@ -61,15 +61,19 @@ class App extends Component {
     }
 
     render() {
-
         const { layout, toggleSidebar } = this.props;
         const { sidebarOpen } = layout;
         const layoutClass = classNames({open : sidebarOpen});
+        const style = {
+            wrap: {
+                backgroundImage: 'url(../../../styles/assets/elsewhere.jpg)',
+            } 
+        }
 
         return (
             <div className={layoutClass}>
                 <Sidebar layout={layout} toggleSidebar={toggleSidebar} />
-                <div className="wrap">
+                <div className="wrap"  style={style.wrap} >
                     <Header />
                     <div className="container content">
 
