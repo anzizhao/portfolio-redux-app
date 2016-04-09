@@ -1,2 +1,6 @@
 .gitattributes export-ignore  
 .gitignore export-ignore
+src  export-ignore
+node_modules/ export-ignore 
+webpack.config.js export-ignore 
+Gruntfile.js export-ignore
