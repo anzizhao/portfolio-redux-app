@@ -27,7 +27,11 @@
     "grunt-contrib-cssmin": "^1.0.1",
     "history": "1.13.0",
     "immutable": "^3.7.6",
+    "joi": "^8.0.5",
+    "joi-browser": "^8.0.1",
+    "joi-validation-strategy": "^0.3.3",
     "json-loader": "^0.5.4",
+    "moment": "^2.12.0",
     "nprogress": "^0.2.0",
     "react": "^0.14.6",
     "react-addons-css-transition-group": "^0.14.7",
@@ -40,13 +44,15 @@
     "react-router": "1.0.2",
     "react-select2-wrapper": "~0.4.0",
     "react-tooltip": "~1.1.2",
+    "react-validation-mixin": "^5.3.4",
     "redux": "^3.0.0",
     "redux-router": "^1.0.0-beta3",
     "redux-thunk": "^0.1.0",
     "redux-undo": "^0.6.0",
     "theaterjs": "^3.0.0",
     "uuid": "^2.0.1",
-    "webpack-dev-server": "~1.14.1"
+    "webpack-dev-server": "~1.14.1",
+    "whatwg-fetch": "^0.11.0"
   },
   "devDependencies": {
     "babel": "6.3.26",

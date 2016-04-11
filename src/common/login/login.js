@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { findDOMNode } from 'react-dom';
 import { connect } from 'react-redux';
 
 import Paper from 'material-ui/lib/paper';
@@ -13,20 +14,92 @@ import CardText from 'material-ui/lib/card/card-text';
 import FlatButton from 'material-ui/lib/flat-button';
 
 import "../../../styles/sea.scss"
+import "whatwg-fetch"
+
+
+import validation from 'react-validation-mixin';
+// need to change 
+import strategy from 'joi-validation-strategy';
+import Joi from 'joi-browser';
+
+//用户名：    
+ //不能超过10个字
+ //登录密码： 
+  //至少6位,必须是字母或特殊符号和数字结合
+
 
 class Login extends Component {
     constructor(props) {
         super(props);
         this.handleLogin = this.handleLogin.bind(this)
+        this.getValidatorData = this.getValidatorData.bind(this)
+        this.renderHelpText = this.renderHelpText.bind(this)
+        this.validatorTypes = {
+            username: Joi.string().alphanum().min(3).max(30).required().label('username'),
+            password: Joi.string().regex(/[a-zA-Z0-9]{3,30}/).required().label('password')
+        }
+
     }
 
     componentDidMount() {
 
     }
 
+    getValidatorData() {
+        const username = findDOMNode(this.refs.username).getElementsByTagName('input')[0].value
+        const password = findDOMNode(this.refs.password).getElementsByTagName('input')[0].value
+        return {
+            username: username,
+            password: password 
+        };
+    }
+    renderHelpText(field) {
+        const errors = this.props.errors
+        const showErrors = {
+            username : '用户名由' 
+        
+        }
+        let message 
+        return (
+            <span className='help-block'>{message}</span>
+        );
+    }
     handleLogin(){
-    
-    
+        const onValidate = (error) => {
+            if (error) {
+                //form has errors; do not submit
+            } else {
+                //no errors; submit form
+                const form = document.querySelector('form')
+                let data = new FormData(form)
+                fetch('/api/v1.0/login', {
+                    method: 'POST',
+                    body: data ,
+                }) 
+                .then(checkStatus)
+                .then(parseJSON)
+                .then(function(data) {
+                    console.log('request succeeded with JSON response', data)
+                }).catch(function(error) {
+                    console.log('request failed', error)
+                })
+
+                function checkStatus(response) {
+                    if (response.status >= 200 && response.status < 300) {
+                        return response
+                    } else {
+                        var error = new Error(response.statusText)
+                        error.response = response
+                        throw error
+                    }
+                }
+
+                function parseJSON(response) {
+                    return response.json()
+                }
+            }
+        };
+        this.props.validate(onValidate)
     }
 
     render () {
@@ -77,68 +150,86 @@ class Login extends Component {
 
         return (
             <Paper style={style.paper} zDepth={5}>
-                <Card>
-                    <CardHeader
-                        style={ style.cardHeader } 
-                    >
-                    </CardHeader>
-                    <CardText
-                        style={ style.cardText } 
-                    >
-                        <form  action="/api/v1.0/login">
+                <form  method="post"  action="/api/v1.0/login">
+                    <Card>
+                        <CardHeader
+                            style={ style.cardHeader } 
+                        >
+                        </CardHeader>
+                        <CardText
+                            style={ style.cardText } 
+                        >
                             <TextField
                                 floatingLabelText="用户名"
                                 name="username"
                                 type="text"
+                                ref="username"
+                                onBlur={this.props.handleValidation('username')}
                             />
                             <br/>
+                            {this.renderHelpText(this.props.getValidationMessages('username'))}
                             <TextField
                                 floatingLabelText="密码"
                                 name="password"
                                 type="password"
+                                ref="password"
+                                onBlur={this.props.handleValidation('password')}
                             />
                             <br/>
-                        </form>
-                    </CardText>
+                            {this.renderHelpText(this.props.getValidationMessages('password'))}
+
+                        </CardText>
 
 
-                    <CardActions
-                        style={ style.cardActions } 
-                    >
-                        <FlatButton 
-                            label="登  录" 
-                            style ={style.flatBut}
-                            onClick={this.handleLogin}
-                        />
-                    </CardActions>
+                        <CardActions
+                            style={ style.cardActions } 
+                        >
+                            <FlatButton 
+                                label="登  录" 
+                                style ={style.flatBut}
+                                onClick={this.handleLogin}
+                            />
+                        </CardActions>
 
-                    <div className="sea">
-                        <div className="circle-wrapper">
-                            <div className="bubble"></div>
-                            <div className="submarine-wrapper">
-                                <div className="submarine-body">
-                                    <div className="window"></div>
-                                    <div className="engine"></div>
-                                    <div className="light"></div>
-                                </div>
-                                <div className="helix"></div>
-                                <div className="hat">
-                                    <div className="leds-wrapper">
-                                        <div className="periscope"></div>
-                                        <div className="leds"></div>
+                        <div className="sea">
+                            <div className="circle-wrapper">
+                                <div className="bubble"></div>
+                                <div className="submarine-wrapper">
+                                    <div className="submarine-body">
+                                        <div className="window"></div>
+                                        <div className="engine"></div>
+                                        <div className="light"></div>
+                                    </div>
+                                    <div className="helix"></div>
+                                    <div className="hat">
+                                        <div className="leds-wrapper">
+                                            <div className="periscope"></div>
+                                            <div className="leds"></div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                </Card>
+                    </Card>
+                </form>
 
 
             </Paper>
         )
     }
 }
+
+Login.propTypes = {
+    errors: PropTypes.object,
+    validate: PropTypes.func,
+    isValid: PropTypes.func,
+    handleValidation: PropTypes.func,
+    getValidationMessages: PropTypes.func,
+    clearValidations: PropTypes.func,
+}
+
+
 
                     //<CardMedia >
 
@@ -154,5 +245,6 @@ class Login extends Component {
 ///>
 //</CardMedia>
 
-export default Login;
-module.exports = Login;
+//export default Login;
+export default validation(strategy)(Login);
+module.exports = validation(strategy)(Login)

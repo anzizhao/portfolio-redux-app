@@ -16,8 +16,10 @@ var webpackConfig = {
         // may be the materialize
         //"jquery": "jQuery"
     },
+    exclude: [ /joi-browser/ ],
     resolve: {
         extensions: ['', '.js', '.jsx' ]
+
     },
 };
 
